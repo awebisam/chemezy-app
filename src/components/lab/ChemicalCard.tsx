@@ -6,7 +6,9 @@ export interface ChemicalCardProps {
   chemical: Chemical;
   onSelect?: (chemical: Chemical) => void;
   onViewDetails?: (chemical: Chemical) => void;
+  onAddToLab?: (chemical: Chemical) => void;
   isDraggable?: boolean;
+  showAddButton?: boolean;
   className?: string;
 }
 
@@ -14,7 +16,9 @@ export const ChemicalCard: React.FC<ChemicalCardProps> = ({
   chemical,
   onSelect,
   onViewDetails,
+  onAddToLab,
   isDraggable = true,
+  showAddButton = false,
   className,
 }) => {
   const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
@@ -46,6 +50,13 @@ export const ChemicalCard: React.FC<ChemicalCardProps> = ({
     event.stopPropagation();
     if (onViewDetails) {
       onViewDetails(chemical);
+    }
+  };
+
+  const handleAddToLab = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    if (onAddToLab) {
+      onAddToLab(chemical);
     }
   };
 
@@ -130,24 +141,36 @@ export const ChemicalCard: React.FC<ChemicalCardProps> = ({
 
       {/* Actions */}
       <div className="flex justify-between items-center">
-        {isDraggable && (
-          <div className="flex items-center text-xs text-gray-400">
-            <svg
-              className="w-4 h-4 mr-1"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+        <div className="flex items-center space-x-2">
+          {isDraggable && (
+            <div className="flex items-center text-xs text-gray-400">
+              <svg
+                className="w-4 h-4 mr-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
+                />
+              </svg>
+              Drag to lab
+            </div>
+          )}
+          
+          {showAddButton && onAddToLab && (
+            <button
+              onClick={handleAddToLab}
+              className="text-xs bg-primary-600 text-white px-2 py-1 rounded hover:bg-primary-700 transition-colors duration-200"
+              aria-label={`Add ${chemical.common_name} to lab bench`}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
-              />
-            </svg>
-            Drag to lab
-          </div>
-        )}
+              + Add
+            </button>
+          )}
+        </div>
         
         {onViewDetails && (
           <button

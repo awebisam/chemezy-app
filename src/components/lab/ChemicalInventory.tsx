@@ -10,17 +10,21 @@ import { cn } from '@/utils/cn';
 
 export interface ChemicalInventoryProps {
   onChemicalSelect?: (chemical: Chemical) => void;
+  onAddToLab?: (chemical: Chemical) => void;
   className?: string;
   showSearch?: boolean;
   showPagination?: boolean;
+  showAddButton?: boolean;
   pageSize?: number;
 }
 
 export const ChemicalInventory: React.FC<ChemicalInventoryProps> = ({
   onChemicalSelect,
+  onAddToLab,
   className,
   showSearch = true,
   showPagination = true,
+  showAddButton = false,
   pageSize = 20,
 }) => {
   const {
@@ -79,6 +83,12 @@ export const ChemicalInventory: React.FC<ChemicalInventoryProps> = ({
   const handleChemicalSelect = (chemical: Chemical) => {
     if (onChemicalSelect) {
       onChemicalSelect(chemical);
+    }
+  };
+
+  const handleAddToLab = (chemical: Chemical) => {
+    if (onAddToLab) {
+      onAddToLab(chemical);
     }
   };
 
@@ -210,7 +220,9 @@ export const ChemicalInventory: React.FC<ChemicalInventoryProps> = ({
                   chemical={chemical}
                   onSelect={handleChemicalSelect}
                   onViewDetails={handleViewDetails}
+                  onAddToLab={handleAddToLab}
                   isDraggable={true}
+                  showAddButton={showAddButton}
                 />
               ))}
             </div>

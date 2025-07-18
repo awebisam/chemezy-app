@@ -56,7 +56,7 @@
   - Create chemical detail modal for viewing full chemical properties
   - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
 
-- [ ] 8. Build drag-and-drop lab bench interface
+- [x] 8. Build drag-and-drop lab bench interface
   - Create LabBench component with designated drop zones
   - Implement drag-and-drop functionality using HTML5 drag API with touch support
   - Build SelectedChemical component for chemicals added to lab bench
