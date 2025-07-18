@@ -1,6 +1,6 @@
 // Award-related type definitions
 
-export type AwardCategory = 
+export type AwardCategory =
   | 'discovery'
   | 'database_contribution'
   | 'community'

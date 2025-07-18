@@ -14,7 +14,7 @@
   - Define store interfaces for authentication, lab, and dashboard state management
   - _Requirements: 2.3, 5.4, 6.1, 7.2_
 
-- [ ] 3. Build API service layer with authentication
+- [x] 3. Build API service layer with authentication
   - Create Axios instance with base configuration and request/response interceptors
   - Implement AuthService class with login, register, getCurrentUser, and token refresh methods
   - Create ChemicalService class with methods for fetching chemicals and pagination

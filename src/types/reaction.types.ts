@@ -1,6 +1,6 @@
 // Reaction-related type definitions
 
-export type Environment = 
+export type Environment =
   | 'Earth (Normal)'
   | 'Vacuum'
   | 'Pure Oxygen'
@@ -82,7 +82,7 @@ export interface TextureChangeEffect {
   viscosity: number; // 0.0 to 1.0
 }
 
-export type VisualEffect = 
+export type VisualEffect =
   | GasProductionEffect
   | LightEmissionEffect
   | TemperatureChangeEffect

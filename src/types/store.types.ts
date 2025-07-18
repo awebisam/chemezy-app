@@ -2,8 +2,18 @@
 
 import type { User } from './api.types';
 import type { Chemical, SelectedChemical } from './chemical.types';
-import type { Environment, ReactionPrediction, UserReactionStats } from './reaction.types';
-import type { UserAward, AvailableAward, LeaderboardEntry, UserRank, AwardCategory } from './award.types';
+import type {
+  Environment,
+  ReactionPrediction,
+  UserReactionStats,
+} from './reaction.types';
+import type {
+  UserAward,
+  AvailableAward,
+  LeaderboardEntry,
+  UserRank,
+  AwardCategory,
+} from './award.types';
 
 // Authentication Store Interface
 export interface AuthStore {
@@ -16,7 +26,11 @@ export interface AuthStore {
 
   // Actions
   login: (credentials: { username: string; password: string }) => Promise<void>;
-  register: (userData: { username: string; email: string; password: string }) => Promise<void>;
+  register: (userData: {
+    username: string;
+    email: string;
+    password: string;
+  }) => Promise<void>;
   logout: () => void;
   refreshToken: () => Promise<void>;
   getCurrentUser: () => Promise<void>;
@@ -58,7 +72,10 @@ export interface ChemicalStore {
   // Actions
   fetchChemicals: (params?: { skip?: number; limit?: number }) => Promise<void>;
   searchChemicals: (query: string) => void;
-  createChemical: (data: { molecular_formula: string; common_name?: string }) => Promise<Chemical>;
+  createChemical: (data: {
+    molecular_formula: string;
+    common_name?: string;
+  }) => Promise<Chemical>;
   clearError: () => void;
   resetPagination: () => void;
 }
@@ -76,7 +93,11 @@ export interface DashboardStore {
   error: string | null;
 
   // Actions
-  fetchAwards: (params?: { category?: AwardCategory; skip?: number; limit?: number }) => Promise<void>;
+  fetchAwards: (params?: {
+    category?: AwardCategory;
+    skip?: number;
+    limit?: number;
+  }) => Promise<void>;
   fetchAvailableAwards: (category?: AwardCategory) => Promise<void>;
   fetchLeaderboard: (category?: AwardCategory, limit?: number) => Promise<void>;
   fetchUserRank: (category?: AwardCategory) => Promise<void>;
@@ -119,7 +140,9 @@ export interface AppStore {
   // Actions
   initialize: () => Promise<void>;
   setTheme: (theme: 'light' | 'dark' | 'system') => void;
-  addNotification: (notification: Omit<AppStore['notifications'][0], 'id' | 'timestamp'>) => void;
+  addNotification: (
+    notification: Omit<AppStore['notifications'][0], 'id' | 'timestamp'>
+  ) => void;
   removeNotification: (id: string) => void;
   clearNotifications: () => void;
 }

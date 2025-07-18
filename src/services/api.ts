@@ -1,9 +1,14 @@
 import axios from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import type { APIError } from '@/types/api.types';
+import type { APIError, AuthResponse } from '@/types/api.types';
 
 class ApiClient {
   private client: AxiosInstance;
+  private isRefreshing = false;
+  private failedQueue: Array<{
+    resolve: (value: any) => void;
+    reject: (error: any) => void;
+  }> = [];
 
   constructor() {
     this.client = axios.create({
@@ -33,15 +38,67 @@ class ApiClient {
       }
     );
 
-    // Response interceptor for error handling
+    // Response interceptor for error handling and token refresh
     this.client.interceptors.response.use(
       (response: AxiosResponse) => {
         return response;
       },
-      error => {
+      async error => {
+        const originalRequest = error.config;
+
+        // Handle token expiration with automatic refresh
+        if (error.response?.status === 401 && !originalRequest._retry) {
+          if (this.isRefreshing) {
+            // If already refreshing, queue the request
+            return new Promise((resolve, reject) => {
+              this.failedQueue.push({ resolve, reject });
+            })
+              .then(token => {
+                originalRequest.headers.Authorization = `Bearer ${token}`;
+                return this.client(originalRequest);
+              })
+              .catch(err => {
+                return Promise.reject(err);
+              });
+          }
+
+          originalRequest._retry = true;
+          this.isRefreshing = true;
+
+          try {
+            const response =
+              await this.client.post<AuthResponse>('/auth/refresh');
+            const { access_token } = response.data;
+
+            localStorage.setItem('auth_token', access_token);
+
+            // Process queued requests
+            this.processQueue(null, access_token);
+
+            // Retry original request
+            originalRequest.headers.Authorization = `Bearer ${access_token}`;
+            return this.client(originalRequest);
+          } catch (refreshError) {
+            // Refresh failed, redirect to login
+            this.processQueue(refreshError, null);
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user');
+
+            // Only redirect if we're in a browser environment
+            if (typeof window !== 'undefined') {
+              window.location.href = '/login';
+            }
+
+            return Promise.reject(refreshError);
+          } finally {
+            this.isRefreshing = false;
+          }
+        }
+
         const apiError: APIError = {
           message:
             error.response?.data?.message ||
+            error.response?.data?.detail ||
             error.message ||
             'An error occurred',
           status: error.response?.status || 500,
@@ -49,16 +106,21 @@ class ApiClient {
           details: error.response?.data?.details,
         };
 
-        // Handle token expiration
-        if (error.response?.status === 401) {
-          localStorage.removeItem('auth_token');
-          localStorage.removeItem('user');
-          window.location.href = '/login';
-        }
-
         return Promise.reject(apiError);
       }
     );
+  }
+
+  private processQueue(error: any, token: string | null) {
+    this.failedQueue.forEach(({ resolve, reject }) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(token);
+      }
+    });
+
+    this.failedQueue = [];
   }
 
   public async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
