@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { ChemicalInventory, LabBench, EnvironmentSelector } from '@/components/lab';
+import { ChemicalInventory, LabBench, EnvironmentSelector, ReactionTrigger, ResultsDisplay } from '@/components/lab';
 import { useLabStore } from '@/store/lab.store';
 
 export const LabPage: React.FC = () => {
-  const { selectedChemicals, clearLab, addChemical } = useLabStore();
+  const { selectedChemicals, clearLab, addChemical, reactionResult } = useLabStore();
   const [showInventory, setShowInventory] = useState(true);
 
   return (
@@ -71,6 +71,20 @@ export const LabPage: React.FC = () => {
             </div>
             
             <LabBench />
+            
+            {/* Reaction Trigger */}
+            {selectedChemicals.length > 0 && (
+              <div className="mt-6 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <ReactionTrigger />
+              </div>
+            )}
+            
+            {/* Reaction Results */}
+            {reactionResult && (
+              <div className="mt-6">
+                <ResultsDisplay />
+              </div>
+            )}
             
             {/* Instructions */}
             <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
