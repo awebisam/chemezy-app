@@ -58,9 +58,9 @@ export const LabBench: React.FC<LabBenchProps> = ({ className }) => {
     }
   };
 
-  const handleTouchDrop = (chemical: Chemical) => {
-    addChemical(chemical, 1);
-  };
+  // const handleTouchDrop = (chemical: Chemical) => {
+  //   addChemical(chemical, 1);
+  // };
 
   // Touch support for mobile devices
   const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {

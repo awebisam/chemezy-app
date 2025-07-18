@@ -65,7 +65,7 @@
   - Create remove functionality for chemicals on the lab bench
   - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 9.2_
 
-- [ ] 9. Create environment selection interface
+- [x] 9. Create environment selection interface
   - Build EnvironmentSelector component with all available environment options
   - Implement visual indicators for currently selected environment
   - Add environment descriptions and tooltips for educational value

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChemicalInventory, LabBench } from '@/components/lab';
+import { ChemicalInventory, LabBench, EnvironmentSelector } from '@/components/lab';
 import { useLabStore } from '@/store/lab.store';
 
 export const LabPage: React.FC = () => {
@@ -65,6 +65,11 @@ export const LabPage: React.FC = () => {
 
           {/* Lab Bench */}
           <div className={showInventory ? 'lg:col-span-2' : 'lg:col-span-3'}>
+            {/* Environment Selection */}
+            <div className="mb-6 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <EnvironmentSelector />
+            </div>
+            
             <LabBench />
             
             {/* Instructions */}
