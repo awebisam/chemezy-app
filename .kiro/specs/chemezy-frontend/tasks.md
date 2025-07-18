@@ -23,7 +23,7 @@
   - Add automatic JWT token attachment and error handling for all API calls
   - _Requirements: 1.2, 1.3, 1.4, 2.1, 5.2, 7.1, 8.1_
 
-- [ ] 4. Create Zustand stores for state management
+- [x] 4. Create Zustand stores for state management
   - Implement AuthStore with user authentication state and methods
   - Create LabStore for managing selected chemicals, environment, and reaction results
   - Build DashboardStore for awards, leaderboard, and user statistics
