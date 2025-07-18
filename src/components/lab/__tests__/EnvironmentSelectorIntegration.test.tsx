@@ -17,7 +17,7 @@ describe('EnvironmentSelector Integration', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     mockUseLabStore.mockReturnValue({
       environment: 'Earth (Normal)',
       setEnvironment: mockSetEnvironment,
@@ -86,8 +86,12 @@ describe('EnvironmentSelector Integration', () => {
     render(<LabPage />);
 
     // Check that educational descriptions are present
-    expect(screen.getAllByText(/Standard atmospheric conditions/).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Complete absence of matter/).length).toBeGreaterThan(0);
+    expect(
+      screen.getAllByText(/Standard atmospheric conditions/).length
+    ).toBeGreaterThan(0);
+    expect(
+      screen.getAllByText(/Complete absence of matter/).length
+    ).toBeGreaterThan(0);
   });
 
   it('integrates properly with lab layout', () => {
@@ -95,10 +99,10 @@ describe('EnvironmentSelector Integration', () => {
 
     // Check that environment selector is rendered
     expect(screen.getByText('Experimental Environment')).toBeInTheDocument();
-    
+
     // Check that it appears in the lab page along with other components
     expect(screen.getByText('Virtual Chemistry Lab')).toBeInTheDocument();
-    
+
     // Check that all environment options are available
     expect(screen.getByText('Earth (Normal)')).toBeInTheDocument();
     expect(screen.getByText('Vacuum')).toBeInTheDocument();

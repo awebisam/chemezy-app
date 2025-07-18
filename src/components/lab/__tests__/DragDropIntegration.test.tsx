@@ -24,10 +24,10 @@ const mockUseLabStore = vi.mocked(useLabStore);
 
 describe('Drag and Drop Integration', () => {
   const mockAddChemical = vi.fn();
-  
+
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     mockUseLabStore.mockReturnValue({
       selectedChemicals: [],
       environment: 'Earth (Normal)',
@@ -53,7 +53,9 @@ describe('Drag and Drop Integration', () => {
     );
 
     const chemicalCard = container.querySelector('[draggable="true"]');
-    const labBench = screen.getByRole('region', { name: 'Lab bench drop zone' });
+    const labBench = screen.getByRole('region', {
+      name: 'Lab bench drop zone',
+    });
 
     expect(chemicalCard).toBeInTheDocument();
     expect(labBench).toBeInTheDocument();
@@ -88,7 +90,9 @@ describe('Drag and Drop Integration', () => {
   it('shows visual feedback during drag operations', () => {
     render(<LabBench />);
 
-    const labBench = screen.getByRole('region', { name: 'Lab bench drop zone' });
+    const labBench = screen.getByRole('region', {
+      name: 'Lab bench drop zone',
+    });
 
     // Initially no drag feedback
     expect(screen.queryByText('Drop chemical here')).not.toBeInTheDocument();
@@ -112,16 +116,18 @@ describe('Drag and Drop Integration', () => {
     // In a real scenario, this would hide the feedback
   });
 
-  
-
   it('prevents drag when isDraggable is false', () => {
-    const { container } = render(<ChemicalCard chemical={mockChemical} isDraggable={false} />);
+    const { container } = render(
+      <ChemicalCard chemical={mockChemical} isDraggable={false} />
+    );
 
-    const chemicalCard = container.querySelector('[aria-label="Chemical: Water (H2O)"]');
-    
+    const chemicalCard = container.querySelector(
+      '[aria-label="Chemical: Water (H2O)"]'
+    );
+
     // Should not have draggable attribute set to true
     expect(chemicalCard).toHaveAttribute('draggable', 'false');
-    
+
     // Should not show drag hint
     expect(screen.queryByText('Drag to lab')).not.toBeInTheDocument();
   });

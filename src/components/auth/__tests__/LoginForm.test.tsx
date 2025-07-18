@@ -48,7 +48,7 @@ describe('LoginForm', () => {
     render(<LoginForm />);
 
     const form = document.querySelector('form')!;
-    
+
     // Submit the form directly to bypass browser validation
     fireEvent.submit(form);
 
@@ -122,7 +122,9 @@ describe('LoginForm', () => {
     render(<LoginForm />);
 
     expect(screen.getByText('Signing In...')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Signing In...' })).toBeDisabled();
+    expect(
+      screen.getByRole('button', { name: 'Signing In...' })
+    ).toBeDisabled();
   });
 
   it('calls switch to register callback', () => {

@@ -19,42 +19,48 @@ const environmentOptions: EnvironmentOption[] = [
   {
     value: 'Earth (Normal)',
     label: 'Earth (Normal)',
-    description: 'Standard atmospheric conditions with 21% oxygen, 78% nitrogen, and normal pressure.',
+    description:
+      'Standard atmospheric conditions with 21% oxygen, 78% nitrogen, and normal pressure.',
     icon: '🌍',
     color: 'bg-blue-100 border-blue-300 text-blue-800',
   },
   {
     value: 'Vacuum',
     label: 'Vacuum',
-    description: 'Complete absence of matter - no air pressure or atmospheric gases.',
+    description:
+      'Complete absence of matter - no air pressure or atmospheric gases.',
     icon: '🌌',
     color: 'bg-purple-100 border-purple-300 text-purple-800',
   },
   {
     value: 'Pure Oxygen',
     label: 'Pure Oxygen',
-    description: '100% oxygen environment - highly reactive conditions that accelerate combustion.',
+    description:
+      '100% oxygen environment - highly reactive conditions that accelerate combustion.',
     icon: '💨',
     color: 'bg-red-100 border-red-300 text-red-800',
   },
   {
     value: 'Inert Gas',
     label: 'Inert Gas',
-    description: 'Noble gas environment (argon/helium) that prevents oxidation and unwanted reactions.',
+    description:
+      'Noble gas environment (argon/helium) that prevents oxidation and unwanted reactions.',
     icon: '⚪',
     color: 'bg-gray-100 border-gray-300 text-gray-800',
   },
   {
     value: 'Acidic Environment',
     label: 'Acidic Environment',
-    description: 'Low pH conditions that promote acid-catalyzed reactions and metal dissolution.',
+    description:
+      'Low pH conditions that promote acid-catalyzed reactions and metal dissolution.',
     icon: '🧪',
     color: 'bg-yellow-100 border-yellow-300 text-yellow-800',
   },
   {
     value: 'Basic Environment',
     label: 'Basic Environment',
-    description: 'High pH conditions that favor base-catalyzed reactions and saponification.',
+    description:
+      'High pH conditions that favor base-catalyzed reactions and saponification.',
     icon: '🧂',
     color: 'bg-green-100 border-green-300 text-green-800',
   },
@@ -101,9 +107,9 @@ export const EnvironmentSelector: React.FC<EnvironmentSelectorProps> = ({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        {environmentOptions.map((option) => {
+        {environmentOptions.map(option => {
           const isSelected = environment === option.value;
-          
+
           return (
             <div key={option.value} className="group relative">
               <button
@@ -120,20 +126,28 @@ export const EnvironmentSelector: React.FC<EnvironmentSelectorProps> = ({
                 aria-describedby={`env-desc-${option.value.replace(/[^a-zA-Z0-9]/g, '-')}`}
               >
                 <div className="flex items-start space-x-3">
-                  <span className="text-2xl flex-shrink-0" role="img" aria-hidden="true">
+                  <span
+                    className="text-2xl flex-shrink-0"
+                    role="img"
+                    aria-hidden="true"
+                  >
                     {option.icon}
                   </span>
                   <div className="flex-1 min-w-0">
-                    <h4 className={cn(
-                      'font-medium text-sm',
-                      isSelected ? 'text-current' : 'text-gray-900'
-                    )}>
+                    <h4
+                      className={cn(
+                        'font-medium text-sm',
+                        isSelected ? 'text-current' : 'text-gray-900'
+                      )}
+                    >
                       {option.label}
                     </h4>
-                    <p className={cn(
-                      'text-xs mt-1 line-clamp-2',
-                      isSelected ? 'text-current opacity-80' : 'text-gray-600'
-                    )}>
+                    <p
+                      className={cn(
+                        'text-xs mt-1 line-clamp-2',
+                        isSelected ? 'text-current opacity-80' : 'text-gray-600'
+                      )}
+                    >
                       {option.description}
                     </p>
                   </div>
@@ -178,11 +192,11 @@ export const EnvironmentSelector: React.FC<EnvironmentSelectorProps> = ({
             Current Environment:
           </span>
           <span className="text-primary-800 font-semibold text-sm">
-            {environmentOptions.find(opt => opt.value === environment)?.icon} {environment}
+            {environmentOptions.find(opt => opt.value === environment)?.icon}{' '}
+            {environment}
           </span>
         </div>
       </div>
     </div>
   );
 };
-

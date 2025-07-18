@@ -76,9 +76,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         {isLoading ? (
           <>
-            <span className="sr-only">
-              {loadingText || 'Loading...'}
-            </span>
+            <span className="sr-only">{loadingText || 'Loading...'}</span>
             <span aria-live="polite" className="sr-only">
               Loading, please wait
             </span>

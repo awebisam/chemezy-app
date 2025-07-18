@@ -14,7 +14,9 @@ export const SelectedChemical: React.FC<SelectedChemicalProps> = ({
 }) => {
   const { updateChemicalQuantity, removeChemical } = useLabStore();
   const [isEditing, setIsEditing] = useState(false);
-  const [tempQuantity, setTempQuantity] = useState(selectedChemical.quantity.toString());
+  const [tempQuantity, setTempQuantity] = useState(
+    selectedChemical.quantity.toString()
+  );
 
   const { chemical, quantity } = selectedChemical;
 
@@ -24,7 +26,9 @@ export const SelectedChemical: React.FC<SelectedChemicalProps> = ({
     }
   };
 
-  const handleQuantityInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQuantityInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const value = event.target.value;
     setTempQuantity(value);
   };
@@ -41,7 +45,9 @@ export const SelectedChemical: React.FC<SelectedChemicalProps> = ({
     }
   };
 
-  const handleQuantityKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleQuantityKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
     if (event.key === 'Enter') {
       handleQuantitySubmit();
     } else if (event.key === 'Escape') {
@@ -96,7 +102,7 @@ export const SelectedChemical: React.FC<SelectedChemicalProps> = ({
             {chemical.state_of_matter}
           </span>
         </div>
-        
+
         <button
           onClick={handleRemove}
           className="text-gray-400 hover:text-red-500 transition-colors duration-200 p-1"
@@ -140,7 +146,7 @@ export const SelectedChemical: React.FC<SelectedChemicalProps> = ({
       <div className="border-t border-gray-100 pt-3">
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium text-gray-700">Quantity:</span>
-          
+
           <div className="flex items-center space-x-2">
             {/* Decrease Button */}
             <button
@@ -204,14 +210,12 @@ export const SelectedChemical: React.FC<SelectedChemicalProps> = ({
         </div>
 
         {/* Unit Label */}
-        <div className="text-xs text-gray-500 text-right mt-1">
-          grams
-        </div>
+        <div className="text-xs text-gray-500 text-right mt-1">grams</div>
       </div>
 
       {/* Quick Quantity Buttons */}
       <div className="flex space-x-1 mt-3">
-        {[1, 5, 10].map((quickQuantity) => (
+        {[1, 5, 10].map(quickQuantity => (
           <button
             key={quickQuantity}
             onClick={() => handleQuantityChange(quickQuantity)}

@@ -66,7 +66,8 @@ describe('ResultsDisplay', () => {
           delta_celsius: 25,
         },
       ],
-      explanation: 'This is a simple acid-base neutralization reaction that produces water and salt.',
+      explanation:
+        'This is a simple acid-base neutralization reaction that produces water and salt.',
       is_world_first: false,
     };
 
@@ -139,7 +140,9 @@ describe('ResultsDisplay', () => {
 
     // Check explanation
     expect(screen.getByText('Scientific Explanation')).toBeInTheDocument();
-    expect(screen.getByText(mockReactionResult.explanation)).toBeInTheDocument();
+    expect(
+      screen.getByText(mockReactionResult.explanation)
+    ).toBeInTheDocument();
   });
 
   it('displays world-first discovery banner', () => {
@@ -189,7 +192,11 @@ describe('ResultsDisplay', () => {
     render(<ResultsDisplay />);
 
     expect(screen.getByText(/WORLD-FIRST DISCOVERY!/)).toBeInTheDocument();
-    expect(screen.getByText(/Congratulations! You've discovered a reaction that no one has found before!/)).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /Congratulations! You've discovered a reaction that no one has found before!/
+      )
+    ).toBeInTheDocument();
   });
 
   it('displays different effect types correctly', () => {
@@ -260,9 +267,13 @@ describe('ResultsDisplay', () => {
     expect(screen.getByText('light emission')).toBeInTheDocument();
     expect(screen.getByText('foam production')).toBeInTheDocument();
     expect(screen.getByText('volume change')).toBeInTheDocument();
-    
-    expect(screen.getByText(/Light emission \(blue, 80% intensity\)/)).toBeInTheDocument();
-    expect(screen.getByText(/white foam production \(large bubbles\)/)).toBeInTheDocument();
+
+    expect(
+      screen.getByText(/Light emission \(blue, 80% intensity\)/)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/white foam production \(large bubbles\)/)
+    ).toBeInTheDocument();
     expect(screen.getByText(/Volume expansion \(1.5x\)/)).toBeInTheDocument();
   });
 });

@@ -38,7 +38,9 @@ export const Modal: React.FC<ModalProps> = ({
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         );
         const firstElement = focusableElements[0] as HTMLElement;
-        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+        const lastElement = focusableElements[
+          focusableElements.length - 1
+        ] as HTMLElement;
 
         if (event.shiftKey) {
           if (document.activeElement === firstElement) {
@@ -58,7 +60,7 @@ export const Modal: React.FC<ModalProps> = ({
       document.addEventListener('keydown', handleEscape);
       document.addEventListener('keydown', handleTabKey);
       document.body.style.overflow = 'hidden';
-      
+
       // Focus management
       if (initialFocus?.current) {
         initialFocus.current.focus();

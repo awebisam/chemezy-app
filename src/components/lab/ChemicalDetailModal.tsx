@@ -40,12 +40,7 @@ export const ChemicalDetailModal: React.FC<ChemicalDetailModalProps> = ({
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title="Chemical Details"
-      size="lg"
-    >
+    <Modal isOpen={isOpen} onClose={onClose} title="Chemical Details" size="lg">
       <div className="space-y-6">
         {/* Header with color and state */}
         <div className="flex items-center justify-between">
@@ -76,7 +71,9 @@ export const ChemicalDetailModal: React.FC<ChemicalDetailModalProps> = ({
         {/* Basic Properties */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-gray-50 p-4 rounded-lg">
-            <h4 className="font-semibold text-gray-900 mb-2">Basic Properties</h4>
+            <h4 className="font-semibold text-gray-900 mb-2">
+              Basic Properties
+            </h4>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-gray-600">ID:</span>
@@ -116,10 +113,14 @@ export const ChemicalDetailModal: React.FC<ChemicalDetailModalProps> = ({
             <h4 className="font-semibold text-gray-900 mb-2">
               Additional Properties
             </h4>
-            {chemical.properties && Object.keys(chemical.properties).length > 0 ? (
+            {chemical.properties &&
+            Object.keys(chemical.properties).length > 0 ? (
               <div className="space-y-2 text-sm max-h-48 overflow-y-auto">
                 {Object.entries(chemical.properties).map(([key, value]) => (
-                  <div key={key} className="border-b border-gray-200 pb-2 last:border-b-0">
+                  <div
+                    key={key}
+                    className="border-b border-gray-200 pb-2 last:border-b-0"
+                  >
                     <div className="font-medium text-gray-700 capitalize">
                       {key.replace(/_/g, ' ')}:
                     </div>
@@ -130,7 +131,9 @@ export const ChemicalDetailModal: React.FC<ChemicalDetailModalProps> = ({
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500 text-sm">No additional properties available</p>
+              <p className="text-gray-500 text-sm">
+                No additional properties available
+              </p>
             )}
           </div>
         </div>
@@ -154,9 +157,9 @@ export const ChemicalDetailModal: React.FC<ChemicalDetailModalProps> = ({
             Safety Notice
           </h4>
           <p className="text-yellow-700 text-sm">
-            This is a virtual chemistry lab. In real life, always follow proper safety
-            protocols when handling chemicals. Consult safety data sheets (SDS) and
-            work under appropriate supervision.
+            This is a virtual chemistry lab. In real life, always follow proper
+            safety protocols when handling chemicals. Consult safety data sheets
+            (SDS) and work under appropriate supervision.
           </p>
         </div>
 
@@ -164,9 +167,9 @@ export const ChemicalDetailModal: React.FC<ChemicalDetailModalProps> = ({
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
           <h4 className="font-semibold text-blue-800 mb-2">How to Use</h4>
           <p className="text-blue-700 text-sm">
-            Drag this chemical from the inventory to your lab bench to add it to your
-            experiment. You can specify the quantity and combine it with other chemicals
-            to see what reactions occur.
+            Drag this chemical from the inventory to your lab bench to add it to
+            your experiment. You can specify the quantity and combine it with
+            other chemicals to see what reactions occur.
           </p>
         </div>
       </div>

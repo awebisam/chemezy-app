@@ -55,7 +55,9 @@ describe('EnvironmentSelector', () => {
     render(<EnvironmentSelector />);
 
     // The Earth (Normal) button should be selected (pressed)
-    const earthButton = screen.getByRole('button', { name: /Earth \(Normal\)/ });
+    const earthButton = screen.getByRole('button', {
+      name: /Earth \(Normal\)/,
+    });
     expect(earthButton).toHaveAttribute('aria-pressed', 'true');
   });
 
@@ -72,10 +74,10 @@ describe('EnvironmentSelector', () => {
   it('updates selection when environment changes', () => {
     // First render with Earth (Normal)
     const { rerender } = render(<EnvironmentSelector />);
-    
+
     let earthButton = screen.getByRole('button', { name: /Earth \(Normal\)/ });
     let vacuumButton = screen.getByRole('button', { name: /Vacuum/ });
-    
+
     expect(earthButton).toHaveAttribute('aria-pressed', 'true');
     expect(vacuumButton).toHaveAttribute('aria-pressed', 'false');
 
@@ -110,9 +112,15 @@ describe('EnvironmentSelector', () => {
     render(<EnvironmentSelector />);
 
     // Check that descriptions are present (they appear in both card and tooltip)
-    expect(screen.getAllByText(/Standard atmospheric conditions/).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Complete absence of matter/).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/100% oxygen environment/).length).toBeGreaterThan(0);
+    expect(
+      screen.getAllByText(/Standard atmospheric conditions/).length
+    ).toBeGreaterThan(0);
+    expect(
+      screen.getAllByText(/Complete absence of matter/).length
+    ).toBeGreaterThan(0);
+    expect(
+      screen.getAllByText(/100% oxygen environment/).length
+    ).toBeGreaterThan(0);
   });
 
   it('has proper accessibility attributes', () => {
@@ -120,8 +128,8 @@ describe('EnvironmentSelector', () => {
 
     // Check for proper ARIA attributes
     const buttons = screen.getAllByRole('button');
-    const environmentButtons = buttons.filter(button => 
-      button.getAttribute('aria-pressed') !== null
+    const environmentButtons = buttons.filter(
+      button => button.getAttribute('aria-pressed') !== null
     );
 
     environmentButtons.forEach(button => {
@@ -135,8 +143,10 @@ describe('EnvironmentSelector', () => {
   });
 
   it('applies custom className when provided', () => {
-    const { container } = render(<EnvironmentSelector className="custom-class" />);
-    
+    const { container } = render(
+      <EnvironmentSelector className="custom-class" />
+    );
+
     const environmentSelector = container.firstChild as HTMLElement;
     expect(environmentSelector).toHaveClass('custom-class');
   });

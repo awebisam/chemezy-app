@@ -25,7 +25,7 @@ export const LabBench: React.FC<LabBenchProps> = ({ className }) => {
     const rect = event.currentTarget.getBoundingClientRect();
     const x = event.clientX;
     const y = event.clientY;
-    
+
     if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
       setIsDragOver(false);
       setDragError(null);
@@ -45,10 +45,10 @@ export const LabBench: React.FC<LabBenchProps> = ({ className }) => {
       }
 
       const chemical: Chemical = JSON.parse(chemicalData);
-      
+
       // Add chemical with default quantity of 1
       addChemical(chemical, 1);
-      
+
       // Show success feedback briefly
       setTimeout(() => setDragError(null), 3000);
     } catch (error) {
@@ -70,11 +70,11 @@ export const LabBench: React.FC<LabBenchProps> = ({ className }) => {
 
   const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
     event.preventDefault();
-    
+
     // Get touch position
     const touch = event.touches[0];
     const element = document.elementFromPoint(touch.clientX, touch.clientY);
-    
+
     // Check if we're over the drop zone
     if (element && event.currentTarget.contains(element)) {
       setIsDragOver(true);
@@ -89,7 +89,9 @@ export const LabBench: React.FC<LabBenchProps> = ({ className }) => {
   };
 
   return (
-    <div className={cn('bg-white rounded-lg border-2 border-dashed', className)}>
+    <div
+      className={cn('bg-white rounded-lg border-2 border-dashed', className)}
+    >
       {/* Header */}
       <div className="p-4 border-b border-gray-200">
         <h2 className="text-lg font-semibold text-gray-900 flex items-center">
@@ -193,8 +195,9 @@ export const LabBench: React.FC<LabBenchProps> = ({ className }) => {
               Empty Lab Bench
             </h3>
             <p className="text-gray-500 max-w-sm">
-              Drag chemicals from the inventory to start setting up your experiment.
-              You can add multiple chemicals and adjust their quantities.
+              Drag chemicals from the inventory to start setting up your
+              experiment. You can add multiple chemicals and adjust their
+              quantities.
             </p>
           </div>
         )}
@@ -203,7 +206,8 @@ export const LabBench: React.FC<LabBenchProps> = ({ className }) => {
       {/* Touch Support Instructions */}
       <div className="p-4 border-t border-gray-200 bg-gray-50 rounded-b-lg">
         <p className="text-xs text-gray-600 text-center">
-          💡 Tip: On touch devices, tap a chemical in the inventory to add it to the lab bench
+          💡 Tip: On touch devices, tap a chemical in the inventory to add it to
+          the lab bench
         </p>
       </div>
     </div>

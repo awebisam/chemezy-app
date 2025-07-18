@@ -17,10 +17,10 @@ const DemoContent: React.FC = () => {
       setInputError('This field is required');
       return;
     }
-    
+
     setInputError('');
     setIsLoading(true);
-    
+
     // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
@@ -30,14 +30,19 @@ const DemoContent: React.FC = () => {
 
   const showToasts = () => {
     toast.info('Info', 'This is an informational message');
-    setTimeout(() => toast.warning('Warning', 'This is a warning message'), 1000);
+    setTimeout(
+      () => toast.warning('Warning', 'This is a warning message'),
+      1000
+    );
     setTimeout(() => toast.error('Error', 'This is an error message'), 2000);
   };
 
   return (
     <div className="p-8 max-w-4xl mx-auto space-y-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">UI Component Library Demo</h1>
-      
+      <h1 className="text-3xl font-bold text-gray-900 mb-8">
+        UI Component Library Demo
+      </h1>
+
       {/* Buttons Section */}
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold text-gray-800">Buttons</h2>
@@ -53,7 +58,11 @@ const DemoContent: React.FC = () => {
           <Button size="lg">Large Button</Button>
         </div>
         <div className="flex flex-wrap gap-4">
-          <Button isLoading={isLoading} onClick={handleSubmit} loadingText="Processing...">
+          <Button
+            isLoading={isLoading}
+            onClick={handleSubmit}
+            loadingText="Processing..."
+          >
             {isLoading ? 'Processing...' : 'Submit Form'}
           </Button>
           <Button disabled>Disabled Button</Button>
@@ -68,7 +77,7 @@ const DemoContent: React.FC = () => {
             label="Required Field"
             placeholder="Enter some text..."
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={e => setInputValue(e.target.value)}
             error={inputError}
             isRequired
           />
@@ -93,7 +102,9 @@ const DemoContent: React.FC = () => {
 
       {/* Loading Spinners Section */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold text-gray-800">Loading Spinners</h2>
+        <h2 className="text-2xl font-semibold text-gray-800">
+          Loading Spinners
+        </h2>
         <div className="flex items-center gap-8">
           <div className="text-center">
             <LoadingSpinner size="sm" />
@@ -136,7 +147,7 @@ const DemoContent: React.FC = () => {
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold text-gray-800">Modal</h2>
         <Button onClick={() => setIsModalOpen(true)}>Open Modal</Button>
-        
+
         <Modal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
@@ -145,7 +156,8 @@ const DemoContent: React.FC = () => {
         >
           <div className="space-y-4">
             <p className="text-gray-600">
-              This is an example modal with proper accessibility features including:
+              This is an example modal with proper accessibility features
+              including:
             </p>
             <ul className="list-disc list-inside text-gray-600 space-y-1">
               <li>Keyboard navigation (Tab/Shift+Tab)</li>
@@ -158,9 +170,7 @@ const DemoContent: React.FC = () => {
               <Button variant="ghost" onClick={() => setIsModalOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={() => setIsModalOpen(false)}>
-                Confirm
-              </Button>
+              <Button onClick={() => setIsModalOpen(false)}>Confirm</Button>
             </div>
           </div>
         </Modal>
@@ -168,23 +178,31 @@ const DemoContent: React.FC = () => {
 
       {/* Toast Section */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold text-gray-800">Toast Notifications</h2>
+        <h2 className="text-2xl font-semibold text-gray-800">
+          Toast Notifications
+        </h2>
         <div className="flex flex-wrap gap-4">
-          <Button onClick={() => toast.success('Success!', 'Operation completed successfully')}>
+          <Button
+            onClick={() =>
+              toast.success('Success!', 'Operation completed successfully')
+            }
+          >
             Show Success Toast
           </Button>
           <Button onClick={() => toast.error('Error!', 'Something went wrong')}>
             Show Error Toast
           </Button>
-          <Button onClick={() => toast.warning('Warning!', 'Please check your input')}>
+          <Button
+            onClick={() => toast.warning('Warning!', 'Please check your input')}
+          >
             Show Warning Toast
           </Button>
-          <Button onClick={() => toast.info('Info', 'Here is some information')}>
+          <Button
+            onClick={() => toast.info('Info', 'Here is some information')}
+          >
             Show Info Toast
           </Button>
-          <Button onClick={showToasts}>
-            Show Multiple Toasts
-          </Button>
+          <Button onClick={showToasts}>Show Multiple Toasts</Button>
         </div>
       </section>
     </div>

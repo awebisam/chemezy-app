@@ -22,10 +22,10 @@ const mockUseLabStore = vi.mocked(useLabStore);
 
 describe('LabBench', () => {
   const mockAddChemical = vi.fn();
-  
+
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     mockUseLabStore.mockReturnValue({
       selectedChemicals: [],
       environment: 'Earth (Normal)',
@@ -44,33 +44,37 @@ describe('LabBench', () => {
 
   it('renders empty lab bench correctly', () => {
     render(<LabBench />);
-    
+
     expect(screen.getByText('Lab Bench')).toBeInTheDocument();
     expect(screen.getByText('Empty Lab Bench')).toBeInTheDocument();
-    expect(screen.getByText(/Drag chemicals from the inventory/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Drag chemicals from the inventory/)
+    ).toBeInTheDocument();
   });
 
   it('handles drag and drop correctly', () => {
     render(<LabBench />);
-    
-    const dropZone = screen.getByRole('region', { name: 'Lab bench drop zone' });
-    
+
+    const dropZone = screen.getByRole('region', {
+      name: 'Lab bench drop zone',
+    });
+
     // Simulate drag over
     fireEvent.dragOver(dropZone, {
       dataTransfer: {
         dropEffect: 'copy',
       },
     });
-    
+
     expect(screen.getByText('Drop chemical here')).toBeInTheDocument();
-    
+
     // Simulate drop
     fireEvent.drop(dropZone, {
       dataTransfer: {
         getData: vi.fn().mockReturnValue(JSON.stringify(mockChemical)),
       },
     });
-    
+
     expect(mockAddChemical).toHaveBeenCalledWith(mockChemical, 1);
   });
 
@@ -91,24 +95,28 @@ describe('LabBench', () => {
     });
 
     render(<LabBench />);
-    
+
     expect(screen.getByText('Selected Chemicals (1)')).toBeInTheDocument();
     expect(screen.queryByText('Empty Lab Bench')).not.toBeInTheDocument();
   });
 
   it('handles invalid drop data gracefully', () => {
     render(<LabBench />);
-    
-    const dropZone = screen.getByRole('region', { name: 'Lab bench drop zone' });
-    
+
+    const dropZone = screen.getByRole('region', {
+      name: 'Lab bench drop zone',
+    });
+
     // Simulate drop with invalid data
     fireEvent.drop(dropZone, {
       dataTransfer: {
         getData: vi.fn().mockReturnValue('invalid json'),
       },
     });
-    
-    expect(screen.getByText('Failed to add chemical to lab bench')).toBeInTheDocument();
+
+    expect(
+      screen.getByText('Failed to add chemical to lab bench')
+    ).toBeInTheDocument();
     expect(mockAddChemical).not.toHaveBeenCalled();
   });
 });

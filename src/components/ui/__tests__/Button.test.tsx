@@ -5,7 +5,9 @@ import { Button } from '../Button';
 describe('Button', () => {
   it('renders children correctly', () => {
     render(<Button>Click me</Button>);
-    expect(screen.getByRole('button', { name: 'Click me' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Click me' })
+    ).toBeInTheDocument();
   });
 
   it('applies correct variant classes', () => {
@@ -15,7 +17,11 @@ describe('Button', () => {
   });
 
   it('shows loading state correctly', () => {
-    render(<Button isLoading loadingText="Saving...">Save</Button>);
+    render(
+      <Button isLoading loadingText="Saving...">
+        Save
+      </Button>
+    );
     expect(screen.getByText('Saving...')).toBeInTheDocument();
     expect(screen.getByText('Loading, please wait')).toBeInTheDocument();
   });
@@ -30,15 +36,19 @@ describe('Button', () => {
   it('handles click events', () => {
     const handleClick = vi.fn();
     render(<Button onClick={handleClick}>Click me</Button>);
-    
+
     fireEvent.click(screen.getByRole('button'));
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
   it('does not trigger click when disabled', () => {
     const handleClick = vi.fn();
-    render(<Button onClick={handleClick} disabled>Click me</Button>);
-    
+    render(
+      <Button onClick={handleClick} disabled>
+        Click me
+      </Button>
+    );
+
     fireEvent.click(screen.getByRole('button'));
     expect(handleClick).not.toHaveBeenCalled();
   });

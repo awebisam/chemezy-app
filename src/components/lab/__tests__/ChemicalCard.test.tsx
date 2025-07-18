@@ -36,7 +36,9 @@ describe('ChemicalCard', () => {
 
   it('calls onViewDetails when details button is clicked', () => {
     const mockOnViewDetails = vi.fn();
-    render(<ChemicalCard chemical={mockChemical} onViewDetails={mockOnViewDetails} />);
+    render(
+      <ChemicalCard chemical={mockChemical} onViewDetails={mockOnViewDetails} />
+    );
 
     fireEvent.click(screen.getByText('Details'));
     expect(mockOnViewDetails).toHaveBeenCalledWith(mockChemical);

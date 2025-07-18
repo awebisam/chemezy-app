@@ -7,8 +7,11 @@ export interface ReactionTriggerProps {
   className?: string;
 }
 
-export const ReactionTrigger: React.FC<ReactionTriggerProps> = ({ className }) => {
-  const { selectedChemicals, isReacting, triggerReaction, error } = useLabStore();
+export const ReactionTrigger: React.FC<ReactionTriggerProps> = ({
+  className,
+}) => {
+  const { selectedChemicals, isReacting, triggerReaction, error } =
+    useLabStore();
 
   const canReact = selectedChemicals.length > 0 && !isReacting;
 
@@ -86,7 +89,8 @@ export const ReactionTrigger: React.FC<ReactionTriggerProps> = ({ className }) =
           </p>
         ) : (
           <p className="text-sm text-gray-600">
-            Ready to react {selectedChemicals.length} chemical{selectedChemicals.length !== 1 ? 's' : ''}
+            Ready to react {selectedChemicals.length} chemical
+            {selectedChemicals.length !== 1 ? 's' : ''}
           </p>
         )}
       </div>
@@ -134,7 +138,9 @@ export const ReactionTrigger: React.FC<ReactionTriggerProps> = ({ className }) =
               >
                 {selected.chemical.molecular_formula}
                 {selected.quantity > 1 && (
-                  <span className="ml-1 text-primary-600">×{selected.quantity}</span>
+                  <span className="ml-1 text-primary-600">
+                    ×{selected.quantity}
+                  </span>
                 )}
               </span>
             ))}

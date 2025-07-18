@@ -26,11 +26,11 @@ export const ChemicalCard: React.FC<ChemicalCardProps> = ({
       event.preventDefault();
       return;
     }
-    
+
     // Store chemical data for drop handling
     event.dataTransfer.setData('application/json', JSON.stringify(chemical));
     event.dataTransfer.effectAllowed = 'copy';
-    
+
     // Add visual feedback
     event.currentTarget.style.opacity = '0.5';
   };
@@ -92,7 +92,7 @@ export const ChemicalCard: React.FC<ChemicalCardProps> = ({
       onClick={handleClick}
       role={onSelect ? 'button' : undefined}
       tabIndex={onSelect ? 0 : undefined}
-      onKeyDown={(e) => {
+      onKeyDown={e => {
         if ((e.key === 'Enter' || e.key === ' ') && onSelect) {
           e.preventDefault();
           onSelect(chemical);
@@ -160,7 +160,7 @@ export const ChemicalCard: React.FC<ChemicalCardProps> = ({
               Drag to lab
             </div>
           )}
-          
+
           {showAddButton && onAddToLab && (
             <button
               onClick={handleAddToLab}
@@ -171,7 +171,7 @@ export const ChemicalCard: React.FC<ChemicalCardProps> = ({
             </button>
           )}
         </div>
-        
+
         {onViewDetails && (
           <button
             onClick={handleDetailsClick}

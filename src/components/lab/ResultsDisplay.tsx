@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { cn } from '@/utils/cn';
 import { useLabStore } from '@/store/lab.store';
+import {
+  ReactionVessel,
+  VesselPresets,
+} from '@/components/effects/ReactionVessel';
 import type { ProductOutput, VisualEffect } from '@/types/reaction.types';
 
 export interface ResultsDisplayProps {
   className?: string;
 }
 
-export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ className }) => {
+export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
+  className,
+}) => {
   const { reactionResult, selectedChemicals } = useLabStore();
   const [showCelebration, setShowCelebration] = useState(false);
 
@@ -49,12 +55,15 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ className }) => 
                   clipRule="evenodd"
                 />
               </svg>
-              <span className="font-bold text-lg">🎉 WORLD-FIRST DISCOVERY! 🎉</span>
+              <span className="font-bold text-lg">
+                🎉 WORLD-FIRST DISCOVERY! 🎉
+              </span>
             </div>
             <p className="text-center mt-2 text-sm opacity-90">
-              Congratulations! You've discovered a reaction that no one has found before!
+              Congratulations! You've discovered a reaction that no one has
+              found before!
             </p>
-            
+
             {/* Celebration particles */}
             {showCelebration && (
               <div className="absolute inset-0 pointer-events-none">
@@ -98,12 +107,16 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ className }) => 
       <div className="p-4 space-y-6">
         {/* Reactants → Products */}
         <div className="space-y-4">
-          <h3 className="text-md font-medium text-gray-800">Reaction Summary</h3>
-          
+          <h3 className="text-md font-medium text-gray-800">
+            Reaction Summary
+          </h3>
+
           <div className="flex items-center space-x-4">
             {/* Reactants */}
             <div className="flex-1">
-              <h4 className="text-sm font-medium text-gray-600 mb-2">Reactants</h4>
+              <h4 className="text-sm font-medium text-gray-600 mb-2">
+                Reactants
+              </h4>
               <div className="space-y-2">
                 {selectedChemicals.map((selected, index) => (
                   <div
@@ -145,7 +158,9 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ className }) => 
 
             {/* Products */}
             <div className="flex-1">
-              <h4 className="text-sm font-medium text-gray-600 mb-2">Products</h4>
+              <h4 className="text-sm font-medium text-gray-600 mb-2">
+                Products
+              </h4>
               <div className="space-y-2">
                 {products.map((product, index) => (
                   <ProductCard key={index} product={product} />
@@ -155,10 +170,43 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ className }) => 
           </div>
         </div>
 
-        {/* Visual Effects */}
+        {/* Visual Effects with Reaction Vessel */}
         {effects.length > 0 && (
           <div className="space-y-3">
-            <h3 className="text-md font-medium text-gray-800">Visual Effects</h3>
+            <h3 className="text-md font-medium text-gray-800">
+              Visual Effects
+            </h3>
+
+            {/* Interactive Reaction Vessel */}
+            <div className="flex justify-center mb-4">
+              <ReactionVessel
+                config={{
+                  ...VesselPresets.reactionFlask,
+                  bubbling: effects.some(
+                    e => e.effect_type === 'gas_production'
+                  ),
+                  heating: effects.some(
+                    e => e.effect_type === 'temperature_change'
+                  ),
+                  stirring: effects.some(
+                    e => e.effect_type === 'foam_production'
+                  ),
+                }}
+                effects={effects}
+                width={300}
+                height={400}
+                animationConfig={{
+                  bubbleSpeed: 1.5,
+                  stirringSpeed: 2,
+                  heatingIntensity: 1.2,
+                  enableParticles: true,
+                  enableSteam: true,
+                  enableGlow: true,
+                }}
+              />
+            </div>
+
+            {/* Effect Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {effects.map((effect, index) => (
                 <EffectCard key={index} effect={effect} />
@@ -169,9 +217,13 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ className }) => 
 
         {/* Scientific Explanation */}
         <div className="space-y-3">
-          <h3 className="text-md font-medium text-gray-800">Scientific Explanation</h3>
+          <h3 className="text-md font-medium text-gray-800">
+            Scientific Explanation
+          </h3>
           <div className="p-4 bg-gray-50 rounded-md border border-gray-200">
-            <p className="text-sm text-gray-700 leading-relaxed">{explanation}</p>
+            <p className="text-sm text-gray-700 leading-relaxed">
+              {explanation}
+            </p>
           </div>
         </div>
       </div>

@@ -41,7 +41,9 @@ export const ChemicalInventory: React.FC<ChemicalInventoryProps> = ({
   } = useChemicalStore();
 
   const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
-  const [selectedChemical, setSelectedChemical] = useState<Chemical | null>(null);
+  const [selectedChemical, setSelectedChemical] = useState<Chemical | null>(
+    null
+  );
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
 
   // Initialize data on mount
@@ -120,7 +122,7 @@ export const ChemicalInventory: React.FC<ChemicalInventoryProps> = ({
         <h2 className="text-lg font-semibold text-gray-900 mb-4">
           Chemical Inventory
         </h2>
-        
+
         {showSearch && (
           <Input
             type="text"
@@ -202,7 +204,9 @@ export const ChemicalInventory: React.FC<ChemicalInventoryProps> = ({
               />
             </svg>
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              {localSearchQuery ? 'No chemicals found' : 'No chemicals available'}
+              {localSearchQuery
+                ? 'No chemicals found'
+                : 'No chemicals available'}
             </h3>
             <p className="text-gray-600">
               {localSearchQuery
@@ -214,7 +218,7 @@ export const ChemicalInventory: React.FC<ChemicalInventoryProps> = ({
           /* Chemical Grid */
           <div className="p-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {filteredChemicals.map((chemical) => (
+              {filteredChemicals.map(chemical => (
                 <ChemicalCard
                   key={chemical.id}
                   chemical={chemical}
@@ -252,7 +256,9 @@ export const ChemicalInventory: React.FC<ChemicalInventoryProps> = ({
             {isLoading && chemicals.length > 0 && (
               <div className="flex justify-center items-center py-4">
                 <LoadingSpinner size="md" />
-                <span className="ml-2 text-gray-600">Loading more chemicals...</span>
+                <span className="ml-2 text-gray-600">
+                  Loading more chemicals...
+                </span>
               </div>
             )}
           </div>

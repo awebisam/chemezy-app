@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+} from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/utils/cn';
 
@@ -77,14 +83,16 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove }) => {
       icon: 'text-red-400',
       title: 'text-red-800',
       message: 'text-red-700',
-      iconPath: 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z',
+      iconPath:
+        'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z',
     },
     warning: {
       bg: 'bg-yellow-50 border-yellow-200',
       icon: 'text-yellow-400',
       title: 'text-yellow-800',
       message: 'text-yellow-700',
-      iconPath: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z',
+      iconPath:
+        'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z',
     },
     info: {
       bg: 'bg-blue-50 border-blue-200',
@@ -143,10 +151,14 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove }) => {
                   type="button"
                   className={cn(
                     'text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2',
-                    toast.type === 'success' && 'text-green-600 hover:text-green-500 focus:ring-green-500',
-                    toast.type === 'error' && 'text-red-600 hover:text-red-500 focus:ring-red-500',
-                    toast.type === 'warning' && 'text-yellow-600 hover:text-yellow-500 focus:ring-yellow-500',
-                    toast.type === 'info' && 'text-blue-600 hover:text-blue-500 focus:ring-blue-500'
+                    toast.type === 'success' &&
+                      'text-green-600 hover:text-green-500 focus:ring-green-500',
+                    toast.type === 'error' &&
+                      'text-red-600 hover:text-red-500 focus:ring-red-500',
+                    toast.type === 'warning' &&
+                      'text-yellow-600 hover:text-yellow-500 focus:ring-yellow-500',
+                    toast.type === 'info' &&
+                      'text-blue-600 hover:text-blue-500 focus:ring-blue-500'
                   )}
                   onClick={toast.action.onClick}
                 >
@@ -186,7 +198,10 @@ interface ToastContainerProps {
   onRemove: (id: string) => void;
 }
 
-const ToastContainer: React.FC<ToastContainerProps> = ({ toasts, onRemove }) => {
+const ToastContainer: React.FC<ToastContainerProps> = ({
+  toasts,
+  onRemove,
+}) => {
   if (toasts.length === 0) return null;
 
   return createPortal(
@@ -196,7 +211,7 @@ const ToastContainer: React.FC<ToastContainerProps> = ({ toasts, onRemove }) => 
       aria-atomic="true"
     >
       <div className="w-full flex flex-col items-center space-y-4 sm:items-end">
-        {toasts.map((toast) => (
+        {toasts.map(toast => (
           <ToastItem key={toast.id} toast={toast} onRemove={onRemove} />
         ))}
       </div>
@@ -219,11 +234,11 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
       id,
       duration: toast.duration ?? 5000, // Default 5 seconds
     };
-    setToasts((prev) => [...prev, newToast]);
+    setToasts(prev => [...prev, newToast]);
   }, []);
 
   const removeToast = useCallback((id: string) => {
-    setToasts((prev) => prev.filter((toast) => toast.id !== id));
+    setToasts(prev => prev.filter(toast => toast.id !== id));
   }, []);
 
   const clearToasts = useCallback(() => {

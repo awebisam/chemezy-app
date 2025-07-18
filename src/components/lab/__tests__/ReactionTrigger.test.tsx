@@ -11,7 +11,7 @@ const mockUseLabStore = vi.mocked(useLabStore);
 
 describe('ReactionTrigger', () => {
   const mockTriggerReaction = vi.fn();
-  
+
   beforeEach(() => {
     vi.clearAllMocks();
     mockTriggerReaction.mockClear();
@@ -35,9 +35,13 @@ describe('ReactionTrigger', () => {
     });
 
     render(<ReactionTrigger />);
-    
-    expect(screen.getByRole('button', { name: /start reaction/i })).toBeDisabled();
-    expect(screen.getByText(/add chemicals to the lab bench/i)).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('button', { name: /start reaction/i })
+    ).toBeDisabled();
+    expect(
+      screen.getByText(/add chemicals to the lab bench/i)
+    ).toBeInTheDocument();
   });
 
   it('renders with chemicals selected and enabled button', () => {
@@ -72,7 +76,7 @@ describe('ReactionTrigger', () => {
     });
 
     render(<ReactionTrigger />);
-    
+
     const button = screen.getByRole('button', { name: /start reaction/i });
     expect(button).not.toBeDisabled();
     expect(screen.getByText(/ready to react 1 chemical/i)).toBeInTheDocument();
@@ -109,14 +113,14 @@ describe('ReactionTrigger', () => {
     });
 
     render(<ReactionTrigger />);
-    
+
     expect(screen.getByText(/reacting.../i)).toBeInTheDocument();
     expect(screen.getByRole('button')).toBeDisabled();
   });
 
   it('displays error message when reaction fails', () => {
     const errorMessage = 'Reaction failed due to incompatible chemicals';
-    
+
     mockUseLabStore.mockReturnValue({
       selectedChemicals: [
         {
@@ -146,7 +150,7 @@ describe('ReactionTrigger', () => {
     });
 
     render(<ReactionTrigger />);
-    
+
     expect(screen.getByText('Reaction Failed')).toBeInTheDocument();
     expect(screen.getByText(errorMessage)).toBeInTheDocument();
   });
@@ -181,10 +185,10 @@ describe('ReactionTrigger', () => {
     });
 
     render(<ReactionTrigger />);
-    
+
     const button = screen.getByRole('button', { name: /start reaction/i });
     fireEvent.click(button);
-    
+
     await waitFor(() => {
       expect(mockTriggerReaction).toHaveBeenCalledTimes(1);
     });
@@ -234,7 +238,7 @@ describe('ReactionTrigger', () => {
     });
 
     render(<ReactionTrigger />);
-    
+
     expect(screen.getByText(/ready to react 2 chemicals/i)).toBeInTheDocument();
     expect(screen.getByText('H2O')).toBeInTheDocument();
     expect(screen.getByText('×2')).toBeInTheDocument();
