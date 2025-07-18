@@ -10,6 +10,7 @@ export interface ModalProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   closeOnBackdropClick?: boolean;
   showCloseButton?: boolean;
+  initialFocus?: React.RefObject<HTMLElement>;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -20,8 +21,10 @@ export const Modal: React.FC<ModalProps> = ({
   size = 'md',
   closeOnBackdropClick = true,
   showCloseButton = true,
+  initialFocus,
 }) => {
-  // Handle escape key
+  const modalRef = React.useRef<HTMLDivElement>(null);
+  // Handle escape key and focus management
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && isOpen) {
@@ -29,16 +32,50 @@ export const Modal: React.FC<ModalProps> = ({
       }
     };
 
+    const handleTabKey = (event: KeyboardEvent) => {
+      if (event.key === 'Tab' && isOpen && modalRef.current) {
+        const focusableElements = modalRef.current.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        const firstElement = focusableElements[0] as HTMLElement;
+        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+        if (event.shiftKey) {
+          if (document.activeElement === firstElement) {
+            lastElement?.focus();
+            event.preventDefault();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            firstElement?.focus();
+            event.preventDefault();
+          }
+        }
+      }
+    };
+
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
+      document.addEventListener('keydown', handleTabKey);
       document.body.style.overflow = 'hidden';
+      
+      // Focus management
+      if (initialFocus?.current) {
+        initialFocus.current.focus();
+      } else if (modalRef.current) {
+        const firstFocusable = modalRef.current.querySelector(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        ) as HTMLElement;
+        firstFocusable?.focus();
+      }
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener('keydown', handleTabKey);
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, initialFocus]);
 
   if (!isOpen) return null;
 
@@ -64,6 +101,7 @@ export const Modal: React.FC<ModalProps> = ({
       aria-labelledby={title ? 'modal-title' : undefined}
     >
       <div
+        ref={modalRef}
         className={cn(
           'bg-white rounded-lg shadow-xl w-full',
           sizes[size],

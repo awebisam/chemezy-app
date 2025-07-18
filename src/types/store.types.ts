@@ -74,10 +74,13 @@ export interface ChemicalStore {
   searchChemicals: (query: string) => void;
   createChemical: (data: {
     molecular_formula: string;
-    common_name?: string;
+    context?: string | null;
   }) => Promise<Chemical>;
   clearError: () => void;
   resetPagination: () => void;
+  loadMore: () => Promise<void>;
+  hasMore: () => boolean;
+  getFilteredChemicals: () => Chemical[];
 }
 
 // Dashboard Store Interface

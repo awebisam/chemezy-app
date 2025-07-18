@@ -7,6 +7,7 @@ export interface ButtonProps
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   children: React.ReactNode;
+  loadingText?: string;
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -18,6 +19,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       isLoading = false,
       disabled,
       children,
+      loadingText,
       ...props
     },
     ref
@@ -46,6 +48,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(baseClasses, variants[variant], sizes[size], className)}
         disabled={disabled || isLoading}
         ref={ref}
+        aria-disabled={disabled || isLoading}
         {...props}
       >
         {isLoading && (
@@ -54,6 +57,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <circle
               className="opacity-25"
@@ -70,7 +74,18 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             ></path>
           </svg>
         )}
-        {children}
+        {isLoading ? (
+          <>
+            <span className="sr-only">
+              {loadingText || 'Loading...'}
+            </span>
+            <span aria-live="polite" className="sr-only">
+              Loading, please wait
+            </span>
+          </>
+        ) : (
+          children
+        )}
       </button>
     );
   }

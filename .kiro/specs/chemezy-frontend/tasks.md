@@ -39,7 +39,7 @@
   - Add password strength indicator and form submission loading states
   - _Requirements: 1.1, 1.2, 1.3, 1.6_
 
-- [ ] 6. Develop basic UI component library
+- [x] 6. Develop basic UI component library
   - Create Button component with multiple variants (primary, secondary, danger)
   - Implement Input component with validation states and error messages
   - Build Modal component with backdrop, close functionality, and accessibility
@@ -48,7 +48,7 @@
   - Add proper ARIA labels and keyboard navigation support
   - _Requirements: 9.1, 9.4_
 
-- [ ] 7. Implement chemical inventory and search functionality
+- [x] 7. Implement chemical inventory and search functionality
   - Create ChemicalInventory component with pagination and search
   - Build ChemicalCard component with drag functionality and chemical details display
   - Implement search filtering by molecular formula and common name

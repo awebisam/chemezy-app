@@ -8,6 +8,7 @@ export interface InputProps
   helperText?: string;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
+  isRequired?: boolean;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -21,11 +22,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       leftIcon,
       rightIcon,
       id,
+      isRequired = false,
       ...props
     },
     ref
   ) => {
     const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
+    const errorId = error ? `${inputId}-error` : undefined;
+    const helperTextId = helperText ? `${inputId}-helper` : undefined;
 
     return (
       <div className="w-full">
@@ -35,6 +39,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             className="block text-sm font-medium text-gray-700 mb-1"
           >
             {label}
+            {isRequired && (
+              <span className="text-red-500 ml-1" aria-label="required">
+                *
+              </span>
+            )}
           </label>
         )}
         <div className="relative">
@@ -56,6 +65,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               className
             )}
             ref={ref}
+            aria-invalid={error ? 'true' : 'false'}
+            aria-describedby={cn(
+              errorId && error,
+              helperTextId && helperText && !error
+            )}
+            required={isRequired}
             {...props}
           />
           {rightIcon && (
@@ -65,12 +80,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
         </div>
         {error && (
-          <p className="mt-1 text-sm text-red-600" role="alert">
+          <p id={errorId} className="mt-1 text-sm text-red-600" role="alert">
             {error}
           </p>
         )}
         {helperText && !error && (
-          <p className="mt-1 text-sm text-gray-500">{helperText}</p>
+          <p id={helperTextId} className="mt-1 text-sm text-gray-500">
+            {helperText}
+          </p>
         )}
       </div>
     );

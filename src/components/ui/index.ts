@@ -1,4 +1,10 @@
 export { Button } from './Button';
 export { Input } from './Input';
 export { Modal } from './Modal';
+export { LoadingSpinner } from './LoadingSpinner';
+export { ToastProvider } from './Toast';
+export { useToast } from './Toast';
+export { useToastHelpers } from './Toast';
+export type { Toast, ToastType } from './Toast';
 export { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
+export { UIDemo } from './UIDemo';
