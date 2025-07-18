@@ -30,7 +30,7 @@ describe('LabStore', () => {
       isReacting: false,
       error: null,
     });
-    
+
     vi.clearAllMocks();
   });
 
@@ -40,7 +40,7 @@ describe('LabStore', () => {
 
   it('should have initial state', () => {
     const state = useLabStore.getState();
-    
+
     expect(state.selectedChemicals).toEqual([]);
     expect(state.environment).toBe('Earth (Normal)');
     expect(state.reactionResult).toBeNull();
@@ -50,9 +50,9 @@ describe('LabStore', () => {
 
   it('should add chemical to lab bench', () => {
     const { addChemical } = useLabStore.getState();
-    
+
     addChemical(mockChemical, 2);
-    
+
     const state = useLabStore.getState();
     expect(state.selectedChemicals).toHaveLength(1);
     expect(state.selectedChemicals[0]).toEqual({
@@ -63,12 +63,12 @@ describe('LabStore', () => {
 
   it('should update quantity when adding existing chemical', () => {
     const { addChemical } = useLabStore.getState();
-    
+
     // Add chemical first time
     addChemical(mockChemical, 2);
     // Add same chemical again
     addChemical(mockChemical, 3);
-    
+
     const state = useLabStore.getState();
     expect(state.selectedChemicals).toHaveLength(1);
     expect(state.selectedChemicals[0].quantity).toBe(5);
@@ -76,39 +76,39 @@ describe('LabStore', () => {
 
   it('should remove chemical from lab bench', () => {
     const { addChemical, removeChemical } = useLabStore.getState();
-    
+
     addChemical(mockChemical, 2);
     removeChemical(mockChemical.id);
-    
+
     const state = useLabStore.getState();
     expect(state.selectedChemicals).toHaveLength(0);
   });
 
   it('should update chemical quantity', () => {
     const { addChemical, updateChemicalQuantity } = useLabStore.getState();
-    
+
     addChemical(mockChemical, 2);
     updateChemicalQuantity(mockChemical.id, 5);
-    
+
     const state = useLabStore.getState();
     expect(state.selectedChemicals[0].quantity).toBe(5);
   });
 
   it('should remove chemical when quantity is set to 0', () => {
     const { addChemical, updateChemicalQuantity } = useLabStore.getState();
-    
+
     addChemical(mockChemical, 2);
     updateChemicalQuantity(mockChemical.id, 0);
-    
+
     const state = useLabStore.getState();
     expect(state.selectedChemicals).toHaveLength(0);
   });
 
   it('should set environment', () => {
     const { setEnvironment } = useLabStore.getState();
-    
+
     setEnvironment('Vacuum');
-    
+
     const state = useLabStore.getState();
     expect(state.environment).toBe('Vacuum');
   });
@@ -120,14 +120,16 @@ describe('LabStore', () => {
       explanation: 'Test reaction',
       is_world_first: false,
     };
-    
-    vi.mocked(reactionService.predictReaction).mockResolvedValue(mockReactionResult);
-    
+
+    vi.mocked(reactionService.predictReaction).mockResolvedValue(
+      mockReactionResult
+    );
+
     const { addChemical, triggerReaction } = useLabStore.getState();
-    
+
     addChemical(mockChemical, 2);
     await triggerReaction();
-    
+
     const state = useLabStore.getState();
     expect(state.reactionResult).toEqual(mockReactionResult);
     expect(state.isReacting).toBe(false);
@@ -137,13 +139,13 @@ describe('LabStore', () => {
   it('should handle reaction failure', async () => {
     const mockError = new Error('Reaction failed');
     vi.mocked(reactionService.predictReaction).mockRejectedValue(mockError);
-    
+
     const { addChemical, triggerReaction } = useLabStore.getState();
-    
+
     addChemical(mockChemical, 2);
-    
+
     await expect(triggerReaction()).rejects.toThrow('Reaction failed');
-    
+
     const state = useLabStore.getState();
     expect(state.reactionResult).toBeNull();
     expect(state.isReacting).toBe(false);
@@ -152,9 +154,9 @@ describe('LabStore', () => {
 
   it('should not trigger reaction without chemicals', async () => {
     const { triggerReaction } = useLabStore.getState();
-    
+
     await triggerReaction();
-    
+
     const state = useLabStore.getState();
     expect(state.error).toBe('Please add at least one chemical to react');
     expect(reactionService.predictReaction).not.toHaveBeenCalled();
@@ -162,15 +164,20 @@ describe('LabStore', () => {
 
   it('should clear lab', () => {
     const { addChemical, clearLab } = useLabStore.getState();
-    
+
     addChemical(mockChemical, 2);
-    useLabStore.setState({ 
-      reactionResult: { products: [], effects: [], explanation: 'test', is_world_first: false },
-      error: 'test error' 
+    useLabStore.setState({
+      reactionResult: {
+        products: [],
+        effects: [],
+        explanation: 'test',
+        is_world_first: false,
+      },
+      error: 'test error',
     });
-    
+
     clearLab();
-    
+
     const state = useLabStore.getState();
     expect(state.selectedChemicals).toEqual([]);
     expect(state.reactionResult).toBeNull();

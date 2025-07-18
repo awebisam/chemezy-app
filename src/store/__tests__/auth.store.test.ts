@@ -25,7 +25,7 @@ describe('AuthStore', () => {
       isLoading: false,
       error: null,
     });
-    
+
     // Clear all mocks
     vi.clearAllMocks();
   });
@@ -36,7 +36,7 @@ describe('AuthStore', () => {
 
   it('should have initial state', () => {
     const state = useAuthStore.getState();
-    
+
     expect(state.user).toBeNull();
     expect(state.token).toBeNull();
     expect(state.isAuthenticated).toBe(false);
@@ -45,16 +45,26 @@ describe('AuthStore', () => {
   });
 
   it('should handle successful login', async () => {
-    const mockAuthResponse = { access_token: 'test-token', token_type: 'bearer' };
-    const mockUser = { id: 1, username: 'testuser', email: 'test@example.com', is_active: true, is_admin: false, created_at: '2023-01-01' };
-    
+    const mockAuthResponse = {
+      access_token: 'test-token',
+      token_type: 'bearer',
+    };
+    const mockUser = {
+      id: 1,
+      username: 'testuser',
+      email: 'test@example.com',
+      is_active: true,
+      is_admin: false,
+      created_at: '2023-01-01',
+    };
+
     vi.mocked(authService.login).mockResolvedValue(mockAuthResponse);
     vi.mocked(authService.getCurrentUser).mockResolvedValue(mockUser);
 
     const { login } = useAuthStore.getState();
-    
+
     await login({ username: 'testuser', password: 'password' });
-    
+
     const state = useAuthStore.getState();
     expect(state.user).toEqual(mockUser);
     expect(state.token).toBe('test-token');
@@ -68,9 +78,11 @@ describe('AuthStore', () => {
     vi.mocked(authService.login).mockRejectedValue(mockError);
 
     const { login } = useAuthStore.getState();
-    
-    await expect(login({ username: 'testuser', password: 'wrong' })).rejects.toThrow('Invalid credentials');
-    
+
+    await expect(
+      login({ username: 'testuser', password: 'wrong' })
+    ).rejects.toThrow('Invalid credentials');
+
     const state = useAuthStore.getState();
     expect(state.user).toBeNull();
     expect(state.token).toBeNull();
@@ -82,7 +94,14 @@ describe('AuthStore', () => {
   it('should handle logout', () => {
     // Set authenticated state
     useAuthStore.setState({
-      user: { id: 1, username: 'testuser', email: 'test@example.com', is_active: true, is_admin: false, created_at: '2023-01-01' },
+      user: {
+        id: 1,
+        username: 'testuser',
+        email: 'test@example.com',
+        is_active: true,
+        is_admin: false,
+        created_at: '2023-01-01',
+      },
       token: 'test-token',
       isAuthenticated: true,
     });
@@ -100,10 +119,10 @@ describe('AuthStore', () => {
 
   it('should clear error', () => {
     useAuthStore.setState({ error: 'Test error' });
-    
+
     const { clearError } = useAuthStore.getState();
     clearError();
-    
+
     const state = useAuthStore.getState();
     expect(state.error).toBeNull();
   });

@@ -51,7 +51,7 @@ describe('ChemicalStore', () => {
         total: 0,
       },
     });
-    
+
     vi.clearAllMocks();
   });
 
@@ -61,7 +61,7 @@ describe('ChemicalStore', () => {
 
   it('should have initial state', () => {
     const state = useChemicalStore.getState();
-    
+
     expect(state.chemicals).toEqual([]);
     expect(state.searchQuery).toBe('');
     expect(state.isLoading).toBe(false);
@@ -74,12 +74,14 @@ describe('ChemicalStore', () => {
   });
 
   it('should fetch chemicals successfully', async () => {
-    vi.mocked(chemicalService.getChemicals).mockResolvedValue(mockPaginatedResponse);
+    vi.mocked(chemicalService.getChemicals).mockResolvedValue(
+      mockPaginatedResponse
+    );
 
     const { fetchChemicals } = useChemicalStore.getState();
-    
+
     await fetchChemicals();
-    
+
     const state = useChemicalStore.getState();
     expect(state.chemicals).toEqual(mockChemicals);
     expect(state.pagination.total).toBe(2);
@@ -92,9 +94,9 @@ describe('ChemicalStore', () => {
     vi.mocked(chemicalService.getChemicals).mockRejectedValue(mockError);
 
     const { fetchChemicals } = useChemicalStore.getState();
-    
+
     await expect(fetchChemicals()).rejects.toThrow('Failed to fetch');
-    
+
     const state = useChemicalStore.getState();
     expect(state.chemicals).toEqual([]);
     expect(state.isLoading).toBe(false);
@@ -102,12 +104,14 @@ describe('ChemicalStore', () => {
   });
 
   it('should search chemicals', async () => {
-    vi.mocked(chemicalService.getChemicals).mockResolvedValue(mockPaginatedResponse);
+    vi.mocked(chemicalService.getChemicals).mockResolvedValue(
+      mockPaginatedResponse
+    );
 
     const { searchChemicals } = useChemicalStore.getState();
-    
+
     searchChemicals('water');
-    
+
     const state = useChemicalStore.getState();
     expect(state.searchQuery).toBe('water');
     expect(state.chemicals).toEqual([]); // Cleared for new search
@@ -128,20 +132,20 @@ describe('ChemicalStore', () => {
     vi.mocked(chemicalService.createChemical).mockResolvedValue(newChemical);
 
     // Set initial state with existing chemicals
-    useChemicalStore.setState({ 
+    useChemicalStore.setState({
       chemicals: mockChemicals,
-      pagination: { skip: 0, limit: 20, total: 2 }
+      pagination: { skip: 0, limit: 20, total: 2 },
     });
 
     const { createChemical } = useChemicalStore.getState();
-    
+
     const result = await createChemical({
       molecular_formula: 'CO2',
       context: 'test',
     });
-    
+
     expect(result).toEqual(newChemical);
-    
+
     const state = useChemicalStore.getState();
     expect(state.chemicals[0]).toEqual(newChemical); // Added to beginning
     expect(state.pagination.total).toBe(3);
@@ -151,10 +155,10 @@ describe('ChemicalStore', () => {
 
   it('should clear error', () => {
     useChemicalStore.setState({ error: 'Test error' });
-    
+
     const { clearError } = useChemicalStore.getState();
     clearError();
-    
+
     const state = useChemicalStore.getState();
     expect(state.error).toBeNull();
   });
@@ -164,10 +168,10 @@ describe('ChemicalStore', () => {
       chemicals: mockChemicals,
       pagination: { skip: 20, limit: 20, total: 100 },
     });
-    
+
     const { resetPagination } = useChemicalStore.getState();
     resetPagination();
-    
+
     const state = useChemicalStore.getState();
     expect(state.chemicals).toEqual([]);
     expect(state.pagination).toEqual({
@@ -181,14 +185,14 @@ describe('ChemicalStore', () => {
     useChemicalStore.setState({
       pagination: { skip: 0, limit: 20, total: 50 },
     });
-    
+
     const { hasMore } = useChemicalStore.getState();
     expect(hasMore()).toBe(true);
-    
+
     useChemicalStore.setState({
       pagination: { skip: 40, limit: 20, total: 50 },
     });
-    
+
     expect(hasMore()).toBe(false);
   });
 });

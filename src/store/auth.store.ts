@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { authService } from '@/services/auth.service';
 import type { AuthStore } from '@/types/store.types';
-import type { User } from '@/types/api.types';
 
 export const useAuthStore = create<AuthStore>()(
   devtools(
@@ -16,12 +15,12 @@ export const useAuthStore = create<AuthStore>()(
         error: null,
 
         // Actions
-        login: async (credentials) => {
+        login: async credentials => {
           set({ isLoading: true, error: null });
           try {
             const response = await authService.login(credentials);
             const user = await authService.getCurrentUser();
-            
+
             set({
               user,
               token: response.access_token,
@@ -41,7 +40,7 @@ export const useAuthStore = create<AuthStore>()(
           }
         },
 
-        register: async (userData) => {
+        register: async userData => {
           set({ isLoading: true, error: null });
           try {
             await authService.register(userData);
@@ -111,7 +110,7 @@ export const useAuthStore = create<AuthStore>()(
       }),
       {
         name: 'auth-storage',
-        partialize: (state) => ({
+        partialize: state => ({
           user: state.user,
           token: state.token,
           isAuthenticated: state.isAuthenticated,
@@ -128,17 +127,20 @@ export const useAuthStore = create<AuthStore>()(
 export const initializeAuth = () => {
   const token = authService.getToken();
   const isAuthenticated = authService.isAuthenticated();
-  
+
   if (token && isAuthenticated) {
     useAuthStore.setState({
       token,
       isAuthenticated: true,
     });
-    
+
     // Try to get current user info
-    useAuthStore.getState().getCurrentUser().catch(() => {
-      // If getting user info fails, logout
-      useAuthStore.getState().logout();
-    });
+    useAuthStore
+      .getState()
+      .getCurrentUser()
+      .catch(() => {
+        // If getting user info fails, logout
+        useAuthStore.getState().logout();
+      });
   }
 };

@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { chemicalService } from '@/services/chemical.service';
 import type { ChemicalStore } from '@/types/store.types';
-import type { Chemical } from '@/types/chemical.types';
+// Chemical type is used in the store interface
 
 export const useChemicalStore = create<ChemicalStore>()(
   devtools(
@@ -21,11 +21,11 @@ export const useChemicalStore = create<ChemicalStore>()(
       // Actions
       fetchChemicals: async (params = {}) => {
         set({ isLoading: true, error: null });
-        
+
         try {
           const { skip = 0, limit = 20 } = params;
           const { searchQuery } = get();
-          
+
           const searchParams = {
             skip,
             limit,
@@ -33,9 +33,12 @@ export const useChemicalStore = create<ChemicalStore>()(
           };
 
           const response = await chemicalService.getChemicals(searchParams);
-          
+
           set({
-            chemicals: skip === 0 ? response.results : [...get().chemicals, ...response.results],
+            chemicals:
+              skip === 0
+                ? response.results
+                : [...get().chemicals, ...response.results],
             pagination: {
               skip,
               limit,
@@ -54,22 +57,22 @@ export const useChemicalStore = create<ChemicalStore>()(
       },
 
       searchChemicals: (query: string) => {
-        set({ 
+        set({
           searchQuery: query,
           chemicals: [], // Clear existing chemicals for new search
-          pagination: { ...get().pagination, skip: 0 }
+          pagination: { ...get().pagination, skip: 0 },
         });
-        
+
         // Fetch chemicals with new search query
         get().fetchChemicals({ skip: 0, limit: get().pagination.limit });
       },
 
-      createChemical: async (data) => {
+      createChemical: async data => {
         set({ isLoading: true, error: null });
-        
+
         try {
           const newChemical = await chemicalService.createChemical(data);
-          
+
           // Add the new chemical to the beginning of the list
           set({
             chemicals: [newChemical, ...get().chemicals],
@@ -80,7 +83,7 @@ export const useChemicalStore = create<ChemicalStore>()(
             isLoading: false,
             error: null,
           });
-          
+
           return newChemical;
         } catch (error: any) {
           set({
@@ -109,15 +112,18 @@ export const useChemicalStore = create<ChemicalStore>()(
       // Helper methods for pagination
       loadMore: async () => {
         const { pagination, isLoading } = get();
-        
-        if (isLoading || pagination.skip + pagination.limit >= pagination.total) {
+
+        if (
+          isLoading ||
+          pagination.skip + pagination.limit >= pagination.total
+        ) {
           return; // Already loading or no more data
         }
 
         const nextSkip = pagination.skip + pagination.limit;
-        await get().fetchChemicals({ 
-          skip: nextSkip, 
-          limit: pagination.limit 
+        await get().fetchChemicals({
+          skip: nextSkip,
+          limit: pagination.limit,
         });
       },
 
@@ -129,14 +135,14 @@ export const useChemicalStore = create<ChemicalStore>()(
       // Get filtered chemicals based on current search
       getFilteredChemicals: () => {
         const { chemicals, searchQuery } = get();
-        
+
         if (!searchQuery.trim()) {
           return chemicals;
         }
 
         const query = searchQuery.toLowerCase();
         return chemicals.filter(
-          (chemical) =>
+          chemical =>
             chemical.molecular_formula.toLowerCase().includes(query) ||
             chemical.common_name.toLowerCase().includes(query)
         );

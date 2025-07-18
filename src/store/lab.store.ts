@@ -3,7 +3,8 @@ import { devtools } from 'zustand/middleware';
 import { reactionService } from '@/services/reaction.service';
 import type { LabStore } from '@/types/store.types';
 import type { Chemical, SelectedChemical } from '@/types/chemical.types';
-import type { Environment, ReactionPrediction } from '@/types/reaction.types';
+import type { Environment } from '@/types/reaction.types';
+// ReactionPrediction is used in the store interface
 
 export const useLabStore = create<LabStore>()(
   devtools(
@@ -18,10 +19,10 @@ export const useLabStore = create<LabStore>()(
       // Actions
       addChemical: (chemical: Chemical, quantity: number) => {
         const { selectedChemicals } = get();
-        
+
         // Check if chemical is already selected
         const existingIndex = selectedChemicals.findIndex(
-          (selected) => selected.chemical.id === chemical.id
+          selected => selected.chemical.id === chemical.id
         );
 
         if (existingIndex >= 0) {
@@ -39,7 +40,7 @@ export const useLabStore = create<LabStore>()(
             selectedChemicals: [...selectedChemicals, newSelected],
           });
         }
-        
+
         // Clear any previous error
         set({ error: null });
       },
@@ -47,21 +48,21 @@ export const useLabStore = create<LabStore>()(
       removeChemical: (chemicalId: number) => {
         const { selectedChemicals } = get();
         const filtered = selectedChemicals.filter(
-          (selected) => selected.chemical.id !== chemicalId
+          selected => selected.chemical.id !== chemicalId
         );
         set({ selectedChemicals: filtered });
       },
 
       updateChemicalQuantity: (chemicalId: number, quantity: number) => {
         const { selectedChemicals } = get();
-        
+
         if (quantity <= 0) {
           // Remove chemical if quantity is 0 or negative
           get().removeChemical(chemicalId);
           return;
         }
 
-        const updated = selectedChemicals.map((selected) =>
+        const updated = selectedChemicals.map(selected =>
           selected.chemical.id === chemicalId
             ? { ...selected, quantity }
             : selected
@@ -75,17 +76,17 @@ export const useLabStore = create<LabStore>()(
 
       triggerReaction: async () => {
         const { selectedChemicals, environment } = get();
-        
+
         if (selectedChemicals.length === 0) {
           set({ error: 'Please add at least one chemical to react' });
           return;
         }
 
         set({ isReacting: true, error: null });
-        
+
         try {
           const reactionRequest = {
-            reactants: selectedChemicals.map((selected) => ({
+            reactants: selectedChemicals.map(selected => ({
               chemical_id: selected.chemical.id,
               quantity: selected.quantity,
             })),
@@ -93,7 +94,7 @@ export const useLabStore = create<LabStore>()(
           };
 
           const result = await reactionService.predictReaction(reactionRequest);
-          
+
           set({
             reactionResult: result,
             isReacting: false,

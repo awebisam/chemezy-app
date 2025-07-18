@@ -3,14 +3,8 @@ import { devtools } from 'zustand/middleware';
 import { awardsService } from '@/services/awards.service';
 import { reactionService } from '@/services/reaction.service';
 import type { DashboardStore } from '@/types/store.types';
-import type {
-  UserAward,
-  AvailableAward,
-  LeaderboardEntry,
-  UserRank,
-  AwardCategory,
-} from '@/types/award.types';
-import type { ReactionPrediction, UserReactionStats } from '@/types/reaction.types';
+import type { AwardCategory } from '@/types/award.types';
+// Other types are used in the store interface
 
 export const useDashboardStore = create<DashboardStore>()(
   devtools(
@@ -28,10 +22,10 @@ export const useDashboardStore = create<DashboardStore>()(
       // Actions
       fetchAwards: async (params = {}) => {
         set({ isLoading: true, error: null });
-        
+
         try {
           const awards = await awardsService.getUserAwards(params);
-          
+
           set({
             awards,
             isLoading: false,
@@ -46,12 +40,13 @@ export const useDashboardStore = create<DashboardStore>()(
         }
       },
 
-      fetchAvailableAwards: async (category) => {
+      fetchAvailableAwards: async category => {
         set({ isLoading: true, error: null });
-        
+
         try {
-          const availableAwards = await awardsService.getAvailableAwards(category);
-          
+          const availableAwards =
+            await awardsService.getAvailableAwards(category);
+
           set({
             availableAwards,
             isLoading: false,
@@ -68,15 +63,17 @@ export const useDashboardStore = create<DashboardStore>()(
 
       fetchLeaderboard: async (category, limit = 50) => {
         set({ isLoading: true, error: null });
-        
+
         try {
           const leaderboard = category
             ? await awardsService.getCategoryLeaderboard(category)
             : await awardsService.getOverallLeaderboard();
-          
+
           // Apply limit if specified
-          const limitedLeaderboard = limit ? leaderboard.slice(0, limit) : leaderboard;
-          
+          const limitedLeaderboard = limit
+            ? leaderboard.slice(0, limit)
+            : leaderboard;
+
           set({
             leaderboard: limitedLeaderboard,
             isLoading: false,
@@ -91,14 +88,14 @@ export const useDashboardStore = create<DashboardStore>()(
         }
       },
 
-      fetchUserRank: async (category) => {
+      fetchUserRank: async category => {
         set({ isLoading: true, error: null });
-        
+
         try {
           const userRank = category
             ? await awardsService.getUserRankByCategory(category)
             : await awardsService.getUserRank();
-          
+
           set({
             userRank,
             isLoading: false,
@@ -115,10 +112,10 @@ export const useDashboardStore = create<DashboardStore>()(
 
       fetchReactionStats: async () => {
         set({ isLoading: true, error: null });
-        
+
         try {
           const reactionStats = await reactionService.getReactionStats();
-          
+
           set({
             reactionStats,
             isLoading: false,
@@ -135,10 +132,10 @@ export const useDashboardStore = create<DashboardStore>()(
 
       fetchReactionHistory: async () => {
         set({ isLoading: true, error: null });
-        
+
         try {
           const reactionHistory = await reactionService.getReactionCache();
-          
+
           set({
             reactionHistory,
             isLoading: false,
@@ -160,17 +157,15 @@ export const useDashboardStore = create<DashboardStore>()(
       // Helper methods for dashboard functionality
       getAwardsByCategory: (category: AwardCategory) => {
         const { awards } = get();
-        return awards.filter((award) => award.template.category === category);
+        return awards.filter(award => award.template.category === category);
       },
 
       getRecentAwards: (days: number = 30) => {
         const { awards } = get();
         const cutoffDate = new Date();
         cutoffDate.setDate(cutoffDate.getDate() - days);
-        
-        return awards.filter(
-          (award) => new Date(award.granted_at) >= cutoffDate
-        );
+
+        return awards.filter(award => new Date(award.granted_at) >= cutoffDate);
       },
 
       getTotalPoints: () => {
@@ -181,7 +176,7 @@ export const useDashboardStore = create<DashboardStore>()(
       getProgressTowardsAward: (templateId: number) => {
         const { availableAwards } = get();
         const award = availableAwards.find(
-          (award) => award.template_id === templateId
+          award => award.template_id === templateId
         );
         return award?.progress || {};
       },
@@ -208,16 +203,16 @@ export const useDashboardStore = create<DashboardStore>()(
       // Check if user has a specific award
       hasAward: (templateId: number) => {
         const { awards } = get();
-        return awards.some((award) => award.template_id === templateId);
+        return awards.some(award => award.template_id === templateId);
       },
 
       // Get user's rank in leaderboard
       getUserPositionInLeaderboard: () => {
         const { leaderboard, userRank } = get();
         if (!userRank) return null;
-        
+
         const position = leaderboard.findIndex(
-          (entry) => entry.user_id === userRank.user_id
+          entry => entry.user_id === userRank.user_id
         );
         return position >= 0 ? position + 1 : null;
       },
