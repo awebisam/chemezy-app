@@ -1,10 +1,11 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import '@testing-library/jest-dom';
 import { ChemicalCard } from '../ChemicalCard';
 import { LabBench } from '../LabBench';
-import { useLabStore } from '@/store/lab.store';
-import type { Chemical } from '@/types/chemical.types';
+import { useLabStore } from '../../../store/lab.store';
+import type { Chemical } from '../../../types/chemical.types';
 
 // Mock the lab store
 vi.mock('@/store/lab.store');
