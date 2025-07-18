@@ -292,6 +292,19 @@ export const EffectAnimations = {
       y: center.y + Math.sin(angle) * radius,
     };
   },
+
+  // Easing functions
+  easeInOut: (t: number): number => {
+    return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+  },
+
+  easeOut: (t: number): number => {
+    return 1 - Math.pow(1 - t, 3);
+  },
+
+  easeIn: (t: number): number => {
+    return t * t * t;
+  },
 };
 
 // Performance monitoring for effects

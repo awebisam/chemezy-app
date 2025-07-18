@@ -20,11 +20,47 @@ const DEMO_EFFECTS: VisualEffect[] = [
     duration: 3,
   },
   {
-    effect_type: 'gas_production',
-    gas_type: 'Steam',
+    effect_type: 'temperature_change',
+    delta_celsius: 150,
+  },
+  {
+    effect_type: 'foam_production',
     color: '#FFFFFF',
-    intensity: 0.6,
-    duration: 6,
+    density: 0.8,
+    bubble_size: 'medium',
+    stability: 8,
+  },
+  {
+    effect_type: 'temperature_change',
+    delta_celsius: -80,
+  },
+  {
+    effect_type: 'foam_production',
+    color: '#FFD700',
+    density: 0.6,
+    bubble_size: 'large',
+    stability: 12,
+  },
+  {
+    effect_type: 'state_change',
+    product_chemical_id: 1,
+    final_state: 'liquid',
+  },
+  {
+    effect_type: 'volume_change',
+    factor: 2.5,
+  },
+  {
+    effect_type: 'spill',
+    amount_percentage: 75,
+    spread_radius: 60,
+  },
+  {
+    effect_type: 'texture_change',
+    product_chemical_id: 1,
+    texture_type: 'crystalline',
+    color: '#8B5CF6',
+    viscosity: 2,
   },
 ];
 
@@ -97,9 +133,20 @@ export const EffectsDemo: React.FC<EffectsDemoProps> = ({ className }) => {
               <ReactionVessel
                 config={{
                   ...VesselPresets.reactionFlask,
-                  bubbling: activeEffects.some(e => e.effect_type === 'gas_production'),
-                  heating: activeEffects.some(e => e.effect_type === 'light_emission'),
-                  stirring: activeEffects.length > 1,
+                  bubbling: activeEffects.some(e => 
+                    e.effect_type === 'gas_production' || 
+                    e.effect_type === 'foam_production' || 
+                    e.effect_type === 'state_change'
+                  ),
+                  heating: activeEffects.some(e => 
+                    e.effect_type === 'light_emission' || 
+                    (e.effect_type === 'temperature_change' && e.delta_celsius > 0) ||
+                    e.effect_type === 'volume_change'
+                  ),
+                  stirring: activeEffects.length > 1 || activeEffects.some(e => 
+                    e.effect_type === 'spill' || 
+                    e.effect_type === 'texture_change'
+                  ),
                 }}
                 effects={activeEffects}
                 width={350}
@@ -186,6 +233,24 @@ export const EffectsDemo: React.FC<EffectsDemoProps> = ({ className }) => {
                     {effect.effect_type === 'light_emission' && 
                       `${effect.color} • ${Math.round(effect.intensity * 100)}% intensity`
                     }
+                    {effect.effect_type === 'temperature_change' && 
+                      `${effect.delta_celsius > 0 ? '+' : ''}${effect.delta_celsius}°C`
+                    }
+                    {effect.effect_type === 'foam_production' && 
+                      `${effect.bubble_size} bubbles • ${Math.round(effect.density * 100)}% density`
+                    }
+                    {effect.effect_type === 'state_change' && 
+                      `Final state: ${effect.final_state}`
+                    }
+                    {effect.effect_type === 'volume_change' && 
+                      `${Math.round(effect.factor * 100)}% volume`
+                    }
+                    {effect.effect_type === 'spill' && 
+                      `${effect.amount_percentage}% spill • ${effect.spread_radius}m radius`
+                    }
+                    {effect.effect_type === 'texture_change' && 
+                      `${effect.texture_type} texture`
+                    }
                   </div>
                 </button>
               ))}
@@ -248,6 +313,161 @@ export const EffectsDemo: React.FC<EffectsDemoProps> = ({ className }) => {
                     <span className="text-sm font-medium text-gray-700">Radius:</span>
                     <span className="ml-2 text-sm text-gray-900">
                       {selectedEffect.radius} units
+                    </span>
+                  </div>
+                </>
+              )}
+
+              {selectedEffect.effect_type === 'temperature_change' && (
+                <>
+                  <div>
+                    <span className="text-sm font-medium text-gray-700">Temperature Change:</span>
+                    <span className="ml-2 text-sm text-gray-900">
+                      {selectedEffect.delta_celsius > 0 ? '+' : ''}{selectedEffect.delta_celsius}°C
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium text-gray-700">Effect:</span>
+                    <span className="ml-2 text-sm text-gray-900">
+                      {selectedEffect.delta_celsius > 0 ? '🔥 Heating' : '❄️ Cooling'}
+                    </span>
+                  </div>
+                </>
+              )}
+
+              {selectedEffect.effect_type === 'foam_production' && (
+                <>
+                  <div>
+                    <span className="text-sm font-medium text-gray-700">Color:</span>
+                    <span className="ml-2 inline-flex items-center">
+                      <span
+                        className="w-4 h-4 rounded border mr-2"
+                        style={{ backgroundColor: selectedEffect.color }}
+                      />
+                      {selectedEffect.color}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium text-gray-700">Density:</span>
+                    <span className="ml-2 text-sm text-gray-900">
+                      {Math.round(selectedEffect.density * 100)}%
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium text-gray-700">Bubble Size:</span>
+                    <span className="ml-2 text-sm text-gray-900 capitalize">
+                      {selectedEffect.bubble_size}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium text-gray-700">Stability:</span>
+                    <span className="ml-2 text-sm text-gray-900">
+                      {selectedEffect.stability} seconds
+                    </span>
+                  </div>
+                </>
+              )}
+
+              {selectedEffect.effect_type === 'state_change' && (
+                <>
+                  <div>
+                    <span className="text-sm font-medium text-gray-700">Product Chemical ID:</span>
+                    <span className="ml-2 text-sm text-gray-900">
+                      {selectedEffect.product_chemical_id}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium text-gray-700">Final State:</span>
+                    <span className="ml-2 text-sm text-gray-900 capitalize">
+                      {selectedEffect.final_state}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium text-gray-700">Transition:</span>
+                    <span className="ml-2 text-sm text-gray-900">
+                      {selectedEffect.final_state === 'liquid' ? '🔥 Melting/Dissolving' :
+                       selectedEffect.final_state === 'gas' ? '💨 Evaporation/Sublimation' :
+                       selectedEffect.final_state === 'solid' ? '❄️ Crystallization/Freezing' :
+                       '🔄 Phase Change'}
+                    </span>
+                  </div>
+                </>
+              )}
+
+              {selectedEffect.effect_type === 'volume_change' && (
+                <>
+                  <div>
+                    <span className="text-sm font-medium text-gray-700">Volume Factor:</span>
+                    <span className="ml-2 text-sm text-gray-900">
+                      {selectedEffect.factor}x
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium text-gray-700">Change Type:</span>
+                    <span className="ml-2 text-sm text-gray-900">
+                      {selectedEffect.factor > 1 ? '📈 Expansion' : '📉 Contraction'}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium text-gray-700">Percentage:</span>
+                    <span className="ml-2 text-sm text-gray-900">
+                      {Math.round(selectedEffect.factor * 100)}%
+                    </span>
+                  </div>
+                </>
+              )}
+
+              {selectedEffect.effect_type === 'spill' && (
+                <>
+                  <div>
+                    <span className="text-sm font-medium text-gray-700">Amount:</span>
+                    <span className="ml-2 text-sm text-gray-900">
+                      {selectedEffect.amount_percentage}%
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium text-gray-700">Spread Radius:</span>
+                    <span className="ml-2 text-sm text-gray-900">
+                      {selectedEffect.spread_radius}m
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium text-gray-700">Spill Type:</span>
+                    <span className="ml-2 text-sm text-gray-900">
+                      Liquid spill with radius-based spreading
+                    </span>
+                  </div>
+                </>
+              )}
+
+              {selectedEffect.effect_type === 'texture_change' && (
+                <>
+                  <div>
+                    <span className="text-sm font-medium text-gray-700">Product Chemical ID:</span>
+                    <span className="ml-2 text-sm text-gray-900">
+                      {selectedEffect.product_chemical_id}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium text-gray-700">Color:</span>
+                    <span className="ml-2 inline-flex items-center">
+                      <span
+                        className="w-4 h-4 rounded border mr-2"
+                        style={{ backgroundColor: selectedEffect.color }}
+                      />
+                      {selectedEffect.color}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium text-gray-700">Texture Type:</span>
+                    <span className="ml-2 text-sm text-gray-900 capitalize">
+                      {selectedEffect.texture_type}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium text-gray-700">Viscosity:</span>
+                    <span className="ml-2 text-sm text-gray-900">
+                      {selectedEffect.viscosity}
                     </span>
                   </div>
                 </>

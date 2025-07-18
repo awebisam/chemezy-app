@@ -90,7 +90,7 @@
   - Implement reduced motion support for accessibility
   - _Requirements: 6.1, 6.10, 6.11_
 
-- [ ] 12. Implement gas production and light emission effects
+- [x] 12. Implement gas production and light emission effects
   - Create GasProductionEffect component with animated particles and bubbles
   - Build LightEmissionEffect component with radial gradients and pulsing animations
   - Implement procedural SVG generation for gas particles with configurable properties
@@ -98,7 +98,7 @@
   - Create smooth animation loops using requestAnimationFrame
   - _Requirements: 6.2, 6.3, 6.12_
 
-- [ ] 13. Implement temperature and foam production effects
+- [x] 13. Implement temperature and foam production effects
   - Create TemperatureChangeEffect component with color-coded visual indicators
   - Build FoamProductionEffect component with animated foam bubbles
   - Implement temperature gauge or thermometer visualization for temperature changes
@@ -106,7 +106,7 @@
   - Create visual feedback for extreme temperature changes
   - _Requirements: 6.4, 6.5, 6.12_
 
-- [ ] 14. Implement state change and volume effects
+- [x] 14. Implement state change and volume effects
   - Create StateChangeEffect component for visualizing matter state transitions
   - Build VolumeChangeEffect component for expansion and contraction animations
   - Implement smooth transitions between solid, liquid, and gas states
@@ -114,7 +114,7 @@
   - Create visual indicators for state changes with appropriate colors and textures
   - _Requirements: 6.6, 6.7, 6.12_
 
-- [ ] 15. Implement spill and texture change effects
+- [x] 15. Implement spill and texture change effects
   - Create SpillEffect component with liquid spreading animations
   - Build TextureChangeEffect component for surface texture modifications
   - Implement procedural liquid flow based on amount percentage and spread radius
