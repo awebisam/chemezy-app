@@ -1,103 +1,107 @@
-# Chemezy: The Virtual Lab Frontend
+# Chemezy Frontend
 
-Welcome to the frontend repository for Chemezy, the interactive virtual chemistry lab. This project is the visual and interactive layer that brings the powerful Chemezy backend to life, allowing users to experiment, discover, and learn about chemistry in an engaging 2D sandbox environment.
+An interactive virtual chemistry laboratory for middle and high school students. Built with React, TypeScript, and Tailwind CSS.
 
-This application is built with React and is designed to be a clean, performant, and user-friendly interface for the powerful Chemezy Backend Engine.
+## Features
 
-## Core Features
-
-- **Interactive Lab Bench**: A drag-and-drop interface for adding chemicals and catalysts to a virtual beaker.
-- **Dynamic Environment Selection**: Users can change the conditions of their experiments (e.g., Vacuum, Pure Oxygen, Acidic) to see different outcomes.
-- **Real-time Reaction Visualization**: Displays the products and visual effects of chemical reactions as returned by the backend API.
-- **Gamification Dashboard**: A user-centric dashboard to view earned awards, track progress towards new achievements, and see leaderboard rankings.
-- **Chemical Inventory**: A searchable list of all available chemicals that users can use in their experiments.
-- **Secure User Authentication**: A seamless login/registration flow to manage user sessions and track progress.
-- **Educational Explanations**: Clear, concise explanations for each reaction to help users learn the underlying science.
+- 🧪 Interactive drag-and-drop chemistry lab
+- ⚡ Real-time visual effects for chemical reactions
+- 🏆 Achievement system with awards and leaderboards
+- 📱 Responsive design for desktop, tablet, and mobile
+- 🔒 Secure authentication and user management
+- 📊 Progress tracking and reaction history
 
 ## Tech Stack
 
-- **Framework**: React (using Vite for a fast development experience)
-- **Styling**: Tailwind CSS for a utility-first styling workflow.
-- **State Management**: Zustand for simple, scalable global state management.
-- **API Communication**: Axios for making requests to the backend API.
-- **Routing**: React Router for handling client-side navigation.
-- **Linting & Formatting**: ESLint and Prettier to maintain code quality and consistency.
+- **Framework**: React 18 with TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS
+- **State Management**: Zustand
+- **HTTP Client**: Axios
+- **Routing**: React Router v6
+- **Animation**: Framer Motion
+- **Testing**: Vitest + React Testing Library
 
 ## Getting Started
 
-Follow these instructions to get the project up and running on your local machine for development and testing purposes.
-
 ### Prerequisites
 
-- Node.js (v18 or later)
+- Node.js 18+ 
 - npm or yarn
-- A running instance of the Chemezy Backend Engine.
 
 ### Installation
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/awebisam/chemezy-app.git
-   cd chemezy-frontend
-    ```
-
-2. **Install dependencies**:
-
+1. Clone the repository
+2. Install dependencies:
    ```bash
    npm install
-   # or
-   yarn install
    ```
 
-3. **Configure Environment Variables**:
-
-   * Create a `.env` file in the root of the project by copying the example file:
-
-     ```bash
-     cp .env.example .env
-     ```
-
-   * Open the `.env` file and set the URL for your running backend instance:
-
-     ```
-     VITE_API_BASE_URL=http://localhost:8000/api/v1
-     ```
-
-4. **Run the development server**:
-
+3. Copy environment variables:
    ```bash
-   npm run dev
-   # or
-   yarn dev
+   cp .env.example .env.local
    ```
 
-   The application will be available at `http://localhost:5173` (or another port if 5173 is in use).
+4. Update `.env.local` with your API configuration
+
+### Development
+
+Start the development server:
+```bash
+npm run dev
+```
+
+The application will be available at `http://localhost:3000`
+
+### Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+- `npm run lint:fix` - Fix ESLint issues
+- `npm run format` - Format code with Prettier
+- `npm run type-check` - Run TypeScript type checking
+- `npm run test` - Run tests
+- `npm run test:watch` - Run tests in watch mode
+- `npm run test:coverage` - Run tests with coverage
 
 ## Project Structure
 
 ```
-/src
-├── api          # API service layer for communicating with the backend
-├── assets       # Static assets like images and icons
-├── components   # Reusable UI components (e.g., Button, Modal)
-├── hooks        # Custom React hooks
-├── pages        # Top-level page components (e.g., Lab, Dashboard)
-├── store        # Zustand state management stores
-├── styles       # Global CSS and Tailwind configuration
-└── App.jsx      # Main application component with routing
+src/
+├── components/          # Reusable UI components
+│   ├── ui/             # Basic UI primitives
+│   ├── layout/         # Layout components
+│   ├── auth/           # Authentication components
+│   ├── lab/            # Lab interface components
+│   ├── dashboard/      # Dashboard components
+│   └── effects/        # Visual Effects Engine
+├── pages/              # Top-level page components
+├── hooks/              # Custom React hooks
+├── services/           # API service layer
+├── store/              # Zustand state management
+├── types/              # TypeScript type definitions
+├── utils/              # Utility functions
+└── assets/             # Static assets
 ```
 
-## Connecting to the Backend
+## Environment Variables
 
-All communication with the backend is handled through the API service layer located in `src/api`. The base URL for all API requests is configured in the `.env` file using the `VITE_API_BASE_URL` variable.
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `VITE_API_BASE_URL` | Backend API base URL | `http://localhost:8000/api/v1` |
+| `VITE_APP_NAME` | Application name | `Chemezy` |
+| `VITE_DEV_MODE` | Development mode flag | `true` |
 
-The API service uses an Axios instance that automatically attaches the JWT token to authorized requests after the user logs in.
+## Contributing
 
-## Available Scripts
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests and linting
+5. Submit a pull request
 
-In the project directory, you can run:
+## License
 
-* `npm run dev` — Runs the app in development mode.
-* `npm run build` — Builds the app for production to the `dist` folder.
-* `npm run lint` — Lints the code for errors and warnings.
-* `npm run preview` — Serves the production build locally to preview it before deployment.
+This project is licensed under the MIT License.

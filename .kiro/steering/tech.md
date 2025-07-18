@@ -3,7 +3,7 @@
 ## Core Technologies
 - **Framework**: React 18 with TypeScript for type safety and modern development
 - **Build Tool**: Vite for fast development and optimized production builds
-- **Styling**: Tailwind CSS for utility-first responsive design
+- **Styling**: Tailwind CSS v4 for utility-first responsive design
 - **State Management**: Zustand for lightweight, scalable global state
 - **HTTP Client**: Axios with interceptors for API communication and authentication
 - **Routing**: React Router v6 for client-side navigation
@@ -12,9 +12,32 @@
 ## Development Tools
 - **Linting**: ESLint with React and TypeScript rules
 - **Formatting**: Prettier for consistent code style
-- **Testing**: Jest + React Testing Library for unit/integration tests
+- **Testing**: Vitest + React Testing Library for unit/integration tests
 - **E2E Testing**: Playwright for end-to-end testing
 - **Type Checking**: TypeScript strict mode enabled
+
+## Tailwind CSS v4 Configuration
+- **Version**: Tailwind CSS v4.1.11 (latest major version)
+- **Configuration**: CSS-based theme definition using `@theme` blocks
+- **Custom Theme**: Primary and secondary color palettes defined in `src/index.css`
+- **No Plugins**: v4 has built-in functionality, no external plugins needed
+- **Import Style**: Use `@import "tailwindcss"` instead of separate `@tailwind` directives
+
+### Key v4 Differences from v3:
+- **Theme Definition**: Use CSS custom properties (`--color-primary-500`) instead of JS config
+- **Plugin System**: Built-in plugins replace external packages like `@tailwindcss/forms`
+- **Configuration**: Minimal `tailwind.config.js`, theme in CSS
+- **Import Syntax**: Single `@import "tailwindcss"` replaces three separate imports
+
+### Custom Theme Variables:
+```css
+@theme {
+  --color-primary-50: #eff6ff;
+  --color-primary-600: #2563eb;
+  --color-secondary-500: #22c55e;
+  --animate-bounce-slow: bounce 2s infinite;
+}
+```
 
 ## API Integration
 - **Backend**: Chemezy Backend Engine (FastAPI/Python)
@@ -92,3 +115,42 @@ npm run test:e2e
 - Screen reader compatibility
 - Reduced motion support for visual effects
 - High contrast mode compatibility
+
+## Common Tailwind v4 Troubleshooting
+
+### Issue: "Cannot apply unknown utility class"
+**Solution**: Ensure you're using the correct v4 configuration:
+- Use `@import "tailwindcss"` in CSS (not `@tailwind` directives)
+- Define custom colors in `@theme` blocks with CSS custom properties
+- Don't reference custom component classes in `@apply` (avoid circular references)
+
+### Issue: "Package path ./forms is not exported"
+**Solution**: Remove v3 plugin packages:
+```bash
+npm uninstall @tailwindcss/forms @tailwindcss/typography
+```
+These are built-in to v4 and don't need separate installation.
+
+### Issue: "Cannot use 'in' operator to search for '__isOptionsFunction'"
+**Solution**: This means v3 plugins are still referenced. Check:
+- Remove plugins from `tailwind.config.js`
+- Don't use `require()` syntax for plugins in v4
+- Use empty `plugins: []` array in config
+
+### Working v4 Configuration:
+```javascript
+// tailwind.config.js - Keep minimal
+export default {
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+}
+```
+
+```css
+/* src/index.css - Theme definition */
+@import "tailwindcss";
+
+@theme {
+  --color-primary-600: #2563eb;
+  /* other custom properties */
+}
+```
