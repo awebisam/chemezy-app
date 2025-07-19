@@ -117,18 +117,20 @@ export const EffectsRenderer: React.FC<EffectsRendererProps> = ({
       });
 
       // Remove inactive effects
-      return updated.filter(instance => instance.isActive);
+      const filteredEffects = updated.filter(instance => instance.isActive);
+      
+      // Record render performance
+      recordRender(filteredEffects.length);
+      lastRenderTime.current = frameStartTime;
+
+      // Continue animation loop if there are active effects
+      if (filteredEffects.length > 0) {
+        animationFrameRef.current = requestAnimationFrame(animationLoop);
+      }
+      
+      return filteredEffects;
     });
-
-    // Record render performance
-    recordRender(activeEffects.length);
-    lastRenderTime.current = frameStartTime;
-
-    // Continue animation loop if there are active effects
-    if (activeEffects.some(instance => instance.isActive)) {
-      animationFrameRef.current = requestAnimationFrame(animationLoop);
-    }
-  }, [activeEffects, onEffectComplete, recordRender]);
+  }, [onEffectComplete, recordRender]); // Remove activeEffects from dependencies
 
   // Start new effects when effects prop changes
   useEffect(() => {
@@ -142,7 +144,7 @@ export const EffectsRenderer: React.FC<EffectsRendererProps> = ({
       cancelAnimationFrame(animationFrameRef.current);
     }
     animationFrameRef.current = requestAnimationFrame(animationLoop);
-  }, [effects, createEffectInstance, animationLoop]);
+  }, [effects, createEffectInstance]); // Remove animationLoop from dependencies
 
   // Cleanup animation frame on unmount
   useEffect(() => {
@@ -151,13 +153,16 @@ export const EffectsRenderer: React.FC<EffectsRendererProps> = ({
         cancelAnimationFrame(animationFrameRef.current);
       }
       // Cleanup all active effects
-      activeEffects.forEach(instance => {
-        if (instance.cleanup) {
-          instance.cleanup();
-        }
+      setActiveEffects(prev => {
+        prev.forEach(instance => {
+          if (instance.cleanup) {
+            instance.cleanup();
+          }
+        });
+        return [];
       });
     };
-  }, [activeEffects]);
+  }, []); // Only run on mount/unmount
 
   // Check for reduced motion preference
   const shouldReduceMotion =

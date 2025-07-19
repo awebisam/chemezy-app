@@ -14,19 +14,51 @@ export default defineConfig({
   server: {
     port: 3000,
     open: true,
+    hmr: {
+      overlay: false, // Disable error overlay to reduce re-renders
+    },
   },
   build: {
     outDir: 'dist',
     sourcemap: true,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
     rollupOptions: {
       output: {
-        manualChunks: {
-          // Vendor chunk for large dependencies
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          // UI components chunk
-          ui: ['@/components/ui'],
-          // Effects engine chunk
-          effects: ['@/components/effects'],
+        manualChunks: (id) => {
+          // Vendor chunk for React ecosystem
+          if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
+            return 'vendor-react';
+          }
+          // Animation libraries chunk
+          if (id.includes('framer-motion')) {
+            return 'vendor-animation';
+          }
+          // Utility libraries chunk
+          if (id.includes('axios') || id.includes('zustand') || id.includes('clsx') || id.includes('tailwind-merge')) {
+            return 'vendor-utils';
+          }
+          // Effects engine chunk - local components
+          if (id.includes('/src/components/effects/')) {
+            return 'effects';
+          }
+          // UI components chunk - local components
+          if (id.includes('/src/components/ui/')) {
+            return 'ui';
+          }
+          // Services and stores chunk
+          if (id.includes('/src/services/') || id.includes('/src/store/')) {
+            return 'services';
+          }
+          // All other node_modules
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
         },
       },
     },

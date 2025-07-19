@@ -27,7 +27,7 @@ export const UserDashboard: React.FC = () => {
   useEffect(() => {
     // Load initial dashboard data
     refreshDashboard();
-  }, [refreshDashboard]);
+  }, []); // Remove refreshDashboard from dependencies to avoid infinite loop
 
   const handleCategoryChange = (category: AwardCategory | 'all') => {
     setSelectedCategory(category);

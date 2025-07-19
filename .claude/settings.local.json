@@ -4,7 +4,12 @@
       "Bash(npm uninstall:*)",
       "Bash(npx tsc:*)",
       "Bash(npm run lint:*)",
-      "Bash(npm run type-check:*)"
+      "Bash(npm run type-check:*)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_wait_for",
+      "mcp__playwright__browser_type"
     ],
     "deny": []
   }

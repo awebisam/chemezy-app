@@ -48,7 +48,7 @@ export const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
     };
 
     loadData();
-  }, [category, limit, showUserRank, fetchLeaderboard, fetchUserRank]);
+  }, [category, limit, showUserRank]); // Remove store functions to avoid infinite loop
 
   // Sort and paginate leaderboard data
   const sortedAndPaginatedData = useMemo(() => {

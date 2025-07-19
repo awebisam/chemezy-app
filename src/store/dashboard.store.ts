@@ -210,8 +210,8 @@ export const useDashboardStore = create<DashboardStore>()(
         const promises = [
           get().fetchAwards(),
           get().fetchAvailableAwards(),
-          get().fetchLeaderboard(),
-          get().fetchUserRank(),
+          // Don't fetch leaderboard and user rank without category in refresh
+          // These should be fetched by specific components when needed
           get().fetchReactionStats(),
           get().fetchReactionHistory(),
         ];

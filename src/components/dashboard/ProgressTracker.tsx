@@ -15,23 +15,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
 
   useEffect(() => {
     fetchAvailableAwards(category);
-  }, [category, fetchAvailableAwards]);
-
-  // Filter and sort available awards by progress
-  const sortedAvailableAwards = useMemo(() => {
-    return [...availableAwards]
-      .filter(award => {
-        // Only show awards that have progress data
-        return award.progress && Object.keys(award.progress).length > 0;
-      })
-      .sort((a, b) => {
-        // Sort by completion percentage (highest first)
-        const aProgress = calculateProgressPercentage(a);
-        const bProgress = calculateProgressPercentage(b);
-        return bProgress - aProgress;
-      })
-      .slice(0, 10); // Show top 10 awards in progress
-  }, [availableAwards]);
+  }, [category]); // Remove fetchAvailableAwards from dependencies
 
   const calculateProgressPercentage = (award: AvailableAward): number => {
     if (!award.progress || Object.keys(award.progress).length === 0) {
@@ -62,6 +46,22 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
       ? Math.min((totalProgress / maxProgress) * 100, 100)
       : 0;
   };
+
+  // Filter and sort available awards by progress
+  const sortedAvailableAwards = useMemo(() => {
+    return [...availableAwards]
+      .filter(award => {
+        // Only show awards that have progress data
+        return award.progress && Object.keys(award.progress).length > 0;
+      })
+      .sort((a, b) => {
+        // Sort by completion percentage (highest first)
+        const aProgress = calculateProgressPercentage(a);
+        const bProgress = calculateProgressPercentage(b);
+        return bProgress - aProgress;
+      })
+      .slice(0, 10); // Show top 10 awards in progress
+  }, [availableAwards]); // Remove calculateProgressPercentage from dependencies
 
   const getCategoryColor = (category: AwardCategory) => {
     const colors = {
