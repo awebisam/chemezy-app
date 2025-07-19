@@ -72,7 +72,9 @@ export const UserDashboard: React.FC = () => {
       <div className="mb-6 sm:mb-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="min-w-0 flex-1">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 truncate">Your Dashboard</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 truncate">
+              Your Dashboard
+            </h1>
             <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">
               Track your progress and achievements in chemistry
             </p>
@@ -148,7 +150,9 @@ export const UserDashboard: React.FC = () => {
               </div>
             </div>
             <div className="ml-2 sm:ml-4 min-w-0 flex-1">
-              <p className="text-xs sm:text-sm font-medium text-gray-600 truncate">Total Awards</p>
+              <p className="text-xs sm:text-sm font-medium text-gray-600 truncate">
+                Total Awards
+              </p>
               <p className="text-lg sm:text-2xl font-bold text-gray-900">
                 {awards.length}
               </p>
@@ -176,7 +180,9 @@ export const UserDashboard: React.FC = () => {
               </div>
             </div>
             <div className="ml-2 sm:ml-4 min-w-0 flex-1">
-              <p className="text-xs sm:text-sm font-medium text-gray-600 truncate">Total Points</p>
+              <p className="text-xs sm:text-sm font-medium text-gray-600 truncate">
+                Total Points
+              </p>
               <p className="text-lg sm:text-2xl font-bold text-gray-900">
                 {totalPoints.toLocaleString()}
               </p>
@@ -204,11 +210,15 @@ export const UserDashboard: React.FC = () => {
               </div>
             </div>
             <div className="ml-2 sm:ml-4 min-w-0 flex-1">
-              <p className="text-xs sm:text-sm font-medium text-gray-600 truncate">Recent Awards</p>
+              <p className="text-xs sm:text-sm font-medium text-gray-600 truncate">
+                Recent Awards
+              </p>
               <p className="text-lg sm:text-2xl font-bold text-gray-900">
                 {recentAwards.length}
               </p>
-              <p className="text-xs text-gray-500 hidden sm:block">Last 30 days</p>
+              <p className="text-xs text-gray-500 hidden sm:block">
+                Last 30 days
+              </p>
             </div>
           </div>
         </div>
@@ -233,7 +243,9 @@ export const UserDashboard: React.FC = () => {
               </div>
             </div>
             <div className="ml-2 sm:ml-4 min-w-0 flex-1">
-              <p className="text-xs sm:text-sm font-medium text-gray-600 truncate">Reactions</p>
+              <p className="text-xs sm:text-sm font-medium text-gray-600 truncate">
+                Reactions
+              </p>
               <p className="text-lg sm:text-2xl font-bold text-gray-900">
                 {reactionStats?.total_reactions || 0}
               </p>
@@ -271,7 +283,9 @@ export const UserDashboard: React.FC = () => {
             className="rounded border-gray-300 text-primary-600 focus:ring-primary-500 w-4 h-4"
           />
           <span className="ml-2 text-sm text-gray-700">
-            <span className="hidden sm:inline">Show only recent awards (last 30 days)</span>
+            <span className="hidden sm:inline">
+              Show only recent awards (last 30 days)
+            </span>
             <span className="sm:hidden">Recent only (30 days)</span>
           </span>
         </label>

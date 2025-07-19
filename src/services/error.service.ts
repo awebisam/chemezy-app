@@ -29,11 +29,14 @@ export class ErrorService {
       // Handle API errors
       switch (error.status) {
         case 400:
-          return error.message || 'Invalid request. Please check your input and try again.';
+          return (
+            error.message ||
+            'Invalid request. Please check your input and try again.'
+          );
         case 401:
           return 'Your session has expired. Please log in again.';
         case 403:
-          return 'You don\'t have permission to perform this action.';
+          return "You don't have permission to perform this action.";
         case 404:
           return 'The requested resource was not found.';
         case 409:
@@ -49,12 +52,17 @@ export class ErrorService {
         case 504:
           return 'Service temporarily unavailable. Please try again later.';
         default:
-          return error.message || 'An unexpected error occurred. Please try again.';
+          return (
+            error.message || 'An unexpected error occurred. Please try again.'
+          );
       }
     }
 
     // Handle generic errors
-    if (error.message.includes('Network Error') || error.message.includes('fetch')) {
+    if (
+      error.message.includes('Network Error') ||
+      error.message.includes('fetch')
+    ) {
       return 'Network connection error. Please check your internet connection and try again.';
     }
 
@@ -86,7 +94,8 @@ export class ErrorService {
    * Calculate delay for exponential backoff
    */
   static calculateDelay(attempt: number, config: RetryConfig): number {
-    const delay = config.baseDelay * Math.pow(config.backoffFactor, attempt - 1);
+    const delay =
+      config.baseDelay * Math.pow(config.backoffFactor, attempt - 1);
     return Math.min(delay, config.maxDelay);
   }
 
@@ -114,7 +123,10 @@ export class ErrorService {
         lastError = error as Error;
 
         // Don't retry if it's the last attempt or error is not retryable
-        if (attempt > retryConfig.maxRetries || !this.isRetryableError(lastError)) {
+        if (
+          attempt > retryConfig.maxRetries ||
+          !this.isRetryableError(lastError)
+        ) {
           throw lastError;
         }
 
@@ -122,7 +134,9 @@ export class ErrorService {
         const delay = this.calculateDelay(attempt, retryConfig);
         await this.sleep(delay);
 
-        console.warn(`Retry attempt ${attempt}/${retryConfig.maxRetries} after ${delay}ms delay`);
+        console.warn(
+          `Retry attempt ${attempt}/${retryConfig.maxRetries} after ${delay}ms delay`
+        );
       }
     }
 
@@ -137,16 +151,16 @@ export class ErrorService {
     context: string,
     options: ErrorHandlerOptions = {}
   ): APIError {
-    const {
-      showToast = true,
-      logError = true,
-    } = options;
+    const { showToast = true, logError = true } = options;
 
     // Normalize error
-    const apiError: APIError = 'status' in error ? error : {
-      message: error.message,
-      status: 0,
-    };
+    const apiError: APIError =
+      'status' in error
+        ? error
+        : {
+            message: error.message,
+            status: 0,
+          };
 
     // Log error
     if (logError) {
@@ -192,5 +206,7 @@ export class ErrorService {
 // Export convenience functions
 export const withRetry = ErrorService.withRetry.bind(ErrorService);
 export const handleError = ErrorService.handleError.bind(ErrorService);
-export const getUserFriendlyMessage = ErrorService.getUserFriendlyMessage.bind(ErrorService);
-export const createApiWrapper = ErrorService.createApiWrapper.bind(ErrorService);
+export const getUserFriendlyMessage =
+  ErrorService.getUserFriendlyMessage.bind(ErrorService);
+export const createApiWrapper =
+  ErrorService.createApiWrapper.bind(ErrorService);

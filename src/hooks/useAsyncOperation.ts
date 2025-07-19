@@ -61,67 +61,70 @@ export function useAsyncOperation<T, Args extends any[] = []>(
     };
   }, []);
 
-  const execute = useCallback(async (...args: Args): Promise<T | null> => {
-    // Cancel previous request if still pending
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
+  const execute = useCallback(
+    async (...args: Args): Promise<T | null> => {
+      // Cancel previous request if still pending
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
 
-    // Create new abort controller
-    abortControllerRef.current = new AbortController();
+      // Create new abort controller
+      abortControllerRef.current = new AbortController();
 
-    // Store args for retry functionality
-    lastArgsRef.current = args;
+      // Store args for retry functionality
+      lastArgsRef.current = args;
 
-    // Reset error if starting new operation
-    if (resetOnNewOperation) {
-      setState(prev => ({ ...prev, error: null }));
-    }
+      // Reset error if starting new operation
+      if (resetOnNewOperation) {
+        setState(prev => ({ ...prev, error: null }));
+      }
 
-    setState(prev => ({ ...prev, loading: true }));
+      setState(prev => ({ ...prev, loading: true }));
 
-    try {
-      const wrappedFunction = ErrorService.createApiWrapper(
-        asyncFunction,
-        'useAsyncOperation',
-        {
-          retryConfig,
-          showToast: showErrorToast,
-          logError: logErrors,
+      try {
+        const wrappedFunction = ErrorService.createApiWrapper(
+          asyncFunction,
+          'useAsyncOperation',
+          {
+            retryConfig,
+            showToast: showErrorToast,
+            logError: logErrors,
+          }
+        );
+
+        const result = await wrappedFunction(...args);
+
+        // Check if operation was aborted
+        if (abortControllerRef.current?.signal.aborted) {
+          return null;
         }
-      );
 
-      const result = await wrappedFunction(...args);
+        setState({
+          data: result,
+          loading: false,
+          error: null,
+          lastUpdated: new Date(),
+        });
 
-      // Check if operation was aborted
-      if (abortControllerRef.current?.signal.aborted) {
+        return result;
+      } catch (error) {
+        // Check if operation was aborted
+        if (abortControllerRef.current?.signal.aborted) {
+          return null;
+        }
+
+        const apiError = error as APIError;
+        setState(prev => ({
+          ...prev,
+          loading: false,
+          error: apiError,
+        }));
+
         return null;
       }
-
-      setState({
-        data: result,
-        loading: false,
-        error: null,
-        lastUpdated: new Date(),
-      });
-
-      return result;
-    } catch (error) {
-      // Check if operation was aborted
-      if (abortControllerRef.current?.signal.aborted) {
-        return null;
-      }
-
-      const apiError = error as APIError;
-      setState(prev => ({
-        ...prev,
-        loading: false,
-        error: apiError,
-      }));
-
-      return null;
-    }
-  }, [asyncFunction, retryConfig, showErrorToast, logErrors, resetOnNewOperation]);
+    },
+    [asyncFunction, retryConfig, showErrorToast, logErrors, resetOnNewOperation]
+  );
 
   const retry = useCallback(async (): Promise<T | null> => {
     if (lastArgsRef.current) {
@@ -143,10 +146,13 @@ export function useAsyncOperation<T, Args extends any[] = []>(
     lastArgsRef.current = null;
   }, []);
 
-  const isStale = useCallback((maxAge: number): boolean => {
-    if (!state.lastUpdated) return true;
-    return Date.now() - state.lastUpdated.getTime() > maxAge;
-  }, [state.lastUpdated]);
+  const isStale = useCallback(
+    (maxAge: number): boolean => {
+      if (!state.lastUpdated) return true;
+      return Date.now() - state.lastUpdated.getTime() > maxAge;
+    },
+    [state.lastUpdated]
+  );
 
   return {
     ...state,
@@ -177,7 +183,9 @@ export function useAsyncOperations<T extends Record<string, any>>(
 
   const isAnyLoading = Object.values(results).some(result => result.loading);
   const hasAnyError = Object.values(results).some(result => result.error);
-  const allHaveData = Object.values(results).every(result => result.data !== null);
+  const allHaveData = Object.values(results).every(
+    result => result.data !== null
+  );
 
   return {
     operations: results,

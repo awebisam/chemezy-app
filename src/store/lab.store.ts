@@ -104,7 +104,10 @@ export const useLabStore = create<LabStore>()(
           set({
             reactionResult: null,
             isReacting: false,
-            error: error.message || 'Failed to predict reaction',
+            error:
+              typeof error.message === 'string'
+                ? error.message
+                : 'Failed to predict reaction',
           });
           throw error;
         }

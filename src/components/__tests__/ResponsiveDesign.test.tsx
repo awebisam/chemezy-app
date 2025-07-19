@@ -48,7 +48,7 @@ describe('Responsive Design', () => {
   beforeEach(() => {
     // Reset all mocks
     vi.clearAllMocks();
-    
+
     // Setup default mock implementations
     mockAuthStore.mockReturnValue({
       user: { id: 1, username: 'testuser', email: 'test@example.com' },
@@ -86,7 +86,7 @@ describe('Responsive Design', () => {
       });
 
       renderWithRouter(<MainLayout />);
-      
+
       // Mobile menu button should be present
       const menuButton = screen.getByLabelText('Toggle mobile menu');
       expect(menuButton).toBeInTheDocument();
@@ -94,15 +94,15 @@ describe('Responsive Design', () => {
 
     it('should toggle mobile menu when button is clicked', () => {
       renderWithRouter(<MainLayout />);
-      
+
       const menuButton = screen.getByLabelText('Toggle mobile menu');
-      
+
       // Menu should be hidden initially
       expect(screen.queryByText('Virtual Lab')).not.toBeVisible();
-      
+
       // Click to open menu
       fireEvent.click(menuButton);
-      
+
       // Menu items should be visible
       expect(screen.getByText('Virtual Lab')).toBeVisible();
       expect(screen.getByText('Dashboard')).toBeVisible();
@@ -117,7 +117,7 @@ describe('Responsive Design', () => {
       });
 
       renderWithRouter(<MainLayout />);
-      
+
       // Desktop navigation should be visible
       const desktopNav = screen.getAllByText('Virtual Lab')[0];
       expect(desktopNav).toBeInTheDocument();
@@ -127,35 +127,35 @@ describe('Responsive Design', () => {
   describe('LabPage Responsive Layout', () => {
     it('should render responsive layout structure', () => {
       renderWithRouter(<LabPage />);
-      
+
       // Page title should be present
       expect(screen.getByText('Virtual Chemistry Lab')).toBeInTheDocument();
-      
+
       // Inventory toggle button should be present
       expect(screen.getByText(/Hide|Show/)).toBeInTheDocument();
-      
+
       // Lab bench should be present
       expect(screen.getByText('Lab Bench')).toBeInTheDocument();
     });
 
     it('should toggle inventory visibility', () => {
       renderWithRouter(<LabPage />);
-      
+
       const toggleButton = screen.getByRole('button', { name: /Hide|Show/ });
-      
+
       // Initially inventory should be visible
       expect(screen.getByText('Chemical Inventory')).toBeInTheDocument();
-      
+
       // Click to hide inventory
       fireEvent.click(toggleButton);
-      
+
       // Inventory should still be in DOM but layout should change
       expect(screen.getByText('Chemical Inventory')).toBeInTheDocument();
     });
 
     it('should show mobile-optimized instructions', () => {
       renderWithRouter(<LabPage />);
-      
+
       // Mobile instructions should be present
       expect(screen.getByText(/Tap \+ Add/)).toBeInTheDocument();
     });
@@ -164,28 +164,28 @@ describe('Responsive Design', () => {
   describe('Touch-friendly Interactions', () => {
     it('should have touch-manipulation class on interactive elements', () => {
       renderWithRouter(<LabPage />);
-      
+
       const buttons = screen.getAllByRole('button');
-      
+
       // At least some buttons should have touch-manipulation class
-      const touchButtons = buttons.filter(button => 
+      const touchButtons = buttons.filter(button =>
         button.className.includes('touch-manipulation')
       );
-      
+
       expect(touchButtons.length).toBeGreaterThan(0);
     });
 
     it('should have appropriate minimum touch target sizes', () => {
       renderWithRouter(<LabPage />);
-      
+
       const buttons = screen.getAllByRole('button');
-      
+
       // Check that buttons have reasonable minimum sizes for touch
       buttons.forEach(button => {
         const styles = window.getComputedStyle(button);
         const minHeight = parseInt(styles.minHeight) || parseInt(styles.height);
         const minWidth = parseInt(styles.minWidth) || parseInt(styles.width);
-        
+
         // Touch targets should be at least 44px (iOS) or 48dp (Android)
         // We'll be lenient and check for at least 32px
         if (minHeight > 0) {
@@ -198,9 +198,9 @@ describe('Responsive Design', () => {
   describe('Responsive Typography and Spacing', () => {
     it('should use responsive text classes', () => {
       renderWithRouter(<LabPage />);
-      
+
       const heading = screen.getByText('Virtual Chemistry Lab');
-      
+
       // Should have responsive text classes
       expect(heading.className).toMatch(/text-(xl|2xl)/);
       expect(heading.className).toMatch(/sm:text-/);
@@ -208,9 +208,11 @@ describe('Responsive Design', () => {
 
     it('should use responsive padding and margins', () => {
       renderWithRouter(<LabPage />);
-      
-      const container = screen.getByText('Virtual Chemistry Lab').closest('div');
-      
+
+      const container = screen
+        .getByText('Virtual Chemistry Lab')
+        .closest('div');
+
       // Should have responsive spacing classes
       expect(container?.className).toMatch(/p(x|y)?-\d+/);
       expect(container?.className).toMatch(/sm:p/);
@@ -220,18 +222,20 @@ describe('Responsive Design', () => {
   describe('Grid and Layout Responsiveness', () => {
     it('should use responsive grid classes', () => {
       renderWithRouter(<LabPage />);
-      
+
       // Look for grid containers
       const gridElements = document.querySelectorAll('[class*="grid"]');
-      
+
       expect(gridElements.length).toBeGreaterThan(0);
-      
+
       // Check for responsive grid classes
-      const responsiveGrids = Array.from(gridElements).filter(el =>
-        el.className.includes('grid-cols-1') && 
-        (el.className.includes('lg:grid-cols') || el.className.includes('sm:grid-cols'))
+      const responsiveGrids = Array.from(gridElements).filter(
+        el =>
+          el.className.includes('grid-cols-1') &&
+          (el.className.includes('lg:grid-cols') ||
+            el.className.includes('sm:grid-cols'))
       );
-      
+
       expect(responsiveGrids.length).toBeGreaterThan(0);
     });
   });
@@ -239,9 +243,11 @@ describe('Responsive Design', () => {
   describe('Mobile-specific Features', () => {
     it('should show mobile-specific UI elements', () => {
       renderWithRouter(<LabPage />);
-      
+
       // Mobile-specific text should be present
-      expect(screen.getByText(/Tap \+ Add on chemicals to experiment/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Tap \+ Add on chemicals to experiment/)
+      ).toBeInTheDocument();
     });
 
     it('should hide desktop-only elements on mobile', () => {
@@ -253,10 +259,12 @@ describe('Responsive Design', () => {
       });
 
       renderWithRouter(<LabPage />);
-      
+
       // Desktop-specific instructions should be hidden
-      const desktopInstructions = screen.queryByText(/Drag chemicals from the inventory to the lab bench/);
-      
+      const desktopInstructions = screen.queryByText(
+        /Drag chemicals from the inventory to the lab bench/
+      );
+
       // This text might still be in DOM but hidden with CSS classes
       if (desktopInstructions) {
         expect(desktopInstructions.className).toMatch(/hidden|sm:block/);
@@ -267,24 +275,25 @@ describe('Responsive Design', () => {
   describe('Accessibility on Mobile', () => {
     it('should maintain proper ARIA labels on touch devices', () => {
       renderWithRouter(<LabPage />);
-      
+
       const buttons = screen.getAllByRole('button');
-      
+
       // All buttons should have accessible names
       buttons.forEach(button => {
-        const accessibleName = button.getAttribute('aria-label') || 
-                              button.getAttribute('aria-labelledby') || 
-                              button.textContent;
-        
+        const accessibleName =
+          button.getAttribute('aria-label') ||
+          button.getAttribute('aria-labelledby') ||
+          button.textContent;
+
         expect(accessibleName).toBeTruthy();
       });
     });
 
     it('should have proper focus management', () => {
       renderWithRouter(<LabPage />);
-      
+
       const focusableElements = screen.getAllByRole('button');
-      
+
       // Elements should be focusable
       focusableElements.forEach(element => {
         expect(element.tabIndex).toBeGreaterThanOrEqual(0);

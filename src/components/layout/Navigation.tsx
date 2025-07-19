@@ -12,7 +12,7 @@ interface NavigationProps {
 export const Navigation: React.FC<NavigationProps> = ({
   className = '',
   variant = 'horizontal',
-  showUserMenu = true
+  showUserMenu = true,
 }) => {
   const { navigationRoutes, isActive, navigateTo } = useNavigation();
   const { user, logout } = useAuthStore();
@@ -41,7 +41,10 @@ export const Navigation: React.FC<NavigationProps> = ({
   // Close user menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(event.target as Node)
+      ) {
         setIsUserMenuOpen(false);
       }
     };
@@ -60,15 +63,20 @@ export const Navigation: React.FC<NavigationProps> = ({
     }
   };
 
-  const baseNavClasses = variant === 'horizontal' 
-    ? 'flex items-center space-x-8' 
-    : 'flex flex-col space-y-2';
+  const baseNavClasses =
+    variant === 'horizontal'
+      ? 'flex items-center space-x-8'
+      : 'flex flex-col space-y-2';
 
   return (
-    <nav className={`${className}`} role="navigation" aria-label="Main navigation">
+    <nav
+      className={`${className}`}
+      role="navigation"
+      aria-label="Main navigation"
+    >
       {/* Desktop Navigation */}
       <div className={`hidden md:flex ${baseNavClasses}`}>
-        {navigationRoutes.map((route) => (
+        {navigationRoutes.map(route => (
           <Link
             key={route.path}
             to={route.path}
@@ -89,7 +97,7 @@ export const Navigation: React.FC<NavigationProps> = ({
       <div className="flex items-center md:hidden">
         <button
           onClick={toggleMobileMenu}
-          onKeyDown={(e) => handleKeyDown(e, toggleMobileMenu)}
+          onKeyDown={e => handleKeyDown(e, toggleMobileMenu)}
           className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500 transition-colors duration-200"
           aria-expanded={isMobileMenuOpen}
           aria-label="Toggle mobile menu"
@@ -136,7 +144,7 @@ export const Navigation: React.FC<NavigationProps> = ({
           <div className="relative" ref={userMenuRef}>
             <button
               onClick={toggleUserMenu}
-              onKeyDown={(e) => handleKeyDown(e, toggleUserMenu)}
+              onKeyDown={e => handleKeyDown(e, toggleUserMenu)}
               className="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200"
               aria-expanded={isUserMenuOpen}
               aria-haspopup="true"
@@ -172,7 +180,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               >
                 <button
                   onClick={handleLogout}
-                  onKeyDown={(e) => handleKeyDown(e, handleLogout)}
+                  onKeyDown={e => handleKeyDown(e, handleLogout)}
                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition-colors duration-200"
                   role="menuitem"
                 >
@@ -185,12 +193,12 @@ export const Navigation: React.FC<NavigationProps> = ({
       )}
 
       {/* Mobile Navigation Menu */}
-      <div 
+      <div
         className={`md:hidden ${isMobileMenuOpen ? 'block' : 'hidden'}`}
         id="mobile-menu"
       >
         <div className="pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
-          {navigationRoutes.map((route) => (
+          {navigationRoutes.map(route => (
             <Link
               key={route.path}
               to={route.path}
@@ -205,7 +213,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               {route.label}
             </Link>
           ))}
-          
+
           {/* Mobile user info and logout */}
           {showUserMenu && (
             <div className="pt-4 pb-3 border-t border-gray-200">
@@ -220,10 +228,12 @@ export const Navigation: React.FC<NavigationProps> = ({
                     closeMobileMenu();
                     handleLogout();
                   }}
-                  onKeyDown={(e) => handleKeyDown(e, () => {
-                    closeMobileMenu();
-                    handleLogout();
-                  })}
+                  onKeyDown={e =>
+                    handleKeyDown(e, () => {
+                      closeMobileMenu();
+                      handleLogout();
+                    })
+                  }
                   className="block w-full text-left pl-3 pr-4 py-2 text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500 transition-colors duration-200"
                 >
                   Sign Out

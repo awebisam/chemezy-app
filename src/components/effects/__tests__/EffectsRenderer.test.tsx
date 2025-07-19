@@ -38,7 +38,7 @@ describe('EffectsRenderer', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockRequestAnimationFrame.mockImplementation((callback) => {
+    mockRequestAnimationFrame.mockImplementation(callback => {
       setTimeout(callback, 16); // Simulate 60fps
       return 1;
     });
@@ -46,7 +46,7 @@ describe('EffectsRenderer', () => {
 
   it('renders without effects', () => {
     render(<EffectsRenderer {...defaultProps} />);
-    
+
     const svg = screen.getByRole('img', { hidden: true });
     expect(svg).toBeInTheDocument();
     expect(svg).toHaveAttribute('width', '400');
@@ -63,7 +63,7 @@ describe('EffectsRenderer', () => {
     };
 
     render(<EffectsRenderer {...defaultProps} effects={[gasEffect]} />);
-    
+
     await waitFor(() => {
       const svg = screen.getByRole('img', { hidden: true });
       expect(svg).toBeInTheDocument();
@@ -83,7 +83,7 @@ describe('EffectsRenderer', () => {
     };
 
     render(<EffectsRenderer {...defaultProps} effects={[lightEffect]} />);
-    
+
     await waitFor(() => {
       const svg = screen.getByRole('img', { hidden: true });
       expect(svg).toBeInTheDocument();
@@ -97,7 +97,7 @@ describe('EffectsRenderer', () => {
     };
 
     render(<EffectsRenderer {...defaultProps} effects={[tempEffect]} />);
-    
+
     await waitFor(() => {
       const svg = screen.getByRole('img', { hidden: true });
       expect(svg).toBeInTheDocument();
@@ -114,7 +114,7 @@ describe('EffectsRenderer', () => {
     };
 
     render(<EffectsRenderer {...defaultProps} effects={[foamEffect]} />);
-    
+
     await waitFor(() => {
       const svg = screen.getByRole('img', { hidden: true });
       expect(svg).toBeInTheDocument();
@@ -129,7 +129,7 @@ describe('EffectsRenderer', () => {
     };
 
     render(<EffectsRenderer {...defaultProps} effects={[stateEffect]} />);
-    
+
     await waitFor(() => {
       const svg = screen.getByRole('img', { hidden: true });
       expect(svg).toBeInTheDocument();
@@ -143,7 +143,7 @@ describe('EffectsRenderer', () => {
     };
 
     render(<EffectsRenderer {...defaultProps} effects={[volumeEffect]} />);
-    
+
     await waitFor(() => {
       const svg = screen.getByRole('img', { hidden: true });
       expect(svg).toBeInTheDocument();
@@ -158,7 +158,7 @@ describe('EffectsRenderer', () => {
     };
 
     render(<EffectsRenderer {...defaultProps} effects={[spillEffect]} />);
-    
+
     await waitFor(() => {
       const svg = screen.getByRole('img', { hidden: true });
       expect(svg).toBeInTheDocument();
@@ -174,7 +174,7 @@ describe('EffectsRenderer', () => {
     };
 
     render(<EffectsRenderer {...defaultProps} effects={[textureEffect]} />);
-    
+
     await waitFor(() => {
       const svg = screen.getByRole('img', { hidden: true });
       expect(svg).toBeInTheDocument();
@@ -200,7 +200,7 @@ describe('EffectsRenderer', () => {
     ];
 
     render(<EffectsRenderer {...defaultProps} effects={effects} />);
-    
+
     await waitFor(() => {
       const svg = screen.getByRole('img', { hidden: true });
       expect(svg).toBeInTheDocument();
@@ -250,7 +250,7 @@ describe('EffectsRenderer', () => {
         reduceMotion={true}
       />
     );
-    
+
     await waitFor(() => {
       const svg = screen.getByRole('img', { hidden: true });
       expect(svg).toBeInTheDocument();
@@ -282,7 +282,7 @@ describe('EffectsRenderer', () => {
     };
 
     render(<EffectsRenderer {...defaultProps} effects={[gasEffect]} />);
-    
+
     await waitFor(() => {
       const svg = screen.getByRole('img', { hidden: true });
       expect(svg).toBeInTheDocument();
@@ -306,7 +306,7 @@ describe('EffectsRenderer', () => {
         vesselCenter={customVesselCenter}
       />
     );
-    
+
     await waitFor(() => {
       const svg = screen.getByRole('img', { hidden: true });
       expect(svg).toBeInTheDocument();
@@ -315,21 +315,18 @@ describe('EffectsRenderer', () => {
 
   it('applies custom className', () => {
     render(
-      <EffectsRenderer
-        {...defaultProps}
-        className="custom-effects-class"
-      />
+      <EffectsRenderer {...defaultProps} className="custom-effects-class" />
     );
-    
+
     const container = screen.getByRole('img', { hidden: true }).parentElement;
     expect(container).toHaveClass('custom-effects-class');
   });
 
   it('cleans up animation frames on unmount', () => {
     const { unmount } = render(<EffectsRenderer {...defaultProps} />);
-    
+
     unmount();
-    
+
     expect(mockCancelAnimationFrame).toHaveBeenCalled();
   });
 
@@ -352,7 +349,7 @@ describe('EffectsRenderer', () => {
     ];
 
     const onEffectComplete = vi.fn();
-    
+
     render(
       <EffectsRenderer
         {...defaultProps}

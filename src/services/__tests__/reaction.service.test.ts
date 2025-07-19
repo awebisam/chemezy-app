@@ -1,7 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { reactionService } from '../reaction.service';
 import { apiClient } from '../api';
-import type { ReactionRequest, ReactionPrediction } from '@/types/reaction.types';
+import type {
+  ReactionRequest,
+  ReactionPrediction,
+} from '@/types/reaction.types';
 
 // Mock the API client
 vi.mock('../api', () => ({
@@ -13,7 +16,7 @@ vi.mock('../api', () => ({
 
 // Mock the error service
 vi.mock('../error.service', () => ({
-  createApiWrapper: vi.fn((fn) => fn),
+  createApiWrapper: vi.fn(fn => fn),
 }));
 
 describe('ReactionService', () => {
@@ -58,7 +61,10 @@ describe('ReactionService', () => {
 
       const result = await reactionService.predictReaction(mockReactionRequest);
 
-      expect(apiClient.post).toHaveBeenCalledWith('/reactions/react', mockReactionRequest);
+      expect(apiClient.post).toHaveBeenCalledWith(
+        '/reactions/react',
+        mockReactionRequest
+      );
       expect(result).toEqual(mockReactionPrediction);
     });
 

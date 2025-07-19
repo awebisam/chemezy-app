@@ -39,12 +39,14 @@ export const usePageLoading = (options: UsePageLoadingOptions = {}) => {
 
 // Hook for managing async operation loading states
 export const useAsyncLoading = () => {
-  const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>({});
+  const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>(
+    {}
+  );
 
   const setLoading = (key: string, loading: boolean) => {
     setLoadingStates(prev => ({
       ...prev,
-      [key]: loading
+      [key]: loading,
     }));
   };
 
@@ -55,6 +57,6 @@ export const useAsyncLoading = () => {
     setLoading,
     isLoading,
     isAnyLoading,
-    loadingStates
+    loadingStates,
   };
 };

@@ -34,7 +34,10 @@ export const useAuthStore = create<AuthStore>()(
               token: null,
               isAuthenticated: false,
               isLoading: false,
-              error: error.message || 'Login failed',
+              error:
+                typeof error.message === 'string'
+                  ? error.message
+                  : 'Login failed',
             });
             throw error;
           }
@@ -52,7 +55,10 @@ export const useAuthStore = create<AuthStore>()(
           } catch (error: any) {
             set({
               isLoading: false,
-              error: error.message || 'Registration failed',
+              error:
+                typeof error.message === 'string'
+                  ? error.message
+                  : 'Registration failed',
             });
             throw error;
           }
@@ -98,7 +104,10 @@ export const useAuthStore = create<AuthStore>()(
               user: null,
               isAuthenticated: false,
               isLoading: false,
-              error: error.message || 'Failed to get user information',
+              error:
+                typeof error.message === 'string'
+                  ? error.message
+                  : 'Failed to get user information',
             });
             throw error;
           }

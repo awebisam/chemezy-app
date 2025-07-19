@@ -1,5 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { ErrorService, withRetry, handleError, getUserFriendlyMessage } from '../error.service';
+import {
+  ErrorService,
+  withRetry,
+  handleError,
+  getUserFriendlyMessage,
+} from '../error.service';
 import type { APIError } from '@/types/api.types';
 
 // Mock window for event dispatching
@@ -54,7 +59,9 @@ describe('ErrorService', () => {
     it('should handle network errors', () => {
       const networkError = new Error('Network Error');
       const result = getUserFriendlyMessage(networkError);
-      expect(result).toBe('Network connection error. Please check your internet connection and try again.');
+      expect(result).toBe(
+        'Network connection error. Please check your internet connection and try again.'
+      );
     });
 
     it('should handle timeout errors', () => {
@@ -71,7 +78,10 @@ describe('ErrorService', () => {
     });
 
     it('should return true for rate limiting', () => {
-      const rateLimitError: APIError = { message: 'Too many requests', status: 429 };
+      const rateLimitError: APIError = {
+        message: 'Too many requests',
+        status: 429,
+      };
       expect(ErrorService.isRetryableError(rateLimitError)).toBe(true);
     });
 
@@ -115,20 +125,21 @@ describe('ErrorService', () => {
   describe('withRetry', () => {
     it('should succeed on first attempt', async () => {
       const mockFn = vi.fn().mockResolvedValue('success');
-      
+
       const result = await withRetry(mockFn);
-      
+
       expect(result).toBe('success');
       expect(mockFn).toHaveBeenCalledTimes(1);
     });
 
     it('should retry on retryable errors', async () => {
-      const mockFn = vi.fn()
+      const mockFn = vi
+        .fn()
         .mockRejectedValueOnce(new Error('Network Error'))
         .mockResolvedValue('success');
-      
+
       const result = await withRetry(mockFn, { maxRetries: 2, baseDelay: 10 });
-      
+
       expect(result).toBe('success');
       expect(mockFn).toHaveBeenCalledTimes(2);
     });
@@ -136,7 +147,7 @@ describe('ErrorService', () => {
     it('should not retry on non-retryable errors', async () => {
       const apiError: APIError = { message: 'Bad request', status: 400 };
       const mockFn = vi.fn().mockRejectedValue(apiError);
-      
+
       await expect(withRetry(mockFn)).rejects.toEqual(apiError);
       expect(mockFn).toHaveBeenCalledTimes(1);
     });
@@ -144,8 +155,10 @@ describe('ErrorService', () => {
     it('should throw after max retries', async () => {
       const networkError = new Error('Network Error');
       const mockFn = vi.fn().mockRejectedValue(networkError);
-      
-      await expect(withRetry(mockFn, { maxRetries: 2, baseDelay: 10 })).rejects.toEqual(networkError);
+
+      await expect(
+        withRetry(mockFn, { maxRetries: 2, baseDelay: 10 })
+      ).rejects.toEqual(networkError);
       expect(mockFn).toHaveBeenCalledTimes(3); // Initial + 2 retries
     });
   });
@@ -153,9 +166,9 @@ describe('ErrorService', () => {
   describe('handleError', () => {
     it('should dispatch error toast event when showToast is true', () => {
       const apiError: APIError = { message: 'Test error', status: 500 };
-      
+
       handleError(apiError, 'test context', { showToast: true });
-      
+
       expect(mockWindow.dispatchEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           type: 'show-error-toast',
@@ -169,20 +182,25 @@ describe('ErrorService', () => {
 
     it('should not dispatch toast event when showToast is false', () => {
       const apiError: APIError = { message: 'Test error', status: 500 };
-      
+
       handleError(apiError, 'test context', { showToast: false });
-      
+
       expect(mockWindow.dispatchEvent).not.toHaveBeenCalled();
     });
 
     it('should log error when logError is true', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
       const apiError: APIError = { message: 'Test error', status: 500 };
-      
+
       handleError(apiError, 'test context', { logError: true });
-      
-      expect(consoleSpy).toHaveBeenCalledWith('Error in test context:', apiError);
-      
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Error in test context:',
+        apiError
+      );
+
       consoleSpy.mockRestore();
     });
   });
@@ -191,9 +209,9 @@ describe('ErrorService', () => {
     it('should wrap function with error handling', async () => {
       const mockFn = vi.fn().mockResolvedValue('success');
       const wrappedFn = ErrorService.createApiWrapper(mockFn, 'test context');
-      
+
       const result = await wrappedFn('arg1', 'arg2');
-      
+
       expect(result).toBe('success');
       expect(mockFn).toHaveBeenCalledWith('arg1', 'arg2');
     });
@@ -202,21 +220,27 @@ describe('ErrorService', () => {
       const apiError: APIError = { message: 'Test error', status: 500 };
       const mockFn = vi.fn().mockRejectedValue(apiError);
       const wrappedFn = ErrorService.createApiWrapper(mockFn, 'test context');
-      
+
       await expect(wrappedFn()).rejects.toEqual(apiError);
     });
 
     it('should apply retry logic when configured', async () => {
-      const mockFn = vi.fn()
+      const mockFn = vi
+        .fn()
         .mockRejectedValueOnce(new Error('Network Error'))
         .mockResolvedValue('success');
-      
+
       const wrappedFn = ErrorService.createApiWrapper(mockFn, 'test context', {
-        retryConfig: { maxRetries: 2, baseDelay: 10, maxDelay: 100, backoffFactor: 2 }
+        retryConfig: {
+          maxRetries: 2,
+          baseDelay: 10,
+          maxDelay: 100,
+          backoffFactor: 2,
+        },
       });
-      
+
       const result = await wrappedFn();
-      
+
       expect(result).toBe('success');
       expect(mockFn).toHaveBeenCalledTimes(2);
     });

@@ -13,7 +13,9 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
   position = 'bottom-right',
 }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [stats, setStats] = useState<ReturnType<typeof performanceMonitor.getPerformanceStats> | null>(null);
+  const [stats, setStats] = useState<ReturnType<
+    typeof performanceMonitor.getPerformanceStats
+  > | null>(null);
   const [recommendations, setRecommendations] = useState<string[]>([]);
 
   // Only show in development mode if specified
@@ -26,8 +28,9 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
 
     const interval = setInterval(() => {
       const currentStats = performanceMonitor.getPerformanceStats();
-      const currentRecommendations = performanceMonitor.getPerformanceRecommendations();
-      
+      const currentRecommendations =
+        performanceMonitor.getPerformanceRecommendations();
+
       setStats(currentStats);
       setRecommendations(currentRecommendations);
     }, 2000); // Update every 2 seconds
@@ -57,9 +60,10 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
           onClick={() => setIsVisible(!isVisible)}
           className={`
             w-12 h-12 rounded-full shadow-lg transition-colors duration-200
-            ${isDegraded 
-              ? 'bg-red-500 hover:bg-red-600 text-white' 
-              : 'bg-green-500 hover:bg-green-600 text-white'
+            ${
+              isDegraded
+                ? 'bg-red-500 hover:bg-red-600 text-white'
+                : 'bg-green-500 hover:bg-green-600 text-white'
             }
           `}
           title="Performance Monitor"
@@ -74,7 +78,9 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
         {isVisible && (
           <div className="absolute bottom-14 right-0 w-80 bg-white rounded-lg shadow-xl border border-gray-200 p-4 text-sm">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold text-gray-900">Performance Monitor</h3>
+              <h3 className="font-semibold text-gray-900">
+                Performance Monitor
+              </h3>
               <button
                 onClick={() => setIsVisible(false)}
                 className="text-gray-400 hover:text-gray-600"
@@ -88,21 +94,39 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
             <div className="space-y-2 mb-4">
               <div className="flex justify-between">
                 <span className="text-gray-600">Frame Rate:</span>
-                <span className={stats.averageFrameRate < 30 ? 'text-red-600 font-semibold' : 'text-green-600'}>
+                <span
+                  className={
+                    stats.averageFrameRate < 30
+                      ? 'text-red-600 font-semibold'
+                      : 'text-green-600'
+                  }
+                >
                   {Math.round(stats.averageFrameRate)} FPS
                 </span>
               </div>
-              
+
               <div className="flex justify-between">
                 <span className="text-gray-600">Render Time:</span>
-                <span className={stats.averageRenderTime > 16 ? 'text-red-600 font-semibold' : 'text-green-600'}>
+                <span
+                  className={
+                    stats.averageRenderTime > 16
+                      ? 'text-red-600 font-semibold'
+                      : 'text-green-600'
+                  }
+                >
                   {Math.round(stats.averageRenderTime)}ms
                 </span>
               </div>
-              
+
               <div className="flex justify-between">
                 <span className="text-gray-600">Memory:</span>
-                <span className={stats.memoryUsage > 50 * 1024 * 1024 ? 'text-yellow-600 font-semibold' : 'text-green-600'}>
+                <span
+                  className={
+                    stats.memoryUsage > 50 * 1024 * 1024
+                      ? 'text-yellow-600 font-semibold'
+                      : 'text-green-600'
+                  }
+                >
                   {Math.round(stats.memoryUsage / 1024 / 1024)}MB
                 </span>
               </div>
@@ -111,16 +135,31 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
             {/* Effects performance */}
             {Object.keys(stats.effectsPerformance).length > 0 && (
               <div className="mb-4">
-                <h4 className="font-medium text-gray-900 mb-2">Effects Performance</h4>
+                <h4 className="font-medium text-gray-900 mb-2">
+                  Effects Performance
+                </h4>
                 <div className="space-y-1 max-h-32 overflow-y-auto">
-                  {Object.entries(stats.effectsPerformance).map(([effectType, perf]) => (
-                    <div key={effectType} className="flex justify-between text-xs">
-                      <span className="text-gray-600 truncate">{effectType}:</span>
-                      <span className={perf.averageRenderTime > 10 ? 'text-red-600' : 'text-green-600'}>
-                        {Math.round(perf.averageRenderTime)}ms
-                      </span>
-                    </div>
-                  ))}
+                  {Object.entries(stats.effectsPerformance).map(
+                    ([effectType, perf]) => (
+                      <div
+                        key={effectType}
+                        className="flex justify-between text-xs"
+                      >
+                        <span className="text-gray-600 truncate">
+                          {effectType}:
+                        </span>
+                        <span
+                          className={
+                            perf.averageRenderTime > 10
+                              ? 'text-red-600'
+                              : 'text-green-600'
+                          }
+                        >
+                          {Math.round(perf.averageRenderTime)}ms
+                        </span>
+                      </div>
+                    )
+                  )}
                 </div>
               </div>
             )}
@@ -128,10 +167,14 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
             {/* Recommendations */}
             {recommendations.length > 0 && (
               <div>
-                <h4 className="font-medium text-red-600 mb-2">⚠️ Recommendations</h4>
+                <h4 className="font-medium text-red-600 mb-2">
+                  ⚠️ Recommendations
+                </h4>
                 <ul className="space-y-1 text-xs text-red-600">
                   {recommendations.map((rec, index) => (
-                    <li key={index} className="leading-tight">• {rec}</li>
+                    <li key={index} className="leading-tight">
+                      • {rec}
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -180,7 +223,7 @@ export const BundleSizeMonitor: React.FC = () => {
         chunkCount: Math.floor(Math.random() * 10) + 3, // 3-12 chunks
         timestamp: new Date().toISOString(),
       };
-      
+
       setBundleInfo(mockBundleInfo);
     }
   }, []);
@@ -191,10 +234,12 @@ export const BundleSizeMonitor: React.FC = () => {
 
   return (
     <div className="fixed top-4 left-4 z-50">
-      <div className={`
+      <div
+        className={`
         px-3 py-2 rounded-lg shadow-lg text-xs font-mono
         ${isLarge ? 'bg-red-100 text-red-800 border border-red-200' : 'bg-green-100 text-green-800 border border-green-200'}
-      `}>
+      `}
+      >
         <div>Bundle: {Math.round(bundleInfo.totalSize)}KB</div>
         <div>Chunks: {bundleInfo.chunkCount}</div>
         {isLarge && (

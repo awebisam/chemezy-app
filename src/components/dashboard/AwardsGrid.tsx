@@ -159,7 +159,10 @@ export const AwardsGrid: React.FC<AwardsGridProps> = ({
 
         <div className="flex items-center space-x-2 sm:space-x-4">
           <div className="flex items-center space-x-2">
-            <label htmlFor="sort-by" className="text-sm text-gray-600 whitespace-nowrap">
+            <label
+              htmlFor="sort-by"
+              className="text-sm text-gray-600 whitespace-nowrap"
+            >
               Sort by:
             </label>
             <select

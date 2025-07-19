@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { calculatePasswordStrength, validateEmail, validatePassword } from '../password';
+import {
+  calculatePasswordStrength,
+  validateEmail,
+  validatePassword,
+} from '../password';
 
 describe('password utilities', () => {
   describe('calculatePasswordStrength', () => {
@@ -83,25 +87,33 @@ describe('password utilities', () => {
     it('should reject short passwords', () => {
       const result = validatePassword('Short1');
       expect(result.isValid).toBe(false);
-      expect(result.errors).toContain('Password must be at least 8 characters long');
+      expect(result.errors).toContain(
+        'Password must be at least 8 characters long'
+      );
     });
 
     it('should require lowercase letters', () => {
       const result = validatePassword('PASSWORD123');
       expect(result.isValid).toBe(false);
-      expect(result.errors).toContain('Password must contain at least one lowercase letter');
+      expect(result.errors).toContain(
+        'Password must contain at least one lowercase letter'
+      );
     });
 
     it('should require uppercase letters', () => {
       const result = validatePassword('password123');
       expect(result.isValid).toBe(false);
-      expect(result.errors).toContain('Password must contain at least one uppercase letter');
+      expect(result.errors).toContain(
+        'Password must contain at least one uppercase letter'
+      );
     });
 
     it('should require numbers', () => {
       const result = validatePassword('Password');
       expect(result.isValid).toBe(false);
-      expect(result.errors).toContain('Password must contain at least one number');
+      expect(result.errors).toContain(
+        'Password must contain at least one number'
+      );
     });
 
     it('should return all validation errors', () => {

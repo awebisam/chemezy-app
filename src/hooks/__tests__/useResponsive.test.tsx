@@ -53,7 +53,7 @@ describe('useResponsive', () => {
   it('should detect mobile screen size', () => {
     mockWindowDimensions(640, 480);
     const { result } = renderHook(() => useResponsive());
-    
+
     expect(result.current.isMobile).toBe(true);
     expect(result.current.isTablet).toBe(false);
     expect(result.current.isDesktop).toBe(false);
@@ -66,7 +66,7 @@ describe('useResponsive', () => {
   it('should detect tablet screen size', () => {
     mockWindowDimensions(800, 600);
     const { result } = renderHook(() => useResponsive());
-    
+
     expect(result.current.isMobile).toBe(false);
     expect(result.current.isTablet).toBe(true);
     expect(result.current.isDesktop).toBe(false);
@@ -76,7 +76,7 @@ describe('useResponsive', () => {
   it('should detect desktop screen size', () => {
     mockWindowDimensions(1200, 800);
     const { result } = renderHook(() => useResponsive());
-    
+
     expect(result.current.isMobile).toBe(false);
     expect(result.current.isTablet).toBe(false);
     expect(result.current.isDesktop).toBe(true);
@@ -86,7 +86,7 @@ describe('useResponsive', () => {
   it('should detect large desktop screen size', () => {
     mockWindowDimensions(1400, 900);
     const { result } = renderHook(() => useResponsive());
-    
+
     expect(result.current.isMobile).toBe(false);
     expect(result.current.isTablet).toBe(false);
     expect(result.current.isDesktop).toBe(false);
@@ -96,28 +96,28 @@ describe('useResponsive', () => {
   it('should detect portrait orientation', () => {
     mockWindowDimensions(480, 800);
     const { result } = renderHook(() => useResponsive());
-    
+
     expect(result.current.orientation).toBe('portrait');
   });
 
   it('should detect landscape orientation', () => {
     mockWindowDimensions(800, 480);
     const { result } = renderHook(() => useResponsive());
-    
+
     expect(result.current.orientation).toBe('landscape');
   });
 
   it('should detect touch device', () => {
     mockTouchSupport(true);
     const { result } = renderHook(() => useResponsive());
-    
+
     expect(result.current.isTouchDevice).toBe(true);
   });
 
   it('should detect non-touch device', () => {
     mockTouchSupport(false);
     const { result } = renderHook(() => useResponsive());
-    
+
     expect(result.current.isTouchDevice).toBe(false);
   });
 
@@ -127,9 +127,9 @@ describe('useResponsive', () => {
       md: 900,
       lg: 1200,
     };
-    
+
     const { result } = renderHook(() => useResponsive(customBreakpoints));
-    
+
     expect(result.current.isMobile).toBe(false);
     expect(result.current.isTablet).toBe(true);
   });
@@ -137,16 +137,16 @@ describe('useResponsive', () => {
   it('should update on window resize', () => {
     mockWindowDimensions(640, 480);
     const { result } = renderHook(() => useResponsive());
-    
+
     expect(result.current.isMobile).toBe(true);
-    
+
     // Simulate window resize
     mockWindowDimensions(1200, 800);
-    
+
     act(() => {
       window.dispatchEvent(new Event('resize'));
     });
-    
+
     expect(result.current.isMobile).toBe(false);
     expect(result.current.isDesktop).toBe(true);
     expect(result.current.screenWidth).toBe(1200);
@@ -156,18 +156,18 @@ describe('useResponsive', () => {
   it('should handle orientation change', () => {
     mockWindowDimensions(480, 800);
     const { result } = renderHook(() => useResponsive());
-    
+
     expect(result.current.orientation).toBe('portrait');
-    
+
     // Simulate orientation change
     mockWindowDimensions(800, 480);
-    
+
     act(() => {
       window.dispatchEvent(new Event('orientationchange'));
       // Simulate the timeout delay
       vi.advanceTimersByTime(100);
     });
-    
+
     expect(result.current.orientation).toBe('landscape');
   });
 
@@ -175,9 +175,9 @@ describe('useResponsive', () => {
     // Mock server environment
     const originalWindow = global.window;
     delete (global as any).window;
-    
+
     const { result } = renderHook(() => useResponsive());
-    
+
     expect(result.current.isMobile).toBe(false);
     expect(result.current.isTablet).toBe(false);
     expect(result.current.isDesktop).toBe(true);
@@ -186,7 +186,7 @@ describe('useResponsive', () => {
     expect(result.current.screenHeight).toBe(768);
     expect(result.current.orientation).toBe('landscape');
     expect(result.current.isTouchDevice).toBe(false);
-    
+
     // Restore window
     global.window = originalWindow;
   });
@@ -200,14 +200,14 @@ describe('useBreakpoint', () => {
   it('should return true for met breakpoints', () => {
     mockWindowDimensions(1200, 800);
     const { result } = renderHook(() => useBreakpoint('lg'));
-    
+
     expect(result.current).toBe(true);
   });
 
   it('should return false for unmet breakpoints', () => {
     mockWindowDimensions(800, 600);
     const { result } = renderHook(() => useBreakpoint('lg'));
-    
+
     expect(result.current).toBe(false);
   });
 });
@@ -216,14 +216,14 @@ describe('useTouchDevice', () => {
   it('should return true for touch devices', () => {
     mockTouchSupport(true);
     const { result } = renderHook(() => useTouchDevice());
-    
+
     expect(result.current).toBe(true);
   });
 
   it('should return false for non-touch devices', () => {
     mockTouchSupport(false);
     const { result } = renderHook(() => useTouchDevice());
-    
+
     expect(result.current).toBe(false);
   });
 });

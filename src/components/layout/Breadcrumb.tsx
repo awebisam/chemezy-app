@@ -13,24 +13,22 @@ interface BreadcrumbProps {
   className?: string;
 }
 
-export const Breadcrumb: React.FC<BreadcrumbProps> = ({ 
-  items, 
-  className = '' 
+export const Breadcrumb: React.FC<BreadcrumbProps> = ({
+  items,
+  className = '',
 }) => {
   const location = useLocation();
 
   // Auto-generate breadcrumbs if not provided
-  const breadcrumbItems = items || generateBreadcrumbsFromPath(location.pathname);
+  const breadcrumbItems =
+    items || generateBreadcrumbsFromPath(location.pathname);
 
   if (breadcrumbItems.length <= 1) {
     return null; // Don't show breadcrumbs for single-level pages
   }
 
   return (
-    <nav 
-      className={`flex ${className}`} 
-      aria-label="Breadcrumb"
-    >
+    <nav className={`flex ${className}`} aria-label="Breadcrumb">
       <ol className="inline-flex items-center space-x-1 md:space-x-3">
         {breadcrumbItems.map((item, index) => (
           <li key={index} className="inline-flex items-center">
@@ -91,4 +89,3 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
     </nav>
   );
 };
-

@@ -83,21 +83,28 @@ class PerformanceMonitor {
     averageRenderTime: number;
     averageFrameRate: number;
     memoryUsage: number;
-    effectsPerformance: Record<string, {
-      averageRenderTime: number;
-      averageDuration: number;
-      count: number;
-    }>;
+    effectsPerformance: Record<
+      string,
+      {
+        averageRenderTime: number;
+        averageDuration: number;
+        count: number;
+      }
+    >;
   } {
     const recentMetrics = this.metrics.slice(-20); // Last 20 metrics
-    
-    const averageRenderTime = recentMetrics.length > 0
-      ? recentMetrics.reduce((sum, m) => sum + m.renderTime, 0) / recentMetrics.length
-      : 0;
 
-    const averageFrameRate = this.frameRateBuffer.length > 0
-      ? this.frameRateBuffer.reduce((sum, rate) => sum + rate, 0) / this.frameRateBuffer.length
-      : 0;
+    const averageRenderTime =
+      recentMetrics.length > 0
+        ? recentMetrics.reduce((sum, m) => sum + m.renderTime, 0) /
+          recentMetrics.length
+        : 0;
+
+    const averageFrameRate =
+      this.frameRateBuffer.length > 0
+        ? this.frameRateBuffer.reduce((sum, rate) => sum + rate, 0) /
+          this.frameRateBuffer.length
+        : 0;
 
     const memoryUsage = this.getMemoryUsage();
 
@@ -105,8 +112,12 @@ class PerformanceMonitor {
     this.effectMetrics.forEach((data, effectType) => {
       const recentData = data.slice(-10); // Last 10 records per effect
       effectsPerformance[effectType] = {
-        averageRenderTime: recentData.reduce((sum, d) => sum + d.renderTime, 0) / recentData.length,
-        averageDuration: recentData.reduce((sum, d) => sum + d.duration, 0) / recentData.length,
+        averageRenderTime:
+          recentData.reduce((sum, d) => sum + d.renderTime, 0) /
+          recentData.length,
+        averageDuration:
+          recentData.reduce((sum, d) => sum + d.duration, 0) /
+          recentData.length,
         count: recentData.length,
       };
     });
@@ -124,7 +135,7 @@ class PerformanceMonitor {
    */
   isPerformanceDegraded(): boolean {
     const stats = this.getPerformanceStats();
-    
+
     // Consider performance degraded if:
     // - Frame rate is below 30 FPS
     // - Average render time is above 16ms (60 FPS threshold)
@@ -144,21 +155,30 @@ class PerformanceMonitor {
     const stats = this.getPerformanceStats();
 
     if (stats.averageFrameRate < 30) {
-      recommendations.push('Consider reducing the number of simultaneous visual effects');
+      recommendations.push(
+        'Consider reducing the number of simultaneous visual effects'
+      );
     }
 
     if (stats.averageRenderTime > 16) {
-      recommendations.push('Optimize rendering performance by reducing effect complexity');
+      recommendations.push(
+        'Optimize rendering performance by reducing effect complexity'
+      );
     }
 
-    if (stats.memoryUsage > 50 * 1024 * 1024) { // 50MB
-      recommendations.push('Monitor memory usage - consider implementing effect pooling');
+    if (stats.memoryUsage > 50 * 1024 * 1024) {
+      // 50MB
+      recommendations.push(
+        'Monitor memory usage - consider implementing effect pooling'
+      );
     }
 
     // Check individual effect performance
     Object.entries(stats.effectsPerformance).forEach(([effectType, perf]) => {
       if (perf.averageRenderTime > 10) {
-        recommendations.push(`Optimize ${effectType} effect rendering performance`);
+        recommendations.push(
+          `Optimize ${effectType} effect rendering performance`
+        );
       }
     });
 
@@ -182,17 +202,17 @@ class PerformanceMonitor {
       if (this.lastFrameTime > 0) {
         const deltaTime = currentTime - this.lastFrameTime;
         const frameRate = 1000 / deltaTime; // Convert to FPS
-        
+
         this.frameRateBuffer.push(frameRate);
-        
+
         // Keep only last 60 frame rate measurements
         if (this.frameRateBuffer.length > 60) {
           this.frameRateBuffer = this.frameRateBuffer.slice(-60);
         }
       }
-      
+
       this.lastFrameTime = currentTime;
-      
+
       if (this.isMonitoring) {
         requestAnimationFrame(measureFrameRate);
       }
@@ -244,9 +264,9 @@ export function measurePerformance<T extends (...args: any[]) => any>(
     const startTime = performance.now();
     const result = fn(...args);
     const endTime = performance.now();
-    
+
     console.debug(`${name} took ${endTime - startTime}ms`);
-    
+
     return result;
   }) as T;
 }
@@ -263,12 +283,15 @@ export const bundleMonitor = {
       console.group('Bundle Information');
       console.log('Environment:', import.meta.env.MODE);
       console.log('Build timestamp:', new Date().toISOString());
-      
+
       // Log loaded modules count
       if ('webpackChunkName' in window) {
-        console.log('Webpack chunks loaded:', Object.keys((window as any).webpackChunkName || {}).length);
+        console.log(
+          'Webpack chunks loaded:',
+          Object.keys((window as any).webpackChunkName || {}).length
+        );
       }
-      
+
       console.groupEnd();
     }
   },
@@ -281,13 +304,13 @@ export const bundleMonitor = {
     componentName: string
   ): Promise<T> => {
     const startTime = performance.now();
-    
+
     try {
       const module = await importFn();
       const loadTime = performance.now() - startTime;
-      
+
       console.debug(`Lazy loaded ${componentName} in ${loadTime}ms`);
-      
+
       return module;
     } catch (error) {
       console.error(`Failed to lazy load ${componentName}:`, error);

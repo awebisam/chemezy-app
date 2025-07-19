@@ -89,7 +89,9 @@ export const LabPage: React.FC = () => {
           )}
 
           {/* Lab Bench Area */}
-          <div className={`${showInventory ? 'lg:col-span-8 xl:col-span-9' : 'lg:col-span-12'}`}>
+          <div
+            className={`${showInventory ? 'lg:col-span-8 xl:col-span-9' : 'lg:col-span-12'}`}
+          >
             <div className="space-y-6">
               {/* Environment Selection */}
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
@@ -121,20 +123,20 @@ export const LabPage: React.FC = () => {
                   </summary>
                   <ul className="text-sm text-blue-800 space-y-1 mt-2">
                     <li className="hidden sm:block">
-                      • <strong>Desktop:</strong> Drag chemicals from the inventory
-                      to the lab bench
+                      • <strong>Desktop:</strong> Drag chemicals from the
+                      inventory to the lab bench
                     </li>
                     <li>
                       • <strong>Mobile/Touch:</strong> Tap the "+ Add" button on
                       chemical cards
                     </li>
                     <li>
-                      • <strong>Adjust quantities:</strong> Use the +/- buttons or
-                      tap the quantity to edit
+                      • <strong>Adjust quantities:</strong> Use the +/- buttons
+                      or tap the quantity to edit
                     </li>
                     <li>
-                      • <strong>Remove chemicals:</strong> Tap the × button on any
-                      chemical in the lab bench
+                      • <strong>Remove chemicals:</strong> Tap the × button on
+                      any chemical in the lab bench
                     </li>
                     <li>
                       • <strong>Quick quantities:</strong> Use the 1g, 5g, 10g

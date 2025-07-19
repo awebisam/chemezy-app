@@ -148,7 +148,9 @@ export const LabBench: React.FC<LabBenchProps> = ({ className }) => {
                   d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                 />
               </svg>
-              <p className="text-primary-700 font-medium text-sm sm:text-base">Drop chemical here</p>
+              <p className="text-primary-700 font-medium text-sm sm:text-base">
+                Drop chemical here
+              </p>
             </div>
           </div>
         )}
@@ -201,7 +203,8 @@ export const LabBench: React.FC<LabBenchProps> = ({ className }) => {
                 quantities.
               </span>
               <span className="sm:hidden">
-                Tap + Add on chemicals in the inventory to start your experiment.
+                Tap + Add on chemicals in the inventory to start your
+                experiment.
               </span>
             </p>
           </div>

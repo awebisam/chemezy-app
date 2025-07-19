@@ -27,9 +27,11 @@ export interface ResponsiveState {
   isTouchDevice: boolean;
 }
 
-export const useResponsive = (breakpoints: Partial<BreakpointConfig> = {}): ResponsiveState => {
+export const useResponsive = (
+  breakpoints: Partial<BreakpointConfig> = {}
+): ResponsiveState => {
   const bp = { ...defaultBreakpoints, ...breakpoints };
-  
+
   const [state, setState] = useState<ResponsiveState>(() => {
     if (typeof window === 'undefined') {
       return {
@@ -46,7 +48,7 @@ export const useResponsive = (breakpoints: Partial<BreakpointConfig> = {}): Resp
 
     const width = window.innerWidth;
     const height = window.innerHeight;
-    
+
     return {
       isMobile: width < bp.md,
       isTablet: width >= bp.md && width < bp.lg,
@@ -63,7 +65,7 @@ export const useResponsive = (breakpoints: Partial<BreakpointConfig> = {}): Resp
     const handleResize = () => {
       const width = window.innerWidth;
       const height = window.innerHeight;
-      
+
       setState({
         isMobile: width < bp.md,
         isTablet: width >= bp.md && width < bp.lg,
@@ -78,7 +80,7 @@ export const useResponsive = (breakpoints: Partial<BreakpointConfig> = {}): Resp
 
     // Add event listener
     window.addEventListener('resize', handleResize);
-    
+
     // Handle orientation change on mobile devices
     window.addEventListener('orientationchange', () => {
       // Delay to ensure dimensions are updated after orientation change
@@ -99,7 +101,7 @@ export const useResponsive = (breakpoints: Partial<BreakpointConfig> = {}): Resp
 export const useBreakpoint = (breakpoint: keyof BreakpointConfig): boolean => {
   const { screenWidth } = useResponsive();
   const bp = defaultBreakpoints[breakpoint];
-  
+
   return screenWidth >= bp;
 };
 

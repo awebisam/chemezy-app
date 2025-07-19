@@ -280,16 +280,40 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
       });
     };
 
-    window.addEventListener('show-error-toast', handleErrorToast as EventListener);
-    window.addEventListener('show-success-toast', handleSuccessToast as EventListener);
-    window.addEventListener('show-warning-toast', handleWarningToast as EventListener);
-    window.addEventListener('show-info-toast', handleInfoToast as EventListener);
+    window.addEventListener(
+      'show-error-toast',
+      handleErrorToast as EventListener
+    );
+    window.addEventListener(
+      'show-success-toast',
+      handleSuccessToast as EventListener
+    );
+    window.addEventListener(
+      'show-warning-toast',
+      handleWarningToast as EventListener
+    );
+    window.addEventListener(
+      'show-info-toast',
+      handleInfoToast as EventListener
+    );
 
     return () => {
-      window.removeEventListener('show-error-toast', handleErrorToast as EventListener);
-      window.removeEventListener('show-success-toast', handleSuccessToast as EventListener);
-      window.removeEventListener('show-warning-toast', handleWarningToast as EventListener);
-      window.removeEventListener('show-info-toast', handleInfoToast as EventListener);
+      window.removeEventListener(
+        'show-error-toast',
+        handleErrorToast as EventListener
+      );
+      window.removeEventListener(
+        'show-success-toast',
+        handleSuccessToast as EventListener
+      );
+      window.removeEventListener(
+        'show-warning-toast',
+        handleWarningToast as EventListener
+      );
+      window.removeEventListener(
+        'show-info-toast',
+        handleInfoToast as EventListener
+      );
     };
   }, [addToast]);
 

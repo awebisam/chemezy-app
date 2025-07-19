@@ -7,7 +7,7 @@ import { useToastHelpers } from './Toast';
 
 // Mock API functions for demonstration
 const mockSuccessApi = (): Promise<string> => {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     setTimeout(() => resolve('Success! Data loaded.'), 2000);
   });
 };
@@ -31,7 +31,9 @@ const mockRetryableApi = (): Promise<string> => {
 };
 
 // Component that throws an error for ErrorBoundary demo
-const ErrorThrowingComponent: React.FC<{ shouldThrow: boolean }> = ({ shouldThrow }) => {
+const ErrorThrowingComponent: React.FC<{ shouldThrow: boolean }> = ({
+  shouldThrow,
+}) => {
   if (shouldThrow) {
     throw new Error('This is a test error for ErrorBoundary');
   }
@@ -46,7 +48,12 @@ export const ErrorHandlingDemo: React.FC = () => {
   const successOperation = useAsyncOperation(mockSuccessApi);
   const errorOperation = useAsyncOperation(mockErrorApi);
   const retryOperation = useAsyncOperation(mockRetryableApi, {
-    retryConfig: { maxRetries: 3, baseDelay: 1000, maxDelay: 5000, backoffFactor: 2 }
+    retryConfig: {
+      maxRetries: 3,
+      baseDelay: 1000,
+      maxDelay: 5000,
+      backoffFactor: 2,
+    },
   });
 
   const handleOverlayDemo = () => {
@@ -57,7 +64,10 @@ export const ErrorHandlingDemo: React.FC = () => {
   const handleToastDemo = () => {
     toast.success('Success!', 'This is a success message');
     setTimeout(() => toast.error('Error!', 'This is an error message'), 1000);
-    setTimeout(() => toast.warning('Warning!', 'This is a warning message'), 2000);
+    setTimeout(
+      () => toast.warning('Warning!', 'This is a warning message'),
+      2000
+    );
     setTimeout(() => toast.info('Info!', 'This is an info message'), 3000);
   };
 
@@ -68,7 +78,8 @@ export const ErrorHandlingDemo: React.FC = () => {
           Error Handling & Loading States Demo
         </h1>
         <p className="text-gray-600">
-          Comprehensive demonstration of error handling, loading states, and retry mechanisms
+          Comprehensive demonstration of error handling, loading states, and
+          retry mechanisms
         </p>
       </div>
 
@@ -174,9 +185,7 @@ export const ErrorHandlingDemo: React.FC = () => {
       {/* Toast Notifications Demo */}
       <section className="bg-white rounded-lg shadow p-6">
         <h2 className="text-xl font-semibold mb-4">Toast Notifications</h2>
-        <Button onClick={handleToastDemo}>
-          Show All Toast Types
-        </Button>
+        <Button onClick={handleToastDemo}>Show All Toast Types</Button>
       </section>
 
       {/* Error Boundary Demo */}
@@ -189,11 +198,13 @@ export const ErrorHandlingDemo: React.FC = () => {
           >
             {throwError ? 'Fix Error' : 'Throw Error'}
           </Button>
-          
+
           <ErrorBoundary
             fallback={
               <div className="p-4 bg-red-50 border border-red-200 rounded">
-                <h3 className="font-medium text-red-800">Custom Error Fallback</h3>
+                <h3 className="font-medium text-red-800">
+                  Custom Error Fallback
+                </h3>
                 <p className="text-red-600 mt-1">
                   This is a custom error boundary fallback UI.
                 </p>

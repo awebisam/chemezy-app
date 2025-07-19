@@ -1,6 +1,11 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCallback, useMemo } from 'react';
-import { routes, getRouteByPath, generateBreadcrumbsFromPath, getRouteMetadata } from '@/config/routes';
+import {
+  routes,
+  getRouteByPath,
+  generateBreadcrumbsFromPath,
+  getRouteMetadata,
+} from '@/config/routes';
 
 export const useNavigation = () => {
   const location = useLocation();
@@ -22,9 +27,12 @@ export const useNavigation = () => {
   }, [location.pathname]);
 
   // Navigation helpers
-  const navigateTo = useCallback((path: string, options?: { replace?: boolean; state?: any }) => {
-    navigate(path, options);
-  }, [navigate]);
+  const navigateTo = useCallback(
+    (path: string, options?: { replace?: boolean; state?: any }) => {
+      navigate(path, options);
+    },
+    [navigate]
+  );
 
   const goBack = useCallback(() => {
     navigate(-1);
@@ -35,12 +43,15 @@ export const useNavigation = () => {
   }, [navigate]);
 
   // Check if a path is active
-  const isActive = useCallback((path: string, exact = false) => {
-    if (exact) {
-      return location.pathname === path;
-    }
-    return location.pathname.startsWith(path);
-  }, [location.pathname]);
+  const isActive = useCallback(
+    (path: string, exact = false) => {
+      if (exact) {
+        return location.pathname === path;
+      }
+      return location.pathname.startsWith(path);
+    },
+    [location.pathname]
+  );
 
   // Get navigation routes for menus
   const navigationRoutes = useMemo(() => {
@@ -53,13 +64,13 @@ export const useNavigation = () => {
     currentRoute,
     breadcrumbs,
     metadata,
-    
+
     // Navigation functions
     navigateTo,
     goBack,
     goForward,
     isActive,
-    
+
     // Route data
     routes,
     navigationRoutes,
@@ -69,7 +80,7 @@ export const useNavigation = () => {
 // Hook for managing page loading states during navigation
 export const usePageLoading = () => {
   const location = useLocation();
-  
+
   // This could be enhanced to track actual loading states
   // For now, it provides a simple interface for page transitions
   return {

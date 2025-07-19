@@ -11,20 +11,30 @@ export class ChemicalService {
   private getChemicalsWrapper = createApiWrapper(
     this._getChemicals.bind(this),
     'ChemicalService.getChemicals',
-    { 
+    {
       showToast: false, // Don't show toast for list loading errors
       logError: true,
-      retryConfig: { maxRetries: 2, baseDelay: 1000, maxDelay: 5000, backoffFactor: 2 }
+      retryConfig: {
+        maxRetries: 2,
+        baseDelay: 1000,
+        maxDelay: 5000,
+        backoffFactor: 2,
+      },
     }
   );
 
   private getChemicalWrapper = createApiWrapper(
     this._getChemical.bind(this),
     'ChemicalService.getChemical',
-    { 
-      showToast: true, 
+    {
+      showToast: true,
       logError: true,
-      retryConfig: { maxRetries: 2, baseDelay: 1000, maxDelay: 5000, backoffFactor: 2 }
+      retryConfig: {
+        maxRetries: 2,
+        baseDelay: 1000,
+        maxDelay: 5000,
+        backoffFactor: 2,
+      },
     }
   );
 

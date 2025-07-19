@@ -17,7 +17,7 @@ export function getFocusableElements(container: HTMLElement): HTMLElement[] {
   ].join(', ');
 
   return Array.from(container.querySelectorAll(focusableSelectors)).filter(
-    (element) => {
+    element => {
       const htmlElement = element as HTMLElement;
       return (
         htmlElement.offsetWidth > 0 &&
@@ -149,9 +149,10 @@ export function createSkipLink(targetId: string, text: string): HTMLElement {
   const skipLink = document.createElement('a');
   skipLink.href = `#${targetId}`;
   skipLink.textContent = text;
-  skipLink.className = 'sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary-600 text-white px-4 py-2 rounded-md z-50';
-  
-  skipLink.addEventListener('click', (event) => {
+  skipLink.className =
+    'sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary-600 text-white px-4 py-2 rounded-md z-50';
+
+  skipLink.addEventListener('click', event => {
     event.preventDefault();
     const target = document.getElementById(targetId);
     if (target) {
@@ -206,10 +207,7 @@ export const keyboardNavigation = {
   /**
    * Handle Enter and Space key activation
    */
-  handleActivation: (
-    event: KeyboardEvent,
-    callback: () => void
-  ) => {
+  handleActivation: (event: KeyboardEvent, callback: () => void) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       callback();
@@ -239,10 +237,10 @@ class LiveRegionManager {
     region.setAttribute('aria-live', priority);
     region.setAttribute('aria-atomic', 'true');
     region.className = 'sr-only';
-    
+
     document.body.appendChild(region);
     this.regions.set(id, region);
-    
+
     return region;
   }
 

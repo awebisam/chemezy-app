@@ -32,9 +32,13 @@ export const useDashboardStore = create<DashboardStore>()(
             error: null,
           });
         } catch (error: any) {
+          const errorMessage =
+            typeof error.message === 'string'
+              ? error.message
+              : 'Failed to fetch awards';
           set({
             isLoading: false,
-            error: error.message || 'Failed to fetch awards',
+            error: errorMessage,
           });
           throw error;
         }
@@ -53,9 +57,13 @@ export const useDashboardStore = create<DashboardStore>()(
             error: null,
           });
         } catch (error: any) {
+          const errorMessage =
+            typeof error.message === 'string'
+              ? error.message
+              : 'Failed to fetch available awards';
           set({
             isLoading: false,
-            error: error.message || 'Failed to fetch available awards',
+            error: errorMessage,
           });
           throw error;
         }
@@ -80,9 +88,13 @@ export const useDashboardStore = create<DashboardStore>()(
             error: null,
           });
         } catch (error: any) {
+          const errorMessage =
+            typeof error.message === 'string'
+              ? error.message
+              : 'Failed to fetch leaderboard';
           set({
             isLoading: false,
-            error: error.message || 'Failed to fetch leaderboard',
+            error: errorMessage,
           });
           throw error;
         }
@@ -102,9 +114,13 @@ export const useDashboardStore = create<DashboardStore>()(
             error: null,
           });
         } catch (error: any) {
+          const errorMessage =
+            typeof error.message === 'string'
+              ? error.message
+              : 'Failed to fetch user rank';
           set({
             isLoading: false,
-            error: error.message || 'Failed to fetch user rank',
+            error: errorMessage,
           });
           throw error;
         }
@@ -122,9 +138,13 @@ export const useDashboardStore = create<DashboardStore>()(
             error: null,
           });
         } catch (error: any) {
+          const errorMessage =
+            typeof error.message === 'string'
+              ? error.message
+              : 'Failed to fetch reaction statistics';
           set({
             isLoading: false,
-            error: error.message || 'Failed to fetch reaction statistics',
+            error: errorMessage,
           });
           throw error;
         }
@@ -142,9 +162,13 @@ export const useDashboardStore = create<DashboardStore>()(
             error: null,
           });
         } catch (error: any) {
+          const errorMessage =
+            typeof error.message === 'string'
+              ? error.message
+              : 'Failed to fetch reaction history';
           set({
             isLoading: false,
-            error: error.message || 'Failed to fetch reaction history',
+            error: errorMessage,
           });
           throw error;
         }

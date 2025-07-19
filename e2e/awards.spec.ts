@@ -13,8 +13,8 @@ test.describe('Awards and Dashboard', () => {
           email: 'test@example.com',
           is_active: true,
           is_admin: false,
-          created_at: '2024-01-01T00:00:00Z'
-        })
+          created_at: '2024-01-01T00:00:00Z',
+        }),
       });
     });
 
@@ -37,8 +37,8 @@ test.describe('Awards and Dashboard', () => {
               description: 'Complete your first chemical reaction',
               category: 'discovery',
               icon: '🧪',
-              criteria: {}
-            }
+              criteria: {},
+            },
           },
           {
             id: 2,
@@ -53,10 +53,10 @@ test.describe('Awards and Dashboard', () => {
               description: 'Discover 10 different reactions',
               category: 'discovery',
               icon: '🔍',
-              criteria: {}
-            }
-          }
-        ])
+              criteria: {},
+            },
+          },
+        ]),
       });
     });
 
@@ -73,7 +73,7 @@ test.describe('Awards and Dashboard', () => {
             category: 'achievement',
             icon: '👨‍🔬',
             criteria: { reactions_needed: 100 },
-            progress: { current_reactions: 25, percentage: 25 }
+            progress: { current_reactions: 25, percentage: 25 },
           },
           {
             id: 4,
@@ -82,9 +82,9 @@ test.describe('Awards and Dashboard', () => {
             category: 'discovery',
             icon: '🌍',
             criteria: { discoveries_needed: 5 },
-            progress: { current_discoveries: 1, percentage: 20 }
-          }
-        ])
+            progress: { current_discoveries: 1, percentage: 20 },
+          },
+        ]),
       });
     });
 
@@ -99,23 +99,23 @@ test.describe('Awards and Dashboard', () => {
             user_id: 2,
             username: 'topuser',
             award_count: 15,
-            total_points: 450
+            total_points: 450,
           },
           {
             rank: 2,
             user_id: 1,
             username: 'testuser',
             award_count: 2,
-            total_points: 30
+            total_points: 30,
           },
           {
             rank: 3,
             user_id: 3,
             username: 'thirduser',
             award_count: 1,
-            total_points: 10
-          }
-        ])
+            total_points: 10,
+          },
+        ]),
       });
     });
 
@@ -129,8 +129,8 @@ test.describe('Awards and Dashboard', () => {
           user_id: 1,
           username: 'testuser',
           award_count: 2,
-          total_points: 30
-        })
+          total_points: 30,
+        }),
       });
     });
 
@@ -143,8 +143,8 @@ test.describe('Awards and Dashboard', () => {
           total_reactions: 25,
           world_first_discoveries: 1,
           favorite_environment: 'Earth (Normal)',
-          most_used_chemical: 'Water'
-        })
+          most_used_chemical: 'Water',
+        }),
       });
     });
 
@@ -165,7 +165,7 @@ test.describe('Awards and Dashboard', () => {
     await expect(page.getByText('Your Awards')).toBeVisible();
     await expect(page.getByText('First Reaction')).toBeVisible();
     await expect(page.getByText('Explorer')).toBeVisible();
-    
+
     // Should show award icons
     await expect(page.getByText('🧪')).toBeVisible();
     await expect(page.getByText('🔍')).toBeVisible();
@@ -175,10 +175,10 @@ test.describe('Awards and Dashboard', () => {
     await expect(page.getByText('Progress')).toBeVisible();
     await expect(page.getByText('Master Chemist')).toBeVisible();
     await expect(page.getByText('World Discoverer')).toBeVisible();
-    
+
     // Should show progress bars
     await expect(page.getByRole('progressbar')).toHaveCount(2);
-    
+
     // Should show progress percentages
     await expect(page.getByText('25%')).toBeVisible();
     await expect(page.getByText('20%')).toBeVisible();
@@ -195,14 +195,14 @@ test.describe('Awards and Dashboard', () => {
   test('should filter awards by category', async ({ page }) => {
     // Click on discovery category filter
     await page.getByText('Discovery').click();
-    
+
     // Should show only discovery awards
     await expect(page.getByText('First Reaction')).toBeVisible();
     await expect(page.getByText('Explorer')).toBeVisible();
-    
+
     // Click on achievement category
     await page.getByText('Achievement').click();
-    
+
     // Should show progress toward achievement awards
     await expect(page.getByText('Master Chemist')).toBeVisible();
   });
@@ -210,30 +210,36 @@ test.describe('Awards and Dashboard', () => {
   test('should open award detail modal', async ({ page }) => {
     // Click on an award
     await page.getByText('First Reaction').click();
-    
+
     // Should open modal with award details
     await expect(page.getByRole('dialog')).toBeVisible();
-    await expect(page.getByText('Complete your first chemical reaction')).toBeVisible();
+    await expect(
+      page.getByText('Complete your first chemical reaction')
+    ).toBeVisible();
     await expect(page.getByText('Granted on')).toBeVisible();
-    
+
     // Close modal
     await page.getByRole('button', { name: /close/i }).click();
     await expect(page.getByRole('dialog')).not.toBeVisible();
   });
 
-  test('should display celebration animation for new awards', async ({ page }) => {
+  test('should display celebration animation for new awards', async ({
+    page,
+  }) => {
     // Mock new award notification
     await page.evaluate(() => {
-      window.dispatchEvent(new CustomEvent('newAward', {
-        detail: {
-          id: 5,
-          name: 'Quick Learner',
-          description: 'Complete 5 reactions in one session',
-          icon: '⚡'
-        }
-      }));
+      window.dispatchEvent(
+        new CustomEvent('newAward', {
+          detail: {
+            id: 5,
+            name: 'Quick Learner',
+            description: 'Complete 5 reactions in one session',
+            icon: '⚡',
+          },
+        })
+      );
     });
-    
+
     // Should show celebration animation
     await expect(page.getByTestId('celebration-animation')).toBeVisible();
     await expect(page.getByText('New Award Earned!')).toBeVisible();
@@ -242,25 +248,25 @@ test.describe('Awards and Dashboard', () => {
 
   test('should navigate to leaderboard', async ({ page }) => {
     await page.getByText('Leaderboard').click();
-    
+
     await expect(page).toHaveURL('/leaderboard');
     await expect(page.getByText('Overall Leaderboard')).toBeVisible();
   });
 
   test('should display leaderboard rankings', async ({ page }) => {
     await page.goto('/leaderboard');
-    
+
     // Should show leaderboard table
     await expect(page.getByText('Rank')).toBeVisible();
     await expect(page.getByText('Username')).toBeVisible();
     await expect(page.getByText('Awards')).toBeVisible();
     await expect(page.getByText('Points')).toBeVisible();
-    
+
     // Should show user rankings
     await expect(page.getByText('topuser')).toBeVisible();
     await expect(page.getByText('testuser')).toBeVisible();
     await expect(page.getByText('thirduser')).toBeVisible();
-    
+
     // Should highlight current user
     const userRow = page.getByText('testuser').locator('..');
     await expect(userRow).toHaveClass(/highlight/);
@@ -268,7 +274,7 @@ test.describe('Awards and Dashboard', () => {
 
   test('should filter leaderboard by category', async ({ page }) => {
     await page.goto('/leaderboard');
-    
+
     // Mock category leaderboard
     await page.route('**/api/v1/awards/leaderboard/discovery', async route => {
       await route.fulfill({
@@ -280,22 +286,22 @@ test.describe('Awards and Dashboard', () => {
             user_id: 1,
             username: 'testuser',
             award_count: 2,
-            total_points: 20
-          }
-        ])
+            total_points: 20,
+          },
+        ]),
       });
     });
-    
+
     // Select discovery category
     await page.getByRole('combobox').selectOption('discovery');
-    
+
     // Should show filtered leaderboard
     await expect(page.getByText('Discovery Leaderboard')).toBeVisible();
   });
 
   test('should display user rank prominently', async ({ page }) => {
     await page.goto('/leaderboard');
-    
+
     // Should show user's current rank
     await expect(page.getByText('Your Rank: #2')).toBeVisible();
     await expect(page.getByText('30 points')).toBeVisible();
@@ -307,15 +313,17 @@ test.describe('Awards and Dashboard', () => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
-        body: JSON.stringify([])
+        body: JSON.stringify([]),
       });
     });
-    
+
     await page.reload();
-    
+
     // Should show empty state message
     await expect(page.getByText('No awards yet')).toBeVisible();
-    await expect(page.getByText('Start experimenting to earn your first award!')).toBeVisible();
+    await expect(
+      page.getByText('Start experimenting to earn your first award!')
+    ).toBeVisible();
   });
 
   test('should handle loading states', async ({ page }) => {
@@ -325,12 +333,12 @@ test.describe('Awards and Dashboard', () => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
-        body: JSON.stringify([])
+        body: JSON.stringify([]),
       });
     });
-    
+
     await page.reload();
-    
+
     // Should show loading spinner
     await expect(page.getByTestId('loading-spinner')).toBeVisible();
   });
@@ -341,12 +349,12 @@ test.describe('Awards and Dashboard', () => {
       await route.fulfill({
         status: 500,
         contentType: 'application/json',
-        body: JSON.stringify({ detail: 'Internal server error' })
+        body: JSON.stringify({ detail: 'Internal server error' }),
       });
     });
-    
+
     await page.reload();
-    
+
     // Should show error message
     await expect(page.getByText('Failed to load awards')).toBeVisible();
     await expect(page.getByRole('button', { name: /retry/i })).toBeVisible();
@@ -354,14 +362,14 @@ test.describe('Awards and Dashboard', () => {
 
   test('should work on mobile devices', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
-    
+
     // Should display mobile-optimized layout
     await expect(page.getByText('Dashboard')).toBeVisible();
-    
+
     // Awards should be in a responsive grid
     const awardsGrid = page.getByTestId('awards-grid');
     await expect(awardsGrid).toHaveClass(/grid-cols-1/); // Single column on mobile
-    
+
     // Navigation should be mobile-friendly
     await expect(page.getByRole('button', { name: /menu/i })).toBeVisible();
   });
@@ -370,15 +378,15 @@ test.describe('Awards and Dashboard', () => {
     // Tab through awards
     await page.keyboard.press('Tab');
     await page.keyboard.press('Tab');
-    
+
     // Should focus on first award
     const firstAward = page.getByText('First Reaction');
     await expect(firstAward).toBeFocused();
-    
+
     // Press Enter to open modal
     await page.keyboard.press('Enter');
     await expect(page.getByRole('dialog')).toBeVisible();
-    
+
     // Press Escape to close modal
     await page.keyboard.press('Escape');
     await expect(page.getByRole('dialog')).not.toBeVisible();

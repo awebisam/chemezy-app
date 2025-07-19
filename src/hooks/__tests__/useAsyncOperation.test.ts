@@ -6,7 +6,7 @@ import type { APIError } from '@/types/api.types';
 // Mock the error service
 vi.mock('@/services/error.service', () => ({
   ErrorService: {
-    createApiWrapper: vi.fn((fn) => fn),
+    createApiWrapper: vi.fn(fn => fn),
   },
 }));
 
@@ -66,10 +66,11 @@ describe('useAsyncOperation', () => {
   });
 
   it('should support retry functionality', async () => {
-    const mockFn = vi.fn()
+    const mockFn = vi
+      .fn()
       .mockRejectedValueOnce(new Error('First error'))
       .mockResolvedValue('success');
-    
+
     const { result } = renderHook(() => useAsyncOperation(mockFn));
 
     // First execution fails
@@ -139,7 +140,7 @@ describe('useAsyncOperation', () => {
 
     // Wait a bit and check staleness with a very short max age
     await new Promise(resolve => setTimeout(resolve, 10));
-    
+
     // Should be stale with very short max age
     expect(result.current.isStale(1)).toBe(true);
   });
@@ -148,15 +149,16 @@ describe('useAsyncOperation', () => {
     let resolveFirst: (value: string) => void;
     let resolveSecond: (value: string) => void;
 
-    const firstPromise = new Promise<string>((resolve) => {
+    const firstPromise = new Promise<string>(resolve => {
       resolveFirst = resolve;
     });
 
-    const secondPromise = new Promise<string>((resolve) => {
+    const secondPromise = new Promise<string>(resolve => {
       resolveSecond = resolve;
     });
 
-    const mockFn = vi.fn()
+    const mockFn = vi
+      .fn()
       .mockReturnValueOnce(firstPromise)
       .mockReturnValueOnce(secondPromise);
 
@@ -194,11 +196,12 @@ describe('useAsyncOperation', () => {
 
   it('should not reset error on new operation when resetOnNewOperation is false', async () => {
     const apiError: APIError = { message: 'Test error', status: 500 };
-    const mockFn = vi.fn()
+    const mockFn = vi
+      .fn()
       .mockRejectedValueOnce(apiError)
       .mockResolvedValue('success');
 
-    const { result } = renderHook(() => 
+    const { result } = renderHook(() =>
       useAsyncOperation(mockFn, { resetOnNewOperation: false })
     );
 

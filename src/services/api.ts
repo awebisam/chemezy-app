@@ -95,12 +95,35 @@ class ApiClient {
           }
         }
 
+        // Handle different error response formats
+        let errorMessage = 'An error occurred';
+
+        if (error.response?.data?.message) {
+          errorMessage = error.response.data.message;
+        } else if (error.response?.data?.detail) {
+          // Handle FastAPI validation errors that return arrays
+          const detail = error.response.data.detail;
+          if (Array.isArray(detail)) {
+            // Extract meaningful validation messages
+            errorMessage = detail
+              .map((err: any) => {
+                if (typeof err === 'string') return err;
+                if (err.msg)
+                  return `${err.loc?.join('.') || 'Field'}: ${err.msg}`;
+                return 'Validation error';
+              })
+              .join(', ');
+          } else if (typeof detail === 'string') {
+            errorMessage = detail;
+          } else {
+            errorMessage = 'Validation error occurred';
+          }
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+
         const apiError: APIError = {
-          message:
-            error.response?.data?.message ||
-            error.response?.data?.detail ||
-            error.message ||
-            'An error occurred',
+          message: errorMessage,
           status: error.response?.status || 500,
           code: error.response?.data?.code,
           details: error.response?.data?.details,

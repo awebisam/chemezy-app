@@ -12,30 +12,45 @@ export class ReactionService {
   private predictReactionWrapper = createApiWrapper(
     this._predictReaction.bind(this),
     'ReactionService.predictReaction',
-    { 
-      showToast: true, 
+    {
+      showToast: true,
       logError: true,
-      retryConfig: { maxRetries: 2, baseDelay: 1500, maxDelay: 8000, backoffFactor: 2 }
+      retryConfig: {
+        maxRetries: 2,
+        baseDelay: 1500,
+        maxDelay: 8000,
+        backoffFactor: 2,
+      },
     }
   );
 
   private getReactionCacheWrapper = createApiWrapper(
     this._getReactionCache.bind(this),
     'ReactionService.getReactionCache',
-    { 
-      showToast: false, 
+    {
+      showToast: false,
       logError: true,
-      retryConfig: { maxRetries: 2, baseDelay: 1000, maxDelay: 5000, backoffFactor: 2 }
+      retryConfig: {
+        maxRetries: 2,
+        baseDelay: 1000,
+        maxDelay: 5000,
+        backoffFactor: 2,
+      },
     }
   );
 
   private getReactionStatsWrapper = createApiWrapper(
     this._getReactionStats.bind(this),
     'ReactionService.getReactionStats',
-    { 
-      showToast: false, 
+    {
+      showToast: false,
       logError: true,
-      retryConfig: { maxRetries: 2, baseDelay: 1000, maxDelay: 5000, backoffFactor: 2 }
+      retryConfig: {
+        maxRetries: 2,
+        baseDelay: 1000,
+        maxDelay: 5000,
+        backoffFactor: 2,
+      },
     }
   );
 
@@ -75,7 +90,9 @@ export class ReactionService {
   }
 
   // Private methods that contain the actual API calls
-  private async _predictReaction(request: ReactionRequest): Promise<ReactionPrediction> {
+  private async _predictReaction(
+    request: ReactionRequest
+  ): Promise<ReactionPrediction> {
     const response = await apiClient.post<ReactionPrediction>(
       '/reactions/react',
       request

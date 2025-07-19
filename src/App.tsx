@@ -8,7 +8,13 @@ import {
 import { AuthProvider } from '@/components/auth';
 import { AuthPage, NotFoundPage } from '@/pages';
 import { MainLayout } from '@/components/layout/MainLayout';
-import { ErrorBoundary, ToastProvider, LoadingSpinner, PerformanceMonitor, BundleSizeMonitor } from '@/components/ui';
+import {
+  ErrorBoundary,
+  ToastProvider,
+  LoadingSpinner,
+  PerformanceMonitor,
+  BundleSizeMonitor,
+} from '@/components/ui';
 import { RouteGuard } from '@/components/layout';
 import { useAuthStore } from '@/store/auth.store';
 import { routes } from '@/config/routes';
@@ -21,13 +27,13 @@ function App() {
           <Router>
             <Routes>
               {/* Public route - Landing/Auth page */}
-              <Route 
-                path="/auth" 
+              <Route
+                path="/auth"
                 element={
                   <RouteGuard requireAuth={false}>
                     <AuthPage />
                   </RouteGuard>
-                } 
+                }
               />
 
               {/* Protected routes with layout */}
@@ -40,14 +46,18 @@ function App() {
                 }
               >
                 <Route index element={<Navigate to="/lab" replace />} />
-                {routes.map((route) => (
+                {routes.map(route => (
                   <Route
                     key={route.path}
                     path={route.path.substring(1)} // Remove leading slash for nested routes
                     element={
-                      <Suspense 
+                      <Suspense
                         fallback={
-                          <div className="flex items-center justify-center min-h-[400px]" role="status" aria-label="Loading page">
+                          <div
+                            className="flex items-center justify-center min-h-[400px]"
+                            role="status"
+                            aria-label="Loading page"
+                          >
                             <LoadingSpinner size="lg" />
                           </div>
                         }
@@ -61,12 +71,12 @@ function App() {
 
               {/* 404 Error page */}
               <Route path="/404" element={<NotFoundPage />} />
-              
+
               {/* Catch-all route - redirect to auth if not authenticated, 404 if authenticated */}
               <Route path="*" element={<AuthRedirect />} />
             </Routes>
           </Router>
-          
+
           {/* Development performance monitoring */}
           <PerformanceMonitor showInDev={true} position="bottom-right" />
           <BundleSizeMonitor />
@@ -79,7 +89,7 @@ function App() {
 // Component to handle redirect logic based on auth state
 function AuthRedirect() {
   const { isAuthenticated } = useAuthStore();
-  
+
   // If authenticated, show 404 page for unknown routes
   // If not authenticated, redirect to auth page
   return <Navigate to={isAuthenticated ? '/404' : '/auth'} replace />;

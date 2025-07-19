@@ -1,24 +1,20 @@
 import { http, HttpResponse } from 'msw';
-import type { 
-  AuthResponse, 
-  UserResponse, 
-  LoginCredentials, 
-  RegisterData 
+import type {
+  AuthResponse,
+  UserResponse,
+  RegisterData,
 } from '@/types/api.types';
-import type { 
-  Chemical, 
-  PaginatedChemicals 
-} from '@/types/chemical.types';
-import type { 
-  ReactionRequest, 
-  ReactionPrediction, 
-  UserReactionStats 
+import type { Chemical, PaginatedChemicals } from '@/types/chemical.types';
+import type {
+  ReactionRequest,
+  ReactionPrediction,
+  UserReactionStats,
 } from '@/types/reaction.types';
-import type { 
-  UserAward, 
-  AvailableAward, 
-  LeaderboardEntry, 
-  UserRank 
+import type {
+  UserAward,
+  AvailableAward,
+  LeaderboardEntry,
+  UserRank,
 } from '@/types/award.types';
 
 const API_BASE_URL = 'http://localhost:8000/api/v1';
@@ -76,20 +72,18 @@ const mockUserAwards: UserAward[] = [
       name: 'First Reaction',
       description: 'Complete your first chemical reaction',
       category: 'discovery',
-      icon: '🧪',
-      criteria: {},
+      metadata: { icon: '🧪' },
     },
   },
 ];
 
 const mockAvailableAwards: AvailableAward[] = [
   {
-    id: 2,
+    template_id: 2,
     name: 'Master Chemist',
     description: 'Complete 100 reactions',
     category: 'achievement',
-    icon: '👨‍🔬',
-    criteria: { reactions_needed: 100 },
+    metadata: { icon: '👨‍🔬', reactions_needed: 100 },
     progress: { current_reactions: 25, percentage: 25 },
   },
 ];
@@ -133,8 +127,8 @@ export const handlers = [
   }),
 
   http.post(`${API_BASE_URL}/auth/register`, async ({ request }) => {
-    const data = await request.json() as RegisterData;
-    
+    const data = (await request.json()) as RegisterData;
+
     if (data.username === 'existinguser') {
       return HttpResponse.json(
         { detail: 'Username already exists' },
@@ -165,12 +159,14 @@ export const handlers = [
     const size = parseInt(url.searchParams.get('size') || '50');
 
     let filteredChemicals = mockChemicals;
-    
+
     if (search) {
       filteredChemicals = mockChemicals.filter(
         chemical =>
           chemical.common_name.toLowerCase().includes(search.toLowerCase()) ||
-          chemical.molecular_formula.toLowerCase().includes(search.toLowerCase())
+          chemical.molecular_formula
+            .toLowerCase()
+            .includes(search.toLowerCase())
       );
     }
 
@@ -179,11 +175,8 @@ export const handlers = [
     const paginatedChemicals = filteredChemicals.slice(startIndex, endIndex);
 
     const response: PaginatedChemicals = {
-      items: paginatedChemicals,
-      total: filteredChemicals.length,
-      page,
-      size,
-      pages: Math.ceil(filteredChemicals.length / size),
+      results: paginatedChemicals,
+      count: filteredChemicals.length,
     };
 
     return HttpResponse.json(response);
@@ -192,7 +185,7 @@ export const handlers = [
   http.get(`${API_BASE_URL}/chemicals/:id`, ({ params }) => {
     const id = parseInt(params.id as string);
     const chemical = mockChemicals.find(c => c.id === id);
-    
+
     if (!chemical) {
       return HttpResponse.json(
         { detail: 'Chemical not found' },
@@ -205,8 +198,8 @@ export const handlers = [
 
   // Reaction endpoints
   http.post(`${API_BASE_URL}/reactions/react`, async ({ request }) => {
-    const data = await request.json() as ReactionRequest;
-    
+    const data = (await request.json()) as ReactionRequest;
+
     // Simulate different reaction outcomes based on reactants
     const hasWater = data.reactants.some(r => r.chemical_id === 1);
     const hasSalt = data.reactants.some(r => r.chemical_id === 2);
@@ -221,14 +214,13 @@ export const handlers = [
             molecular_formula: 'NaCl(aq)',
             common_name: 'Salt Solution',
             quantity: 1.0,
-            state_of_matter: 'liquid',
-            color: 'colorless',
+            is_soluble: true,
           },
         ],
         effects: [
           {
             effect_type: 'state_change',
-            initial_state: 'solid',
+            product_chemical_id: 1,
             final_state: 'liquid',
           },
         ],
@@ -244,8 +236,7 @@ export const handlers = [
             molecular_formula: 'XYZ',
             common_name: 'Unknown Compound',
             quantity: 1.0,
-            state_of_matter: 'solid',
-            color: 'purple',
+            is_soluble: false,
           },
         ],
         effects: [
@@ -275,8 +266,7 @@ export const handlers = [
             molecular_formula: 'H2O',
             common_name: 'Steam',
             quantity: 1.0,
-            state_of_matter: 'gas',
-            color: 'colorless',
+            is_soluble: true,
           },
         ],
         effects: [
@@ -300,9 +290,7 @@ export const handlers = [
   http.get(`${API_BASE_URL}/reactions/stats`, () => {
     const stats: UserReactionStats = {
       total_reactions: 25,
-      world_first_discoveries: 1,
-      favorite_environment: 'Earth (Normal)',
-      most_used_chemical: 'Water',
+      total_discoveries: 1,
     };
 
     return HttpResponse.json(stats);
@@ -314,7 +302,7 @@ export const handlers = [
     const category = url.searchParams.get('category');
 
     let filteredAwards = mockUserAwards;
-    
+
     if (category) {
       filteredAwards = mockUserAwards.filter(
         award => award.template.category === category
@@ -329,7 +317,7 @@ export const handlers = [
     const category = url.searchParams.get('category');
 
     let filteredAwards = mockAvailableAwards;
-    
+
     if (category) {
       filteredAwards = mockAvailableAwards.filter(
         award => award.category === category
@@ -343,9 +331,7 @@ export const handlers = [
     return HttpResponse.json(mockLeaderboard);
   }),
 
-  http.get(`${API_BASE_URL}/awards/leaderboard/:category`, ({ params }) => {
-    const category = params.category as string;
-    
+  http.get(`${API_BASE_URL}/awards/leaderboard/:category`, () => {
     // Return filtered leaderboard for category
     const categoryLeaderboard = mockLeaderboard.map(entry => ({
       ...entry,

@@ -1,19 +1,19 @@
 import { vi } from 'vitest';
-import { 
-  getFocusableElements, 
-  trapFocus, 
+import {
+  getFocusableElements,
+  trapFocus,
   createFocusRestorer,
   announceToScreenReader,
   prefersReducedMotion,
   keyboardNavigation,
-  liveRegionManager
+  liveRegionManager,
 } from '../focus';
 
 // Mock DOM methods
 Object.defineProperty(window, 'getComputedStyle', {
   value: () => ({
-    visibility: 'visible'
-  })
+    visibility: 'visible',
+  }),
 });
 
 describe('Focus Management Utilities', () => {
@@ -35,7 +35,7 @@ describe('Focus Management Utilities', () => {
       document.body.appendChild(container);
 
       const focusableElements = getFocusableElements(container);
-      
+
       expect(focusableElements).toHaveLength(4); // button, input, link, focusable div
       expect(focusableElements[0].tagName).toBe('BUTTON');
       expect(focusableElements[1].tagName).toBe('INPUT');
@@ -53,7 +53,7 @@ describe('Focus Management Utilities', () => {
       document.body.appendChild(container);
 
       const focusableElements = getFocusableElements(container);
-      
+
       expect(focusableElements).toHaveLength(1);
       expect(focusableElements[0].textContent).toBe('Visible Button');
     });
@@ -70,10 +70,10 @@ describe('Focus Management Utilities', () => {
       document.body.appendChild(container);
 
       const cleanup = trapFocus(container);
-      
+
       // Should focus first element
       expect(document.activeElement?.id).toBe('first');
-      
+
       cleanup();
     });
 
@@ -83,7 +83,7 @@ describe('Focus Management Utilities', () => {
       document.body.appendChild(container);
 
       const cleanup = trapFocus(container);
-      
+
       expect(typeof cleanup).toBe('function');
       expect(() => cleanup()).not.toThrow();
     });
@@ -95,19 +95,19 @@ describe('Focus Management Utilities', () => {
       const button2 = document.createElement('button');
       button1.id = 'button1';
       button2.id = 'button2';
-      
+
       document.body.appendChild(button1);
       document.body.appendChild(button2);
-      
+
       button1.focus();
       expect(document.activeElement).toBe(button1);
-      
+
       const focusRestorer = createFocusRestorer();
       focusRestorer.save();
-      
+
       button2.focus();
       expect(document.activeElement).toBe(button2);
-      
+
       focusRestorer.restore();
       expect(document.activeElement).toBe(button1);
     });
@@ -116,19 +116,19 @@ describe('Focus Management Utilities', () => {
   describe('announceToScreenReader', () => {
     it('should create and remove announcement element', () => {
       announceToScreenReader('Test announcement');
-      
+
       const announcement = document.querySelector('[aria-live]');
       expect(announcement).toBeTruthy();
       expect(announcement?.textContent).toBe('Test announcement');
       expect(announcement?.getAttribute('aria-live')).toBe('polite');
-      
+
       // Should be removed after timeout (we'll check it exists for now)
       expect(announcement).toBeInTheDocument();
     });
 
     it('should support assertive priority', () => {
       announceToScreenReader('Urgent message', 'assertive');
-      
+
       const announcement = document.querySelector('[aria-live="assertive"]');
       expect(announcement).toBeTruthy();
       expect(announcement?.textContent).toBe('Urgent message');
@@ -148,7 +148,9 @@ describe('Focus Management Utilities', () => {
 
       const result = prefersReducedMotion();
       expect(typeof result).toBe('boolean');
-      expect(window.matchMedia).toHaveBeenCalledWith('(prefers-reduced-motion: reduce)');
+      expect(window.matchMedia).toHaveBeenCalledWith(
+        '(prefers-reduced-motion: reduce)'
+      );
     });
   });
 
@@ -160,13 +162,13 @@ describe('Focus Management Utilities', () => {
           document.createElement('button'),
           document.createElement('button'),
         ];
-        
+
         const onIndexChange = vi.fn();
         const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
         const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
-        
+
         keyboardNavigation.handleArrowKeys(event, items, 0, onIndexChange);
-        
+
         expect(preventDefaultSpy).toHaveBeenCalled();
         expect(onIndexChange).toHaveBeenCalledWith(1);
       });
@@ -177,13 +179,13 @@ describe('Focus Management Utilities', () => {
           document.createElement('button'),
           document.createElement('button'),
         ];
-        
+
         const onIndexChange = vi.fn();
         const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
         const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
-        
+
         keyboardNavigation.handleArrowKeys(event, items, 1, onIndexChange);
-        
+
         expect(preventDefaultSpy).toHaveBeenCalled();
         expect(onIndexChange).toHaveBeenCalledWith(0);
       });
@@ -193,14 +195,14 @@ describe('Focus Management Utilities', () => {
           document.createElement('button'),
           document.createElement('button'),
         ];
-        
+
         const onIndexChange = vi.fn();
-        
+
         // Test wrapping from last to first
         const downEvent = new KeyboardEvent('keydown', { key: 'ArrowDown' });
         keyboardNavigation.handleArrowKeys(downEvent, items, 1, onIndexChange);
         expect(onIndexChange).toHaveBeenCalledWith(0);
-        
+
         // Test wrapping from first to last
         const upEvent = new KeyboardEvent('keydown', { key: 'ArrowUp' });
         keyboardNavigation.handleArrowKeys(upEvent, items, 0, onIndexChange);
@@ -213,9 +215,9 @@ describe('Focus Management Utilities', () => {
         const callback = vi.fn();
         const event = new KeyboardEvent('keydown', { key: 'Enter' });
         const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
-        
+
         keyboardNavigation.handleActivation(event, callback);
-        
+
         expect(preventDefaultSpy).toHaveBeenCalled();
         expect(callback).toHaveBeenCalled();
       });
@@ -224,9 +226,9 @@ describe('Focus Management Utilities', () => {
         const callback = vi.fn();
         const event = new KeyboardEvent('keydown', { key: ' ' });
         const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
-        
+
         keyboardNavigation.handleActivation(event, callback);
-        
+
         expect(preventDefaultSpy).toHaveBeenCalled();
         expect(callback).toHaveBeenCalled();
       });
@@ -235,9 +237,9 @@ describe('Focus Management Utilities', () => {
         const callback = vi.fn();
         const event = new KeyboardEvent('keydown', { key: 'a' });
         const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
-        
+
         keyboardNavigation.handleActivation(event, callback);
-        
+
         expect(preventDefaultSpy).not.toHaveBeenCalled();
         expect(callback).not.toHaveBeenCalled();
       });
@@ -247,12 +249,14 @@ describe('Focus Management Utilities', () => {
   describe('liveRegionManager', () => {
     afterEach(() => {
       // Clean up any created regions
-      document.querySelectorAll('[id^="live-region-"]').forEach(el => el.remove());
+      document
+        .querySelectorAll('[id^="live-region-"]')
+        .forEach(el => el.remove());
     });
 
     it('should create and manage live regions', () => {
       const region = liveRegionManager.getRegion('test', 'polite');
-      
+
       expect(region).toBeTruthy();
       expect(region.getAttribute('aria-live')).toBe('polite');
       expect(region.getAttribute('aria-atomic')).toBe('true');
@@ -262,13 +266,13 @@ describe('Focus Management Utilities', () => {
     it('should reuse existing regions', () => {
       const region1 = liveRegionManager.getRegion('test', 'polite');
       const region2 = liveRegionManager.getRegion('test', 'assertive');
-      
+
       expect(region1).toBe(region2);
     });
 
     it('should announce messages', () => {
       liveRegionManager.announce('test', 'Test message');
-      
+
       const region = document.getElementById('live-region-test');
       expect(region?.textContent).toBe('Test message');
     });
@@ -276,7 +280,7 @@ describe('Focus Management Utilities', () => {
     it('should clear regions', () => {
       liveRegionManager.announce('test', 'Test message');
       liveRegionManager.clear('test');
-      
+
       const region = document.getElementById('live-region-test');
       expect(region?.textContent).toBe('');
     });
@@ -284,7 +288,7 @@ describe('Focus Management Utilities', () => {
     it('should remove regions', () => {
       liveRegionManager.getRegion('test');
       expect(document.getElementById('live-region-test')).toBeTruthy();
-      
+
       liveRegionManager.remove('test');
       expect(document.getElementById('live-region-test')).toBeFalsy();
     });

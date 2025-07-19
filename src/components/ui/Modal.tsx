@@ -30,7 +30,11 @@ export const Modal: React.FC<ModalProps> = ({
   'aria-describedby': ariaDescribedby,
   'aria-label': ariaLabel,
 }) => {
-  const { elementRef: modalRef, trapFocusInElement, restoreFocus } = useFocusManagement<HTMLDivElement>();
+  const {
+    elementRef: modalRef,
+    trapFocusInElement,
+    restoreFocus,
+  } = useFocusManagement<HTMLDivElement>();
   // Handle escape key and focus management
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -57,11 +61,11 @@ export const Modal: React.FC<ModalProps> = ({
     return () => {
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'unset';
-      
+
       if (cleanupFocus) {
         cleanupFocus();
       }
-      
+
       if (!isOpen) {
         restoreFocus();
       }

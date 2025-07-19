@@ -13,60 +13,90 @@ export class AwardsService {
   private getUserAwardsWrapper = createApiWrapper(
     this._getUserAwards.bind(this),
     'AwardsService.getUserAwards',
-    { 
-      showToast: false, 
+    {
+      showToast: false,
       logError: true,
-      retryConfig: { maxRetries: 2, baseDelay: 1000, maxDelay: 5000, backoffFactor: 2 }
+      retryConfig: {
+        maxRetries: 2,
+        baseDelay: 1000,
+        maxDelay: 5000,
+        backoffFactor: 2,
+      },
     }
   );
 
   private getAvailableAwardsWrapper = createApiWrapper(
     this._getAvailableAwards.bind(this),
     'AwardsService.getAvailableAwards',
-    { 
-      showToast: false, 
+    {
+      showToast: false,
       logError: true,
-      retryConfig: { maxRetries: 2, baseDelay: 1000, maxDelay: 5000, backoffFactor: 2 }
+      retryConfig: {
+        maxRetries: 2,
+        baseDelay: 1000,
+        maxDelay: 5000,
+        backoffFactor: 2,
+      },
     }
   );
 
   private getOverallLeaderboardWrapper = createApiWrapper(
     this._getOverallLeaderboard.bind(this),
     'AwardsService.getOverallLeaderboard',
-    { 
-      showToast: false, 
+    {
+      showToast: false,
       logError: true,
-      retryConfig: { maxRetries: 2, baseDelay: 1000, maxDelay: 5000, backoffFactor: 2 }
+      retryConfig: {
+        maxRetries: 2,
+        baseDelay: 1000,
+        maxDelay: 5000,
+        backoffFactor: 2,
+      },
     }
   );
 
   private getCategoryLeaderboardWrapper = createApiWrapper(
     this._getCategoryLeaderboard.bind(this),
     'AwardsService.getCategoryLeaderboard',
-    { 
-      showToast: false, 
+    {
+      showToast: false,
       logError: true,
-      retryConfig: { maxRetries: 2, baseDelay: 1000, maxDelay: 5000, backoffFactor: 2 }
+      retryConfig: {
+        maxRetries: 2,
+        baseDelay: 1000,
+        maxDelay: 5000,
+        backoffFactor: 2,
+      },
     }
   );
 
   private getUserRankWrapper = createApiWrapper(
     this._getUserRank.bind(this),
     'AwardsService.getUserRank',
-    { 
-      showToast: false, 
+    {
+      showToast: false,
       logError: true,
-      retryConfig: { maxRetries: 2, baseDelay: 1000, maxDelay: 5000, backoffFactor: 2 }
+      retryConfig: {
+        maxRetries: 2,
+        baseDelay: 1000,
+        maxDelay: 5000,
+        backoffFactor: 2,
+      },
     }
   );
 
   private getUserRankByCategoryWrapper = createApiWrapper(
     this._getUserRankByCategory.bind(this),
     'AwardsService.getUserRankByCategory',
-    { 
-      showToast: false, 
+    {
+      showToast: false,
       logError: true,
-      retryConfig: { maxRetries: 2, baseDelay: 1000, maxDelay: 5000, backoffFactor: 2 }
+      retryConfig: {
+        maxRetries: 2,
+        baseDelay: 1000,
+        maxDelay: 5000,
+        backoffFactor: 2,
+      },
     }
   );
 
@@ -174,7 +204,9 @@ export class AwardsService {
     return response;
   }
 
-  private async _getUserRankByCategory(category: AwardCategory): Promise<UserRank> {
+  private async _getUserRankByCategory(
+    category: AwardCategory
+  ): Promise<UserRank> {
     const response = await apiClient.get<UserRank>(
       `/awards/leaderboard/my-rank?category=${category}`
     );

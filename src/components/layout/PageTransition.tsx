@@ -1,4 +1,5 @@
-import React, { ReactNode, Suspense } from 'react';
+import React, { Suspense } from 'react';
+import type { ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import { LoadingSpinner } from '@/components/ui';
@@ -9,10 +10,10 @@ interface PageTransitionProps {
   fallback?: ReactNode;
 }
 
-export const PageTransition: React.FC<PageTransitionProps> = ({ 
-  children, 
+export const PageTransition: React.FC<PageTransitionProps> = ({
+  children,
   className = '',
-  fallback
+  fallback,
 }) => {
   const location = useLocation();
 
@@ -32,8 +33,8 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
   };
 
   const pageTransition = {
-    type: 'tween',
-    ease: 'anticipate',
+    type: 'tween' as const,
+    ease: 'anticipate' as const,
     duration: 0.3,
   };
 
@@ -55,9 +56,7 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
         transition={pageTransition}
         className={className}
       >
-        <Suspense fallback={fallback || defaultFallback}>
-          {children}
-        </Suspense>
+        <Suspense fallback={fallback || defaultFallback}>{children}</Suspense>
       </motion.div>
     </AnimatePresence>
   );
@@ -75,7 +74,7 @@ export const LoadingTransition: React.FC<LoadingTransitionProps> = ({
   isLoading,
   children,
   loadingComponent,
-  className = ''
+  className = '',
 }) => {
   const defaultLoadingComponent = (
     <div className="flex items-center justify-center py-12">
@@ -94,7 +93,7 @@ export const LoadingTransition: React.FC<LoadingTransitionProps> = ({
         transition={{ duration: 0.2 }}
         className={className}
       >
-        {isLoading ? (loadingComponent || defaultLoadingComponent) : children}
+        {isLoading ? loadingComponent || defaultLoadingComponent : children}
       </motion.div>
     </AnimatePresence>
   );

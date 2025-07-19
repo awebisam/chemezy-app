@@ -1,4 +1,5 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component } from 'react';
+import type { ErrorInfo, ReactNode } from 'react';
 import { Button } from './Button';
 
 interface Props {
@@ -27,7 +28,7 @@ export class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Log error to console and call optional error handler
     console.error('ErrorBoundary caught an error:', error, errorInfo);
-    
+
     this.setState({
       error,
       errorInfo,
@@ -83,9 +84,10 @@ export class ErrorBoundary extends Component<Props, State> {
                 Something went wrong
               </h2>
               <p className="mt-2 text-sm text-gray-600">
-                We're sorry, but something unexpected happened. Please try again.
+                We're sorry, but something unexpected happened. Please try
+                again.
               </p>
-              
+
               {import.meta.env.DEV && this.state.error && (
                 <details className="mt-4 text-left">
                   <summary className="cursor-pointer text-sm font-medium text-gray-700 hover:text-gray-900">
@@ -107,7 +109,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 </details>
               )}
             </div>
-            
+
             <div className="flex flex-col space-y-3">
               <Button
                 onClick={this.handleRetry}
@@ -137,7 +139,7 @@ export class ErrorBoundary extends Component<Props, State> {
 export const useErrorHandler = () => {
   const handleError = (error: Error, errorInfo?: ErrorInfo) => {
     console.error('Error caught by useErrorHandler:', error, errorInfo);
-    
+
     // In production, log to error reporting service
     if (import.meta.env.PROD) {
       // Example: logErrorToService(error, errorInfo);

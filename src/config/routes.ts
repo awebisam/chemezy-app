@@ -1,16 +1,20 @@
 import { lazy } from 'react';
 
 // Lazy load pages for better performance
-export const LazyLabPage = lazy(() => 
+export const LazyLabPage = lazy(() =>
   import('@/pages/LabPage').then(module => ({ default: module.LabPage }))
 );
 
-export const LazyDashboardPage = lazy(() => 
-  import('@/pages/DashboardPage').then(module => ({ default: module.DashboardPage }))
+export const LazyDashboardPage = lazy(() =>
+  import('@/pages/DashboardPage').then(module => ({
+    default: module.DashboardPage,
+  }))
 );
 
-export const LazyLeaderboardPage = lazy(() => 
-  import('@/pages/LeaderboardPage').then(module => ({ default: module.LeaderboardPage }))
+export const LazyLeaderboardPage = lazy(() =>
+  import('@/pages/LeaderboardPage').then(module => ({
+    default: module.LeaderboardPage,
+  }))
 );
 
 // Route configuration
@@ -37,7 +41,7 @@ export const routes: RouteConfig[] = [
     icon: 'lab',
     breadcrumbLabel: 'Lab',
     description: 'Experiment with chemicals in a safe virtual environment',
-    keywords: ['experiment', 'chemistry', 'reactions', 'lab']
+    keywords: ['experiment', 'chemistry', 'reactions', 'lab'],
   },
   {
     path: '/dashboard',
@@ -48,7 +52,7 @@ export const routes: RouteConfig[] = [
     icon: 'dashboard',
     breadcrumbLabel: 'Dashboard',
     description: 'View your achievements, awards, and progress',
-    keywords: ['awards', 'achievements', 'progress', 'statistics']
+    keywords: ['awards', 'achievements', 'progress', 'statistics'],
   },
   {
     path: '/leaderboard',
@@ -59,15 +63,17 @@ export const routes: RouteConfig[] = [
     icon: 'leaderboard',
     breadcrumbLabel: 'Leaderboard',
     description: 'Compare your progress with other chemistry enthusiasts',
-    keywords: ['ranking', 'competition', 'leaderboard', 'top users']
-  }
+    keywords: ['ranking', 'competition', 'leaderboard', 'top users'],
+  },
 ];
 
 // Get navigation routes (only those that should show in nav)
-export const getNavigationRoutes = () => routes.filter(route => route.showInNav);
+export const getNavigationRoutes = () =>
+  routes.filter(route => route.showInNav);
 
 // Get route by path
-export const getRouteByPath = (path: string) => routes.find(route => route.path === path);
+export const getRouteByPath = (path: string) =>
+  routes.find(route => route.path === path);
 
 // Generate breadcrumb items from current path
 export const generateBreadcrumbsFromPath = (pathname: string) => {
@@ -79,7 +85,7 @@ export const generateBreadcrumbsFromPath = (pathname: string) => {
     breadcrumbs.push({
       label: 'Lab',
       path: '/lab',
-      isActive: false
+      isActive: false,
     });
   }
 
@@ -95,16 +101,17 @@ export const generateBreadcrumbsFromPath = (pathname: string) => {
         breadcrumbs.push({
           label: route.breadcrumbLabel || route.label,
           path: isLast ? undefined : currentPath,
-          isActive: isLast
+          isActive: isLast,
         });
       }
     } else {
       // Fallback for unknown routes or dynamic segments
-      const label = segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
+      const label =
+        segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
       breadcrumbs.push({
         label,
         path: isLast ? undefined : currentPath,
-        isActive: isLast
+        isActive: isLast,
       });
     }
   });
@@ -117,7 +124,8 @@ export const getRouteMetadata = (pathname: string) => {
   const route = getRouteByPath(pathname);
   return {
     title: route?.label || 'Chemezy',
-    description: route?.description || 'Interactive virtual chemistry laboratory',
-    keywords: route?.keywords || ['chemistry', 'education', 'virtual lab']
+    description:
+      route?.description || 'Interactive virtual chemistry laboratory',
+    keywords: route?.keywords || ['chemistry', 'education', 'virtual lab'],
   };
 };

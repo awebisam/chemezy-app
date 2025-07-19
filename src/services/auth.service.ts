@@ -23,20 +23,30 @@ export class AuthService {
   private getCurrentUserWrapper = createApiWrapper(
     this._getCurrentUser.bind(this),
     'AuthService.getCurrentUser',
-    { 
+    {
       showToast: false, // Don't show toast for user fetch errors
       logError: true,
-      retryConfig: { maxRetries: 2, baseDelay: 1000, maxDelay: 5000, backoffFactor: 2 }
+      retryConfig: {
+        maxRetries: 2,
+        baseDelay: 1000,
+        maxDelay: 5000,
+        backoffFactor: 2,
+      },
     }
   );
 
   private refreshTokenWrapper = createApiWrapper(
     this._refreshToken.bind(this),
     'AuthService.refreshToken',
-    { 
+    {
       showToast: false, // Don't show toast for token refresh errors
       logError: true,
-      retryConfig: { maxRetries: 1, baseDelay: 500, maxDelay: 2000, backoffFactor: 1.5 }
+      retryConfig: {
+        maxRetries: 1,
+        baseDelay: 500,
+        maxDelay: 2000,
+        backoffFactor: 1.5,
+      },
     }
   );
 

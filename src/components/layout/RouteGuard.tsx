@@ -1,4 +1,5 @@
-import React, { ReactNode, Suspense } from 'react';
+import React, { Suspense } from 'react';
+import type { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/store/auth.store';
 import { LoadingTransition } from './PageTransition';
@@ -14,7 +15,7 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({
   children,
   requireAuth = false,
   redirectTo,
-  fallback
+  fallback,
 }) => {
   const { isAuthenticated, isLoading } = useAuthStore();
   const location = useLocation();
@@ -31,11 +32,7 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({
   // Handle authentication requirements
   if (requireAuth && !isAuthenticated) {
     return (
-      <Navigate 
-        to={redirectTo || '/auth'} 
-        state={{ from: location }} 
-        replace 
-      />
+      <Navigate to={redirectTo || '/auth'} state={{ from: location }} replace />
     );
   }
 
@@ -45,7 +42,15 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({
 
   // Wrap children in Suspense for lazy-loaded components
   return (
-    <Suspense fallback={fallback || <LoadingTransition isLoading={true}><div /></LoadingTransition>}>
+    <Suspense
+      fallback={
+        fallback || (
+          <LoadingTransition isLoading={true}>
+            <div />
+          </LoadingTransition>
+        )
+      }
+    >
       {children}
     </Suspense>
   );

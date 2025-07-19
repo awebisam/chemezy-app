@@ -20,16 +20,16 @@ export const SkipLink: React.FC<SkipLinkProps> = ({
 }) => {
   const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    
+
     const target = document.getElementById(targetId);
     if (target) {
       // Set focus to the target element
       target.focus();
-      
+
       // If the target is not naturally focusable, make it focusable temporarily
       if (!target.hasAttribute('tabindex')) {
         target.setAttribute('tabindex', '-1');
-        
+
         // Remove tabindex after focus is lost
         const handleBlur = () => {
           target.removeAttribute('tabindex');
@@ -37,11 +37,11 @@ export const SkipLink: React.FC<SkipLinkProps> = ({
         };
         target.addEventListener('blur', handleBlur);
       }
-      
+
       // Smooth scroll to the target
-      target.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'start' 
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
       });
     }
   };
@@ -70,15 +70,9 @@ export const SkipLink: React.FC<SkipLinkProps> = ({
 export const SkipLinks: React.FC = () => {
   return (
     <div className="skip-links">
-      <SkipLink targetId="main-content">
-        Skip to main content
-      </SkipLink>
-      <SkipLink targetId="main-navigation">
-        Skip to navigation
-      </SkipLink>
-      <SkipLink targetId="search">
-        Skip to search
-      </SkipLink>
+      <SkipLink targetId="main-content">Skip to main content</SkipLink>
+      <SkipLink targetId="main-navigation">Skip to navigation</SkipLink>
+      <SkipLink targetId="search">Skip to search</SkipLink>
     </div>
   );
 };

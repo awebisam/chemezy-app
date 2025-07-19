@@ -36,8 +36,8 @@ export const NotFoundPage: React.FC = () => {
             Page Not Found
           </h2>
           <p className="text-gray-600 mb-8 max-w-md mx-auto">
-            Oops! It looks like this page doesn't exist in our virtual lab. 
-            The reaction you're looking for might have been moved or removed.
+            Oops! It looks like this page doesn't exist in our virtual lab. The
+            reaction you're looking for might have been moved or removed.
           </p>
 
           {/* Action Buttons */}

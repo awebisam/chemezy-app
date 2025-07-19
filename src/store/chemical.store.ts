@@ -50,7 +50,10 @@ export const useChemicalStore = create<ChemicalStore>()(
         } catch (error: any) {
           set({
             isLoading: false,
-            error: error.message || 'Failed to fetch chemicals',
+            error:
+              typeof error.message === 'string'
+                ? error.message
+                : 'Failed to fetch chemicals',
           });
           throw error;
         }
@@ -88,7 +91,10 @@ export const useChemicalStore = create<ChemicalStore>()(
         } catch (error: any) {
           set({
             isLoading: false,
-            error: error.message || 'Failed to create chemical',
+            error:
+              typeof error.message === 'string'
+                ? error.message
+                : 'Failed to create chemical',
           });
           throw error;
         }

@@ -8,7 +8,11 @@ describe('cn utility function', () => {
   });
 
   it('should handle conditional classes', () => {
-    const result = cn('base-class', true && 'conditional-class', false && 'hidden-class');
+    const result = cn(
+      'base-class',
+      true && 'conditional-class',
+      false && 'hidden-class'
+    );
     expect(result).toBe('base-class conditional-class');
   });
 
@@ -24,9 +28,9 @@ describe('cn utility function', () => {
 
   it('should handle objects with boolean values', () => {
     const result = cn({
-      'active': true,
-      'disabled': false,
-      'primary': true,
+      active: true,
+      disabled: false,
+      primary: true,
     });
     expect(result).toBe('active primary');
   });
@@ -40,7 +44,7 @@ describe('cn utility function', () => {
     const isActive = true;
     const isDisabled = false;
     const variant = 'primary';
-    
+
     const result = cn(
       'btn',
       `btn-${variant}`,
@@ -50,7 +54,7 @@ describe('cn utility function', () => {
       },
       isActive && 'state-active'
     );
-    
+
     expect(result).toBe('btn btn-primary btn-active state-active');
   });
 });
