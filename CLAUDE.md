@@ -3,11 +3,6 @@
 ## Key Project Files
 Always reference these files when working on tasks:
 
-### Project Specifications
-- `.kiro/specs/chemezy-frontend/requirements.md` - User stories and acceptance criteria  
-- `.kiro/specs/chemezy-frontend/design.md` - Architecture and component design
-- `.kiro/specs/chemezy-frontend/tasks.md` - Implementation plan with 24 tasks
-
 ### Project Guidelines
 - `.kiro/steering/product.md` - Product overview and value proposition
 - `.kiro/steering/structure.md` - File organization and naming conventions
@@ -31,28 +26,6 @@ npm test               # Run unit tests
 npm run test:watch     # Run tests in watch mode
 npm run test:coverage  # Run tests with coverage
 ```
-
-## Project Status
-- Task 1: ✅ Complete - Project foundation and development environment set up
-- Task 2: ✅ Complete - Core TypeScript type definitions
-- Task 3: ✅ Complete - API service layer with authentication
-- Task 4: ✅ Complete - Zustand stores for state management
-- Task 5: ✅ Complete - Build authentication system components
-- Task 6: ✅ Complete - Develop basic UI component library
-- Task 7: ✅ Complete - Implement chemical inventory and search functionality
-- Task 8: ✅ Complete - Build drag-and-drop lab bench interface
-- Task 9: ✅ Complete - Create environment selection interface
-- Task 10: ✅ Complete - Implement reaction triggering and results display
-- Task 11: ✅ Complete - Build Visual Effects Engine core architecture
-- Task 12: ✅ Complete - Implement gas production and light emission effects
-- Task 13: ✅ Complete - Implement temperature and foam production effects
-- Task 14: ✅ Complete - Implement state change and volume effects
-- Task 15: ✅ Complete - Implement spill and texture change effects
-- Task 16: ✅ Complete - Build user dashboard and awards system
-- Task 17: ✅ Complete - Implement leaderboard and ranking system
-- Task 18: ✅ Complete - Build reaction history and statistics
-- Tailwind v4 Configuration: ✅ Complete - Fixed all configuration issues
-- Current Phase: Ready for Task 19 (Implement responsive design and mobile support)
 
 ## Key Architecture Points
 - React 18 + TypeScript + Vite
@@ -79,3 +52,9 @@ npm run test:coverage  # Run tests with coverage
 - Base URL: `VITE_API_BASE_URL` environment variable
 - Authentication: JWT tokens with automatic refresh
 - Main endpoints: `/auth`, `/chemicals`, `/reactions`, `/awards`
+
+## Recent Performance Fixes
+- ✅ Fixed 422 API validation errors in dashboard and leaderboard
+- ✅ Resolved React infinite re-rendering loops in multiple components
+- ✅ Optimized bundle size from 1955KB with improved code splitting
+- ✅ Fixed frequent page reloads by correcting useEffect dependencies
