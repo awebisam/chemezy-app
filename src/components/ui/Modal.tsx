@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/utils/cn';
+import { useFocusManagement } from '@/utils/focus';
 
 export interface ModalProps {
   isOpen: boolean;
@@ -11,6 +12,10 @@ export interface ModalProps {
   closeOnBackdropClick?: boolean;
   showCloseButton?: boolean;
   initialFocus?: React.RefObject<HTMLElement>;
+  /** Accessible description for the modal */
+  'aria-describedby'?: string;
+  /** Custom aria-label for the modal */
+  'aria-label'?: string;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -22,8 +27,10 @@ export const Modal: React.FC<ModalProps> = ({
   closeOnBackdropClick = true,
   showCloseButton = true,
   initialFocus,
+  'aria-describedby': ariaDescribedby,
+  'aria-label': ariaLabel,
 }) => {
-  const modalRef = React.useRef<HTMLDivElement>(null);
+  const { elementRef: modalRef, trapFocusInElement, restoreFocus } = useFocusManagement<HTMLDivElement>();
   // Handle escape key and focus management
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -32,52 +39,34 @@ export const Modal: React.FC<ModalProps> = ({
       }
     };
 
-    const handleTabKey = (event: KeyboardEvent) => {
-      if (event.key === 'Tab' && isOpen && modalRef.current) {
-        const focusableElements = modalRef.current.querySelectorAll(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-        const firstElement = focusableElements[0] as HTMLElement;
-        const lastElement = focusableElements[
-          focusableElements.length - 1
-        ] as HTMLElement;
-
-        if (event.shiftKey) {
-          if (document.activeElement === firstElement) {
-            lastElement?.focus();
-            event.preventDefault();
-          }
-        } else {
-          if (document.activeElement === lastElement) {
-            firstElement?.focus();
-            event.preventDefault();
-          }
-        }
-      }
-    };
+    let cleanupFocus: (() => void) | undefined;
 
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
-      document.addEventListener('keydown', handleTabKey);
       document.body.style.overflow = 'hidden';
 
-      // Focus management
+      // Set up focus trapping
+      cleanupFocus = trapFocusInElement();
+
+      // Focus initial element if specified
       if (initialFocus?.current) {
         initialFocus.current.focus();
-      } else if (modalRef.current) {
-        const firstFocusable = modalRef.current.querySelector(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        ) as HTMLElement;
-        firstFocusable?.focus();
       }
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
-      document.removeEventListener('keydown', handleTabKey);
       document.body.style.overflow = 'unset';
+      
+      if (cleanupFocus) {
+        cleanupFocus();
+      }
+      
+      if (!isOpen) {
+        restoreFocus();
+      }
     };
-  }, [isOpen, onClose, initialFocus]);
+  }, [isOpen, onClose, initialFocus, trapFocusInElement, restoreFocus]);
 
   if (!isOpen) return null;
 
@@ -101,6 +90,8 @@ export const Modal: React.FC<ModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby={title ? 'modal-title' : undefined}
+      aria-describedby={ariaDescribedby}
+      aria-label={ariaLabel}
     >
       <div
         ref={modalRef}

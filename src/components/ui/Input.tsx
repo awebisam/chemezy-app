@@ -9,6 +9,14 @@ export interface InputProps
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   isRequired?: boolean;
+  /** Accessible description for screen readers */
+  'aria-describedby'?: string;
+  /** Indicates if the input is invalid */
+  'aria-invalid'?: boolean | 'false' | 'true' | 'grammar' | 'spelling';
+  /** Label for screen readers when visual label is not sufficient */
+  'aria-label'?: string;
+  /** References element that labels this input */
+  'aria-labelledby'?: string;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -56,12 +64,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             type={type}
             id={inputId}
             className={cn(
-              'w-full px-3 py-2 border rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-0',
+              'w-full px-3 py-2 border rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-0 focus-visible:ring-2 focus-visible:ring-offset-0',
               leftIcon && 'pl-10',
               rightIcon && 'pr-10',
               error
-                ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-                : 'border-gray-300 focus:border-primary-500 focus:ring-primary-500',
+                ? 'border-red-300 focus:border-red-500 focus:ring-red-500 focus-visible:border-red-500 focus-visible:ring-red-500'
+                : 'border-gray-300 focus:border-primary-500 focus:ring-primary-500 focus-visible:border-primary-500 focus-visible:ring-primary-500',
               className
             )}
             ref={ref}

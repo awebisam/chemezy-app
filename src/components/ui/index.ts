@@ -8,4 +8,5 @@ export { useToast } from './Toast';
 export { useToastHelpers } from './Toast';
 export type { Toast, ToastType } from './Toast';
 export { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
+export { PerformanceMonitor, BundleSizeMonitor } from './PerformanceMonitor';
 export { UIDemo } from './UIDemo';

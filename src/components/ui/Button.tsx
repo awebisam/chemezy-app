@@ -8,6 +8,14 @@ export interface ButtonProps
   isLoading?: boolean;
   children: React.ReactNode;
   loadingText?: string;
+  /** Accessible label for screen readers when button content is not descriptive */
+  'aria-label'?: string;
+  /** Describes the button's purpose for screen readers */
+  'aria-describedby'?: string;
+  /** Indicates if button controls an expanded/collapsed element */
+  'aria-expanded'?: boolean;
+  /** Indicates if button controls a popup */
+  'aria-haspopup'?: boolean | 'menu' | 'listbox' | 'tree' | 'grid' | 'dialog';
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -25,7 +33,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseClasses =
-      'inline-flex items-center justify-center font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+      'inline-flex items-center justify-center font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-offset-2';
 
     const variants = {
       primary:

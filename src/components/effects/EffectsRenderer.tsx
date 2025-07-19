@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { cn } from '@/utils/cn';
+import { performanceMonitor, usePerformanceMonitor } from '@/utils/performance';
 import type { VisualEffect } from '@/types/reaction.types';
 
 // Effect pool for performance optimization
@@ -35,6 +36,8 @@ export const EffectsRenderer: React.FC<EffectsRendererProps> = ({
   const [activeEffects, setActiveEffects] = useState<EffectInstance[]>([]);
   const animationFrameRef = useRef<number | undefined>(undefined);
   const effectIdCounter = useRef(0);
+  const { recordRender } = usePerformanceMonitor('EffectsRenderer');
+  const lastRenderTime = useRef<number>(0);
 
   // Generate unique effect ID
   const generateEffectId = useCallback(() => {
@@ -83,6 +86,7 @@ export const EffectsRenderer: React.FC<EffectsRendererProps> = ({
 
   // Animation loop for managing effect lifecycles
   const animationLoop = useCallback(() => {
+    const frameStartTime = performance.now();
     const currentTime = Date.now();
 
     setActiveEffects(prev => {
@@ -91,6 +95,14 @@ export const EffectsRenderer: React.FC<EffectsRendererProps> = ({
         const progress = Math.min(elapsed / instance.duration, 1);
 
         if (progress >= 1 && instance.isActive) {
+          // Record effect performance data
+          performanceMonitor.recordEffectPerformance({
+            effectType: instance.effect.effect_type,
+            duration: elapsed,
+            renderTime: frameStartTime - lastRenderTime.current,
+            memoryDelta: 0, // Could be enhanced with actual memory measurement
+          });
+
           // Effect completed
           if (instance.cleanup) {
             instance.cleanup();
@@ -108,11 +120,15 @@ export const EffectsRenderer: React.FC<EffectsRendererProps> = ({
       return updated.filter(instance => instance.isActive);
     });
 
+    // Record render performance
+    recordRender(activeEffects.length);
+    lastRenderTime.current = frameStartTime;
+
     // Continue animation loop if there are active effects
     if (activeEffects.some(instance => instance.isActive)) {
       animationFrameRef.current = requestAnimationFrame(animationLoop);
     }
-  }, [activeEffects, onEffectComplete]);
+  }, [activeEffects, onEffectComplete, recordRender]);
 
   // Start new effects when effects prop changes
   useEffect(() => {

@@ -18,6 +18,21 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Vendor chunk for large dependencies
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          // UI components chunk
+          ui: ['@/components/ui'],
+          // Effects engine chunk
+          effects: ['@/components/effects'],
+        },
+      },
+    },
+    // Performance budgets
+    chunkSizeWarningLimit: 1000, // 1MB warning limit
+    assetsInlineLimit: 4096, // 4KB inline limit for assets
   },
   test: {
     globals: true,
