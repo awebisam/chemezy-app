@@ -75,7 +75,6 @@ export const ReactionVessel: React.FC<ReactionVesselProps> = ({
     setAttachmentPoints(points);
   }, [config.shape, width, height]);
 
-
   // Generate vessel SVG path based on shape
   const generateVesselPath = (): string => {
     const centerX = width / 2;

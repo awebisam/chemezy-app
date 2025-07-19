@@ -13,20 +13,20 @@ export class VolumeChangeEffect extends BaseEffect<VolumeChangeEffectType> {
     const volumeFactor = effect.factor;
     const isExpansion = volumeFactor > 1;
     const isContraction = volumeFactor < 1;
-    
+
     // Calculate scaling progress with easing
     const scalingProgress = EffectAnimations.easeInOut(progress);
     const currentScale = 1 + (volumeFactor - 1) * scalingProgress;
-    
+
     // Visual properties
     const baseRadius = 30;
     const currentRadius = baseRadius * currentScale;
     const maxRadius = baseRadius * Math.max(volumeFactor, 1);
-    
+
     // Color based on volume change
     const volumeColor = isExpansion ? '#FF6B35' : '#3B82F6';
     const intensity = Math.abs(volumeFactor - 1);
-    
+
     // Animation properties
     const pulseIntensity = EffectAnimations.pulse(progress, intensity);
     const waveIntensity = Math.sin(progress * Math.PI * 4) * 0.3 + 0.7;
@@ -46,7 +46,7 @@ export class VolumeChangeEffect extends BaseEffect<VolumeChangeEffectType> {
               ]
             )}
           </defs>
-          
+
           {/* Static volume indicator */}
           <circle
             cx={vesselCenter.x}
@@ -57,7 +57,7 @@ export class VolumeChangeEffect extends BaseEffect<VolumeChangeEffectType> {
             strokeWidth="2"
             strokeDasharray="4,2"
           />
-          
+
           {/* Volume label */}
           <text
             x={vesselCenter.x}
@@ -127,10 +127,10 @@ export class VolumeChangeEffect extends BaseEffect<VolumeChangeEffectType> {
           {/* Expansion ripple effect */}
           {isExpansion && (
             <filter id={`expansion-ripple-${Math.round(volumeFactor * 100)}`}>
-              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+              <feGaussianBlur stdDeviation="2" result="coloredBlur" />
               <feMerge>
-                <feMergeNode in="coloredBlur"/>
-                <feMergeNode in="SourceGraphic"/>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
           )}
@@ -143,7 +143,11 @@ export class VolumeChangeEffect extends BaseEffect<VolumeChangeEffectType> {
           r={currentRadius}
           fill={`url(#volume-gradient-${Math.round(volumeFactor * 100)})`}
           opacity={0.8}
-          filter={isExpansion ? `url(#expansion-ripple-${Math.round(volumeFactor * 100)})` : undefined}
+          filter={
+            isExpansion
+              ? `url(#expansion-ripple-${Math.round(volumeFactor * 100)})`
+              : undefined
+          }
         />
 
         {/* Compression pattern overlay */}
@@ -158,11 +162,31 @@ export class VolumeChangeEffect extends BaseEffect<VolumeChangeEffectType> {
         )}
 
         {/* Volume change waves */}
-        {isExpansion && this.renderExpansionWaves(vesselCenter, progress, maxRadius, volumeColor, pulseIntensity)}
-        {isContraction && this.renderContractionWaves(vesselCenter, progress, baseRadius, volumeColor, waveIntensity)}
+        {isExpansion &&
+          this.renderExpansionWaves(
+            vesselCenter,
+            progress,
+            maxRadius,
+            volumeColor,
+            pulseIntensity
+          )}
+        {isContraction &&
+          this.renderContractionWaves(
+            vesselCenter,
+            progress,
+            baseRadius,
+            volumeColor,
+            waveIntensity
+          )}
 
         {/* Volume indicator particles */}
-        {this.renderVolumeParticles(vesselCenter, progress, currentScale, volumeColor, isExpansion)}
+        {this.renderVolumeParticles(
+          vesselCenter,
+          progress,
+          currentScale,
+          volumeColor,
+          isExpansion
+        )}
 
         {/* Scale reference circle */}
         <circle
@@ -177,8 +201,20 @@ export class VolumeChangeEffect extends BaseEffect<VolumeChangeEffectType> {
         />
 
         {/* Volume change indicators */}
-        {isExpansion && this.renderExpansionIndicators(vesselCenter, currentRadius, volumeColor, scalingProgress)}
-        {isContraction && this.renderContractionIndicators(vesselCenter, currentRadius, volumeColor, scalingProgress)}
+        {isExpansion &&
+          this.renderExpansionIndicators(
+            vesselCenter,
+            currentRadius,
+            volumeColor,
+            scalingProgress
+          )}
+        {isContraction &&
+          this.renderContractionIndicators(
+            vesselCenter,
+            currentRadius,
+            volumeColor,
+            scalingProgress
+          )}
 
         {/* Volume factor display */}
         <text
@@ -267,7 +303,7 @@ export class VolumeChangeEffect extends BaseEffect<VolumeChangeEffectType> {
       const distance = baseRadius * (1 - progress * 0.3);
       const x = vesselCenter.x + Math.cos(angle) * distance;
       const y = vesselCenter.y + Math.sin(angle) * distance;
-      
+
       waves.push(
         <g key={`contraction-wave-${i}`}>
           <line
@@ -309,10 +345,10 @@ export class VolumeChangeEffect extends BaseEffect<VolumeChangeEffectType> {
       const distance = baseDistance * scale;
       const x = vesselCenter.x + Math.cos(angle) * distance;
       const y = vesselCenter.y + Math.sin(angle) * distance;
-      
+
       const size = isExpansion ? 1 + scale * 2 : 3 - scale * 1.5;
       const opacity = 0.6 + 0.4 * Math.sin(progress * Math.PI * 2 + i);
-      
+
       particles.push(
         <circle
           key={`volume-particle-${i}`}
@@ -341,11 +377,11 @@ export class VolumeChangeEffect extends BaseEffect<VolumeChangeEffectType> {
       const angle = (i / numIndicators) * Math.PI * 2;
       const x = vesselCenter.x + Math.cos(angle) * radius;
       const y = vesselCenter.y + Math.sin(angle) * radius;
-      
+
       const arrowLength = 8 + progress * 4;
       const arrowX = x + Math.cos(angle) * arrowLength;
       const arrowY = y + Math.sin(angle) * arrowLength;
-      
+
       indicators.push(
         <g key={`expansion-indicator-${i}`}>
           <line
@@ -361,7 +397,7 @@ export class VolumeChangeEffect extends BaseEffect<VolumeChangeEffectType> {
             points={`${arrowX},${arrowY} ${arrowX - 3},${arrowY - 2} ${arrowX - 3},${arrowY + 2}`}
             fill={color}
             opacity={0.7}
-            transform={`rotate(${angle * 180 / Math.PI} ${arrowX} ${arrowY})`}
+            transform={`rotate(${(angle * 180) / Math.PI} ${arrowX} ${arrowY})`}
           />
         </g>
       );
@@ -383,11 +419,11 @@ export class VolumeChangeEffect extends BaseEffect<VolumeChangeEffectType> {
       const angle = (i / numIndicators) * Math.PI * 2;
       const x = vesselCenter.x + Math.cos(angle) * (radius + 10);
       const y = vesselCenter.y + Math.sin(angle) * (radius + 10);
-      
+
       const arrowLength = 8 + progress * 4;
       const arrowX = x - Math.cos(angle) * arrowLength;
       const arrowY = y - Math.sin(angle) * arrowLength;
-      
+
       indicators.push(
         <g key={`contraction-indicator-${i}`}>
           <line
@@ -403,7 +439,7 @@ export class VolumeChangeEffect extends BaseEffect<VolumeChangeEffectType> {
             points={`${arrowX},${arrowY} ${arrowX + 3},${arrowY - 2} ${arrowX + 3},${arrowY + 2}`}
             fill={color}
             opacity={0.7}
-            transform={`rotate(${(angle + Math.PI) * 180 / Math.PI} ${arrowX} ${arrowY})`}
+            transform={`rotate(${((angle + Math.PI) * 180) / Math.PI} ${arrowX} ${arrowY})`}
           />
         </g>
       );

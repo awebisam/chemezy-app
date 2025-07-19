@@ -107,6 +107,15 @@ export interface DashboardStore {
   fetchReactionStats: () => Promise<void>;
   fetchReactionHistory: () => Promise<void>;
   clearError: () => void;
+
+  // Helper methods
+  getAwardsByCategory: (category: AwardCategory) => UserAward[];
+  getRecentAwards: (days?: number) => UserAward[];
+  getTotalPoints: () => number;
+  getProgressTowardsAward: (templateId: number) => Record<string, any>;
+  refreshDashboard: () => Promise<void>;
+  hasAward: (templateId: number) => boolean;
+  getUserPositionInLeaderboard: () => number | null;
 }
 
 // Effects Store Interface (for Visual Effects Engine)

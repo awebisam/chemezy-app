@@ -9,6 +9,7 @@ This directory contains the core UI components for the Chemezy Frontend applicat
 A versatile button component with multiple variants, sizes, and loading states.
 
 **Features:**
+
 - Multiple variants: `primary`, `secondary`, `danger`, `ghost`
 - Three sizes: `sm`, `md`, `lg`
 - Loading state with spinner and custom loading text
@@ -16,6 +17,7 @@ A versatile button component with multiple variants, sizes, and loading states.
 - Keyboard navigation support
 
 **Usage:**
+
 ```tsx
 import { Button } from '@/components/ui';
 
@@ -33,6 +35,7 @@ import { Button } from '@/components/ui';
 A form input component with validation states, icons, and accessibility features.
 
 **Features:**
+
 - Label and helper text support
 - Error state with validation messages
 - Left and right icon slots
@@ -41,6 +44,7 @@ A form input component with validation states, icons, and accessibility features
 - Auto-generated IDs for label association
 
 **Usage:**
+
 ```tsx
 import { Input } from '@/components/ui';
 
@@ -51,7 +55,7 @@ import { Input } from '@/components/ui';
   error={errors.email}
   isRequired
   helperText="We'll never share your email"
-/>
+/>;
 ```
 
 ### Modal
@@ -59,6 +63,7 @@ import { Input } from '@/components/ui';
 A fully accessible modal component with focus management and keyboard navigation.
 
 **Features:**
+
 - Backdrop click to close (configurable)
 - Escape key to close
 - Focus trapping and management
@@ -67,6 +72,7 @@ A fully accessible modal component with focus management and keyboard navigation
 - Portal rendering to document body
 
 **Usage:**
+
 ```tsx
 import { Modal } from '@/components/ui';
 
@@ -81,11 +87,9 @@ import { Modal } from '@/components/ui';
     <Button variant="ghost" onClick={() => setIsModalOpen(false)}>
       Cancel
     </Button>
-    <Button onClick={handleConfirm}>
-      Confirm
-    </Button>
+    <Button onClick={handleConfirm}>Confirm</Button>
   </div>
-</Modal>
+</Modal>;
 ```
 
 ### LoadingSpinner
@@ -93,12 +97,14 @@ import { Modal } from '@/components/ui';
 A customizable loading spinner with multiple sizes and colors.
 
 **Features:**
+
 - Four sizes: `sm`, `md`, `lg`, `xl`
 - Multiple colors: `primary`, `secondary`, `white`, `gray`
 - Proper accessibility with `role="status"` and screen reader text
 - Smooth CSS animations
 
 **Usage:**
+
 ```tsx
 import { LoadingSpinner } from '@/components/ui';
 
@@ -111,6 +117,7 @@ import { LoadingSpinner } from '@/components/ui';
 A comprehensive toast notification system with multiple types and auto-dismissal.
 
 **Features:**
+
 - Four types: `success`, `error`, `warning`, `info`
 - Auto-dismissal with configurable duration
 - Manual dismissal with close button
@@ -120,29 +127,30 @@ A comprehensive toast notification system with multiple types and auto-dismissal
 - Full accessibility support
 
 **Usage:**
+
 ```tsx
 import { ToastProvider, useToastHelpers } from '@/components/ui';
 
 // Wrap your app with ToastProvider
 <ToastProvider>
   <App />
-</ToastProvider>
+</ToastProvider>;
 
 // Use in components
 const Component = () => {
   const toast = useToastHelpers();
-  
+
   const handleSuccess = () => {
     toast.success('Success!', 'Operation completed successfully');
   };
-  
+
   const handleError = () => {
     toast.error('Error!', 'Something went wrong', {
       duration: 10000, // 10 seconds
       action: {
         label: 'Retry',
-        onClick: () => retryOperation()
-      }
+        onClick: () => retryOperation(),
+      },
     });
   };
 };
@@ -177,6 +185,7 @@ All components include comprehensive test suites covering:
 - Edge cases
 
 Run tests with:
+
 ```bash
 npm test src/components/ui/__tests__/
 ```
@@ -188,7 +197,7 @@ See all components in action with the `UIDemo` component:
 ```tsx
 import { UIDemo } from '@/components/ui';
 
-<UIDemo />
+<UIDemo />;
 ```
 
 This provides a comprehensive showcase of all components with interactive examples.

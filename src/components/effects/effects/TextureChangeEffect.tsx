@@ -13,25 +13,31 @@ export class TextureChangeEffect extends BaseEffect<TextureChangeEffectType> {
     const textureType = effect.texture_type;
     const color = effect.color;
     const viscosity = effect.viscosity || 1;
-    
+
     // For demo purposes, we'll show a transition to the new texture
     const fromTexture = 'smooth'; // Default assumption
     const toTexture = textureType;
 
     // Calculate texture transition progress
     const transitionProgress = EffectAnimations.easeInOut(progress);
-    
+
     // Texture properties
-    const textureIntensity = 0.6 + (viscosity * 0.1);
-    const surfaceRadius = 35 + (viscosity * 3);
+    const textureIntensity = 0.6 + viscosity * 0.1;
+    const surfaceRadius = 35 + viscosity * 3;
 
     if (reduceMotion) {
       return (
         <g>
           <defs>
-            {this.createTexturePattern(fromTexture, toTexture, transitionProgress, color, viscosity)}
+            {this.createTexturePattern(
+              fromTexture,
+              toTexture,
+              transitionProgress,
+              color,
+              viscosity
+            )}
           </defs>
-          
+
           {/* Static texture surface */}
           <circle
             cx={vesselCenter.x}
@@ -40,7 +46,7 @@ export class TextureChangeEffect extends BaseEffect<TextureChangeEffectType> {
             fill={`url(#texture-pattern-${fromTexture}-${toTexture})`}
             opacity={0.7}
           />
-          
+
           {/* Texture label */}
           <text
             x={vesselCenter.x}
@@ -59,8 +65,14 @@ export class TextureChangeEffect extends BaseEffect<TextureChangeEffectType> {
       <g>
         <defs>
           {/* Texture patterns */}
-          {this.createTexturePattern(fromTexture, toTexture, transitionProgress, color, viscosity)}
-          
+          {this.createTexturePattern(
+            fromTexture,
+            toTexture,
+            transitionProgress,
+            color,
+            viscosity
+          )}
+
           {/* Texture gradient overlay */}
           {this.createRadialGradient(
             `texture-gradient-${fromTexture}-${toTexture}`,
@@ -82,7 +94,11 @@ export class TextureChangeEffect extends BaseEffect<TextureChangeEffectType> {
             y2="100%"
           >
             <stop offset="0%" stopColor={color} stopOpacity="0.1" />
-            <stop offset={`${transitionProgress * 100}%`} stopColor="#FFFFFF" stopOpacity="0.7" />
+            <stop
+              offset={`${transitionProgress * 100}%`}
+              stopColor="#FFFFFF"
+              stopOpacity="0.7"
+            />
             <stop offset="100%" stopColor={color} stopOpacity="0.2" />
           </linearGradient>
 
@@ -130,13 +146,31 @@ export class TextureChangeEffect extends BaseEffect<TextureChangeEffectType> {
         />
 
         {/* Texture particles */}
-        {this.renderTextureParticles(vesselCenter, progress, transitionProgress, color, viscosity)}
+        {this.renderTextureParticles(
+          vesselCenter,
+          progress,
+          transitionProgress,
+          color,
+          viscosity
+        )}
 
         {/* Texture transformation waves */}
-        {this.renderTextureWaves(vesselCenter, progress, surfaceRadius, color, transitionProgress)}
+        {this.renderTextureWaves(
+          vesselCenter,
+          progress,
+          surfaceRadius,
+          color,
+          transitionProgress
+        )}
 
         {/* Surface tension effects */}
-        {this.renderSurfaceTensionEffects(vesselCenter, progress, surfaceRadius, color, viscosity)}
+        {this.renderSurfaceTensionEffects(
+          vesselCenter,
+          progress,
+          surfaceRadius,
+          color,
+          viscosity
+        )}
 
         {/* Texture information */}
         <text
@@ -158,7 +192,8 @@ export class TextureChangeEffect extends BaseEffect<TextureChangeEffectType> {
           fill={color}
           opacity={0.8}
         >
-          Viscosity: {viscosity} • {Math.round(transitionProgress * 100)}% Complete
+          Viscosity: {viscosity} • {Math.round(transitionProgress * 100)}%
+          Complete
         </text>
       </g>
     );
@@ -172,8 +207,8 @@ export class TextureChangeEffect extends BaseEffect<TextureChangeEffectType> {
     viscosity: number
   ): React.ReactElement {
     const patternId = `texture-pattern-${fromTexture}-${toTexture}`;
-    const patternSize = 20 + (viscosity * 2);
-    
+    const patternSize = 20 + viscosity * 2;
+
     return (
       <pattern
         id={patternId}
@@ -181,11 +216,21 @@ export class TextureChangeEffect extends BaseEffect<TextureChangeEffectType> {
         width={patternSize}
         height={patternSize}
       >
-        <rect width={patternSize} height={patternSize} fill={color} opacity="0.1" />
-        
+        <rect
+          width={patternSize}
+          height={patternSize}
+          fill={color}
+          opacity="0.1"
+        />
+
         {/* From texture pattern */}
-        {this.getTextureElements(fromTexture, patternSize, color, (1 - progress) * 0.8)}
-        
+        {this.getTextureElements(
+          fromTexture,
+          patternSize,
+          color,
+          (1 - progress) * 0.8
+        )}
+
         {/* To texture pattern */}
         {this.getTextureElements(toTexture, patternSize, color, progress * 0.8)}
       </pattern>
@@ -267,7 +312,7 @@ export class TextureChangeEffect extends BaseEffect<TextureChangeEffectType> {
 
       case 'fibrous':
         for (let i = 0; i < 4; i++) {
-          const y = (i * quarter) + quarter / 2;
+          const y = i * quarter + quarter / 2;
           elements.push(
             <line
               key={`fibrous-${i}`}
@@ -285,8 +330,8 @@ export class TextureChangeEffect extends BaseEffect<TextureChangeEffectType> {
 
       case 'granular':
         for (let i = 0; i < 12; i++) {
-          const x = (i % 4) * quarter / 2 + quarter / 4;
-          const y = Math.floor(i / 4) * quarter / 2 + quarter / 4;
+          const x = ((i % 4) * quarter) / 2 + quarter / 4;
+          const y = (Math.floor(i / 4) * quarter) / 2 + quarter / 4;
           elements.push(
             <circle
               key={`granular-${i}`}
@@ -345,10 +390,10 @@ export class TextureChangeEffect extends BaseEffect<TextureChangeEffectType> {
       const distance = 20 + transitionProgress * 20;
       const x = vesselCenter.x + Math.cos(angle) * distance;
       const y = vesselCenter.y + Math.sin(angle) * distance;
-      
+
       const size = 1 + viscosity * 0.5;
       const opacity = 0.5 + 0.5 * Math.sin(progress * Math.PI * 2 + i);
-      
+
       particles.push(
         <circle
           key={`texture-particle-${i}`}
@@ -413,10 +458,10 @@ export class TextureChangeEffect extends BaseEffect<TextureChangeEffectType> {
       const angle = (i / numEffects) * Math.PI * 2;
       const x = vesselCenter.x + Math.cos(angle) * radius;
       const y = vesselCenter.y + Math.sin(angle) * radius;
-      
+
       const tensionHeight = 5 + Math.sin(progress * Math.PI * 2 + i) * 3;
       const tensionOpacity = 0.4 + 0.3 * Math.sin(progress * Math.PI * 1.5 + i);
-      
+
       effects.push(
         <ellipse
           key={`surface-tension-${i}`}
@@ -426,7 +471,7 @@ export class TextureChangeEffect extends BaseEffect<TextureChangeEffectType> {
           ry={tensionHeight}
           fill={color}
           opacity={tensionOpacity}
-          transform={`rotate(${angle * 180 / Math.PI} ${x} ${y})`}
+          transform={`rotate(${(angle * 180) / Math.PI} ${x} ${y})`}
         />
       );
     }
@@ -438,7 +483,7 @@ export class TextureChangeEffect extends BaseEffect<TextureChangeEffectType> {
     // Duration depends on viscosity and texture complexity
     const baseDuration = 4000;
     const viscosityMultiplier = 1 + (effect.viscosity || 1) * 0.2;
-    
+
     return baseDuration * viscosityMultiplier;
   }
 }

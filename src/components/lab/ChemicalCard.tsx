@@ -80,9 +80,9 @@ export const ChemicalCard: React.FC<ChemicalCardProps> = ({
   return (
     <div
       className={cn(
-        'bg-white rounded-lg border border-gray-200 p-4 shadow-sm transition-all duration-200',
-        'hover:shadow-md hover:border-gray-300',
-        isDraggable && 'cursor-grab active:cursor-grabbing',
+        'bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm transition-all duration-200',
+        'hover:shadow-md hover:border-gray-300 active:scale-95',
+        isDraggable && 'cursor-grab active:cursor-grabbing touch-manipulation',
         !isDraggable && onSelect && 'cursor-pointer',
         className
       )}
@@ -119,10 +119,10 @@ export const ChemicalCard: React.FC<ChemicalCardProps> = ({
 
       {/* Chemical Names */}
       <div className="mb-3">
-        <h3 className="font-semibold text-gray-900 text-sm mb-1">
+        <h3 className="font-semibold text-gray-900 text-sm mb-1 line-clamp-2">
           {chemical.common_name}
         </h3>
-        <p className="text-gray-600 text-sm font-mono">
+        <p className="text-gray-600 text-xs sm:text-sm font-mono break-all">
           {chemical.molecular_formula}
         </p>
       </div>
@@ -140,12 +140,12 @@ export const ChemicalCard: React.FC<ChemicalCardProps> = ({
       </div>
 
       {/* Actions */}
-      <div className="flex justify-between items-center">
-        <div className="flex items-center space-x-2">
+      <div className="flex justify-between items-center gap-2">
+        <div className="flex items-center space-x-2 flex-1 min-w-0">
           {isDraggable && (
-            <div className="flex items-center text-xs text-gray-400">
+            <div className="hidden sm:flex items-center text-xs text-gray-400">
               <svg
-                className="w-4 h-4 mr-1"
+                className="w-4 h-4 mr-1 flex-shrink-0"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -157,14 +157,14 @@ export const ChemicalCard: React.FC<ChemicalCardProps> = ({
                   d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
                 />
               </svg>
-              Drag to lab
+              <span className="truncate">Drag to lab</span>
             </div>
           )}
 
           {showAddButton && onAddToLab && (
             <button
               onClick={handleAddToLab}
-              className="text-xs bg-primary-600 text-white px-2 py-1 rounded hover:bg-primary-700 transition-colors duration-200"
+              className="text-xs bg-primary-600 text-white px-3 py-2 rounded-md hover:bg-primary-700 active:bg-primary-800 transition-colors duration-200 font-medium touch-manipulation"
               aria-label={`Add ${chemical.common_name} to lab bench`}
             >
               + Add
@@ -175,7 +175,7 @@ export const ChemicalCard: React.FC<ChemicalCardProps> = ({
         {onViewDetails && (
           <button
             onClick={handleDetailsClick}
-            className="text-xs text-primary-600 hover:text-primary-700 font-medium"
+            className="text-xs text-primary-600 hover:text-primary-700 font-medium whitespace-nowrap touch-manipulation"
             aria-label={`View details for ${chemical.common_name}`}
           >
             Details

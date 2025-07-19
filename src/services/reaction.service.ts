@@ -1,4 +1,5 @@
 import { apiClient } from './api';
+import { createApiWrapper } from './error.service';
 import type {
   ReactionRequest,
   ReactionPrediction,
@@ -7,6 +8,36 @@ import type {
 
 export class ReactionService {
   private reactionCache: Map<string, ReactionPrediction> = new Map();
+
+  private predictReactionWrapper = createApiWrapper(
+    this._predictReaction.bind(this),
+    'ReactionService.predictReaction',
+    { 
+      showToast: true, 
+      logError: true,
+      retryConfig: { maxRetries: 2, baseDelay: 1500, maxDelay: 8000, backoffFactor: 2 }
+    }
+  );
+
+  private getReactionCacheWrapper = createApiWrapper(
+    this._getReactionCache.bind(this),
+    'ReactionService.getReactionCache',
+    { 
+      showToast: false, 
+      logError: true,
+      retryConfig: { maxRetries: 2, baseDelay: 1000, maxDelay: 5000, backoffFactor: 2 }
+    }
+  );
+
+  private getReactionStatsWrapper = createApiWrapper(
+    this._getReactionStats.bind(this),
+    'ReactionService.getReactionStats',
+    { 
+      showToast: false, 
+      logError: true,
+      retryConfig: { maxRetries: 2, baseDelay: 1000, maxDelay: 5000, backoffFactor: 2 }
+    }
+  );
 
   /**
    * Predict the outcome of a chemical reaction
@@ -21,10 +52,7 @@ export class ReactionService {
       return cachedResult;
     }
 
-    const response = await apiClient.post<ReactionPrediction>(
-      '/reactions/react',
-      request
-    );
+    const response = await this.predictReactionWrapper(request);
 
     // Cache the result for future use
     this.reactionCache.set(cacheKey, response);
@@ -36,15 +64,32 @@ export class ReactionService {
    * Get cached reaction predictions from the server
    */
   async getReactionCache(): Promise<ReactionPrediction[]> {
-    const response =
-      await apiClient.get<ReactionPrediction[]>('/reactions/cache');
-    return response;
+    return this.getReactionCacheWrapper();
   }
 
   /**
    * Get user's reaction statistics
    */
   async getReactionStats(): Promise<UserReactionStats> {
+    return this.getReactionStatsWrapper();
+  }
+
+  // Private methods that contain the actual API calls
+  private async _predictReaction(request: ReactionRequest): Promise<ReactionPrediction> {
+    const response = await apiClient.post<ReactionPrediction>(
+      '/reactions/react',
+      request
+    );
+    return response;
+  }
+
+  private async _getReactionCache(): Promise<ReactionPrediction[]> {
+    const response =
+      await apiClient.get<ReactionPrediction[]>('/reactions/cache');
+    return response;
+  }
+
+  private async _getReactionStats(): Promise<UserReactionStats> {
     const response = await apiClient.get<UserReactionStats>('/reactions/stats');
     return response;
   }

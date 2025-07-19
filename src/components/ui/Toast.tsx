@@ -245,6 +245,54 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
     setToasts([]);
   }, []);
 
+  // Listen for error events from the error service
+  useEffect(() => {
+    const handleErrorToast = (event: CustomEvent) => {
+      addToast({
+        type: 'error',
+        title: event.detail.title,
+        message: event.detail.message,
+        duration: 7000, // Longer duration for errors
+      });
+    };
+
+    const handleSuccessToast = (event: CustomEvent) => {
+      addToast({
+        type: 'success',
+        title: event.detail.title,
+        message: event.detail.message,
+      });
+    };
+
+    const handleWarningToast = (event: CustomEvent) => {
+      addToast({
+        type: 'warning',
+        title: event.detail.title,
+        message: event.detail.message,
+      });
+    };
+
+    const handleInfoToast = (event: CustomEvent) => {
+      addToast({
+        type: 'info',
+        title: event.detail.title,
+        message: event.detail.message,
+      });
+    };
+
+    window.addEventListener('show-error-toast', handleErrorToast as EventListener);
+    window.addEventListener('show-success-toast', handleSuccessToast as EventListener);
+    window.addEventListener('show-warning-toast', handleWarningToast as EventListener);
+    window.addEventListener('show-info-toast', handleInfoToast as EventListener);
+
+    return () => {
+      window.removeEventListener('show-error-toast', handleErrorToast as EventListener);
+      window.removeEventListener('show-success-toast', handleSuccessToast as EventListener);
+      window.removeEventListener('show-warning-toast', handleWarningToast as EventListener);
+      window.removeEventListener('show-info-toast', handleInfoToast as EventListener);
+    };
+  }, [addToast]);
+
   const contextValue: ToastContextType = {
     toasts,
     addToast,

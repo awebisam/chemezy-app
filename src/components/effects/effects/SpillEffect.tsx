@@ -4,9 +4,7 @@ import type { BaseEffectProps } from '../BaseEffect';
 import type { SpillEffect as SpillEffectType } from '@/types/reaction.types';
 
 export class SpillEffect extends BaseEffect<SpillEffectType> {
-  render(
-    props: BaseEffectProps<SpillEffectType>
-  ): React.ReactElement | null {
+  render(props: BaseEffectProps<SpillEffectType>): React.ReactElement | null {
     const { effect, config } = props;
     const { vesselCenter, reduceMotion, progress } = config;
 
@@ -16,9 +14,10 @@ export class SpillEffect extends BaseEffect<SpillEffectType> {
     const viscosity = 3; // Default viscosity
 
     // Calculate spill progress with different easing based on viscosity
-    const spillProgress = viscosity > 5 
-      ? EffectAnimations.easeOut(progress) // Thick liquids spread slower
-      : EffectAnimations.easeInOut(progress); // Thin liquids spread more evenly
+    const spillProgress =
+      viscosity > 5
+        ? EffectAnimations.easeOut(progress) // Thick liquids spread slower
+        : EffectAnimations.easeInOut(progress); // Thin liquids spread more evenly
 
     // Spill properties
     const maxSpread = spreadRadius * amount;
@@ -33,18 +32,13 @@ export class SpillEffect extends BaseEffect<SpillEffectType> {
       return (
         <g>
           <defs>
-            {this.createRadialGradient(
-              `spill-static-${color}`,
-              color,
-              0.8,
-              [
-                { offset: '0%', opacity: 0.9 },
-                { offset: '70%', opacity: 0.7 },
-                { offset: '100%', opacity: 0.3 },
-              ]
-            )}
+            {this.createRadialGradient(`spill-static-${color}`, color, 0.8, [
+              { offset: '0%', opacity: 0.9 },
+              { offset: '70%', opacity: 0.7 },
+              { offset: '100%', opacity: 0.3 },
+            ])}
           </defs>
-          
+
           {/* Static spill */}
           <ellipse
             cx={vesselCenter.x}
@@ -54,7 +48,7 @@ export class SpillEffect extends BaseEffect<SpillEffectType> {
             fill={`url(#spill-static-${color})`}
             opacity={0.8}
           />
-          
+
           {/* Spill label */}
           <text
             x={vesselCenter.x}
@@ -73,17 +67,12 @@ export class SpillEffect extends BaseEffect<SpillEffectType> {
       <g>
         <defs>
           {/* Spill gradient */}
-          {this.createRadialGradient(
-            `spill-gradient-${color}`,
-            color,
-            0.8,
-            [
-              { offset: '0%', opacity: 0.9 },
-              { offset: '40%', opacity: 0.8 },
-              { offset: '80%', opacity: 0.6 },
-              { offset: '100%', opacity: 0.2 },
-            ]
-          )}
+          {this.createRadialGradient(`spill-gradient-${color}`, color, 0.8, [
+            { offset: '0%', opacity: 0.9 },
+            { offset: '40%', opacity: 0.8 },
+            { offset: '80%', opacity: 0.6 },
+            { offset: '100%', opacity: 0.2 },
+          ])}
 
           {/* Liquid texture pattern */}
           <pattern
@@ -126,13 +115,23 @@ export class SpillEffect extends BaseEffect<SpillEffectType> {
             y2="100%"
           >
             <stop offset="0%" stopColor={color} stopOpacity="0.1" />
-            <stop offset={`${spillProgress * 100}%`} stopColor="#FFFFFF" stopOpacity="0.6" />
+            <stop
+              offset={`${spillProgress * 100}%`}
+              stopColor="#FFFFFF"
+              stopOpacity="0.6"
+            />
             <stop offset="100%" stopColor={color} stopOpacity="0.2" />
           </linearGradient>
         </defs>
 
         {/* Initial spill flow from vessel */}
-        {this.renderSpillFlow(vesselCenter, progress, color, viscosity, spillProgress)}
+        {this.renderSpillFlow(
+          vesselCenter,
+          progress,
+          color,
+          viscosity,
+          spillProgress
+        )}
 
         {/* Main spill body */}
         <ellipse
@@ -175,10 +174,23 @@ export class SpillEffect extends BaseEffect<SpillEffectType> {
         />
 
         {/* Spill edge ripples */}
-        {this.renderSpillRipples(vesselCenter, progress, currentSpread, color, viscosity)}
+        {this.renderSpillRipples(
+          vesselCenter,
+          progress,
+          currentSpread,
+          color,
+          viscosity
+        )}
 
         {/* Spill droplets */}
-        {this.renderSpillDroplets(vesselCenter, progress, currentSpread, color, viscosity, spillProgress)}
+        {this.renderSpillDroplets(
+          vesselCenter,
+          progress,
+          currentSpread,
+          color,
+          viscosity,
+          spillProgress
+        )}
 
         {/* Spill information */}
         <text
@@ -225,7 +237,7 @@ export class SpillEffect extends BaseEffect<SpillEffectType> {
       const y2 = y1 + Math.sin(Math.PI / 2) * flowLength;
 
       const flowWidth = Math.max(1, 4 - viscosity * 0.5);
-      const flowOpacity = 0.8 - (i * 0.1);
+      const flowOpacity = 0.8 - i * 0.1;
 
       flows.push(
         <line
@@ -367,7 +379,7 @@ export class SpillEffect extends BaseEffect<SpillEffectType> {
     const baseDuration = 3000;
     const amountMultiplier = 1 + (effect.amount_percentage / 100) * 0.5;
     const spreadMultiplier = 1 + (effect.spread_radius / 100) * 0.2;
-    
+
     return baseDuration * amountMultiplier * spreadMultiplier;
   }
 }

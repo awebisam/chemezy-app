@@ -18,7 +18,7 @@ export class FoamProductionEffect extends BaseEffect<FoamProductionEffectType> {
 
     // Foam color with transparency
     const foamColor = effect.color;
-    const foamOpacity = 0.7 + (effect.density * 0.3);
+    const foamOpacity = 0.7 + effect.density * 0.3;
 
     // Calculate foam expansion over time
     const expansionFactor = Math.sin(progress * Math.PI) * 0.3 + 1;
@@ -26,7 +26,7 @@ export class FoamProductionEffect extends BaseEffect<FoamProductionEffectType> {
 
     // Stability affects how long foam lasts
     const stabilityProgress = Math.min(progress * (1 + stabilityFactor), 1);
-    const foamDecay = Math.max(0, 1 - (stabilityProgress * 0.8));
+    const foamDecay = Math.max(0, 1 - stabilityProgress * 0.8);
 
     if (reduceMotion) {
       return (
@@ -43,7 +43,7 @@ export class FoamProductionEffect extends BaseEffect<FoamProductionEffectType> {
               ]
             )}
           </defs>
-          
+
           {/* Static foam */}
           <ellipse
             cx={vesselCenter.x}
@@ -53,7 +53,7 @@ export class FoamProductionEffect extends BaseEffect<FoamProductionEffectType> {
             fill={`url(#foam-static-${effect.color})`}
             opacity={foamDecay}
           />
-          
+
           {/* Foam label */}
           <text
             x={vesselCenter.x}
@@ -207,7 +207,7 @@ export class FoamProductionEffect extends BaseEffect<FoamProductionEffectType> {
               const y1 = vesselCenter.y - currentHeight / 2;
               const x2 = vesselCenter.x + Math.cos(angle) * 20;
               const y2 = vesselCenter.y;
-              
+
               return (
                 <line
                   key={`collapse-${i}`}
@@ -230,10 +230,14 @@ export class FoamProductionEffect extends BaseEffect<FoamProductionEffectType> {
 
   private getBubbleSize(size: 'small' | 'medium' | 'large'): number {
     switch (size) {
-      case 'small': return 3;
-      case 'medium': return 6;
-      case 'large': return 10;
-      default: return 6;
+      case 'small':
+        return 3;
+      case 'medium':
+        return 6;
+      case 'large':
+        return 10;
+      default:
+        return 6;
     }
   }
 
@@ -254,7 +258,8 @@ export class FoamProductionEffect extends BaseEffect<FoamProductionEffectType> {
       const x = vesselCenter.x + Math.cos(angle) * distance;
       const y = vesselCenter.y - foamHeight / 2 + (i % 4) * 8;
       const size = bubbleSize + Math.sin(progress * Math.PI * 2 + i) * 2;
-      const opacity = foamDecay * (0.4 + 0.6 * Math.sin(progress * Math.PI + i));
+      const opacity =
+        foamDecay * (0.4 + 0.6 * Math.sin(progress * Math.PI + i));
 
       bubbles.push(
         <g key={`bubble-${i}`}>
@@ -266,7 +271,7 @@ export class FoamProductionEffect extends BaseEffect<FoamProductionEffectType> {
             fill={`url(#bubble-gradient-${foamColor})`}
             opacity={opacity}
           />
-          
+
           {/* Bubble highlight */}
           <circle
             cx={x - size * 0.3}
@@ -275,7 +280,7 @@ export class FoamProductionEffect extends BaseEffect<FoamProductionEffectType> {
             fill={`url(#bubble-highlight-${foamColor})`}
             opacity={opacity * 0.8}
           />
-          
+
           {/* Bubble outline */}
           <circle
             cx={x}
@@ -327,7 +332,7 @@ export class FoamProductionEffect extends BaseEffect<FoamProductionEffectType> {
               strokeWidth="1"
               opacity={opacity * 0.5}
             />
-            
+
             {/* Shrinking bubble */}
             <circle
               cx={x}
@@ -336,14 +341,14 @@ export class FoamProductionEffect extends BaseEffect<FoamProductionEffectType> {
               fill={foamColor}
               opacity={opacity * 0.3}
             />
-            
+
             {/* Pop sparkles */}
             {Array.from({ length: 4 }, (_, j) => {
               const sparkleAngle = (j / 4) * Math.PI * 2;
               const sparkleDistance = bubbleSize * popProgress * 1.5;
               const sparkleX = x + Math.cos(sparkleAngle) * sparkleDistance;
               const sparkleY = y + Math.sin(sparkleAngle) * sparkleDistance;
-              
+
               return (
                 <circle
                   key={`sparkle-${j}`}

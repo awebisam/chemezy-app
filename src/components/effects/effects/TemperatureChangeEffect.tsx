@@ -58,7 +58,7 @@ export class TemperatureChangeEffect extends BaseEffect<TemperatureChangeEffectT
               ]
             )}
           </defs>
-          
+
           {/* Static temperature indicator */}
           <circle
             cx={vesselCenter.x}
@@ -69,7 +69,7 @@ export class TemperatureChangeEffect extends BaseEffect<TemperatureChangeEffectT
             strokeWidth="2"
             strokeDasharray="4,2"
           />
-          
+
           {/* Temperature label */}
           <text
             x={vesselCenter.x}
@@ -77,7 +77,8 @@ export class TemperatureChangeEffect extends BaseEffect<TemperatureChangeEffectT
             textAnchor="middle"
             className="text-xs fill-gray-600"
           >
-            {isHeating ? '🔥' : '❄️'} {temperature > 0 ? '+' : ''}{temperature}°C
+            {isHeating ? '🔥' : '❄️'} {temperature > 0 ? '+' : ''}
+            {temperature}°C
           </text>
         </g>
       );
@@ -108,8 +109,16 @@ export class TemperatureChangeEffect extends BaseEffect<TemperatureChangeEffectT
             y2="0%"
           >
             <stop offset="0%" stopColor={color} stopOpacity="1" />
-            <stop offset={`${fillPercentage * 100}%`} stopColor={color} stopOpacity="0.8" />
-            <stop offset={`${fillPercentage * 100}%`} stopColor="#E5E7EB" stopOpacity="0.3" />
+            <stop
+              offset={`${fillPercentage * 100}%`}
+              stopColor={color}
+              stopOpacity="0.8"
+            />
+            <stop
+              offset={`${fillPercentage * 100}%`}
+              stopColor="#E5E7EB"
+              stopOpacity="0.3"
+            />
             <stop offset="100%" stopColor="#E5E7EB" stopOpacity="0.1" />
           </linearGradient>
 
@@ -154,7 +163,9 @@ export class TemperatureChangeEffect extends BaseEffect<TemperatureChangeEffectT
           cy={vesselCenter.y}
           r={25 + intensity * 40 * pulseIntensity}
           fill={`url(#temp-gradient-${Math.abs(temperature)})`}
-          filter={isHeating ? `url(#heat-waves-${Math.abs(temperature)})` : undefined}
+          filter={
+            isHeating ? `url(#heat-waves-${Math.abs(temperature)})` : undefined
+          }
         />
 
         {/* Frost overlay for cooling */}
@@ -169,8 +180,10 @@ export class TemperatureChangeEffect extends BaseEffect<TemperatureChangeEffectT
         )}
 
         {/* Temperature particles */}
-        {isHeating && this.renderHeatParticles(vesselCenter, progress, intensity, color)}
-        {isCooling && this.renderColdParticles(vesselCenter, progress, intensity, color)}
+        {isHeating &&
+          this.renderHeatParticles(vesselCenter, progress, intensity, color)}
+        {isCooling &&
+          this.renderColdParticles(vesselCenter, progress, intensity, color)}
 
         {/* Thermometer visualization */}
         <g>
@@ -210,7 +223,7 @@ export class TemperatureChangeEffect extends BaseEffect<TemperatureChangeEffectT
           {/* Temperature scale marks */}
           {Array.from({ length: 5 }, (_, i) => {
             const markY = thermometerY + (i * thermometerHeight) / 4;
-            const tempValue = 300 - (i * 100);
+            const tempValue = 300 - i * 100;
             return (
               <g key={i}>
                 <line
@@ -266,7 +279,8 @@ export class TemperatureChangeEffect extends BaseEffect<TemperatureChangeEffectT
           className="text-lg font-bold"
           fill={color}
         >
-          {temperature > 0 ? '+' : ''}{temperature}°C
+          {temperature > 0 ? '+' : ''}
+          {temperature}°C
         </text>
 
         {/* Temperature change indicator */}
@@ -297,7 +311,8 @@ export class TemperatureChangeEffect extends BaseEffect<TemperatureChangeEffectT
       const x = vesselCenter.x + Math.cos(angle) * distance;
       const y = vesselCenter.y + Math.sin(angle) * distance - progress * 40;
       const size = 2 + Math.sin(progress * Math.PI * 3 + i) * 2;
-      const opacity = intensity * (0.5 + 0.5 * Math.sin(progress * Math.PI * 4 + i));
+      const opacity =
+        intensity * (0.5 + 0.5 * Math.sin(progress * Math.PI * 4 + i));
 
       particles.push(
         <circle
@@ -330,20 +345,15 @@ export class TemperatureChangeEffect extends BaseEffect<TemperatureChangeEffectT
       const x = vesselCenter.x + Math.cos(angle) * distance;
       const y = vesselCenter.y + Math.sin(angle) * distance + progress * 20;
       const size = 1 + Math.sin(progress * Math.PI * 2 + i) * 1.5;
-      const opacity = intensity * (0.6 + 0.4 * Math.sin(progress * Math.PI * 3 + i));
+      const opacity =
+        intensity * (0.6 + 0.4 * Math.sin(progress * Math.PI * 3 + i));
 
       // Ice crystal shape
       particles.push(
         <g key={`cold-${i}`}>
-          <circle
-            cx={x}
-            cy={y}
-            r={size}
-            fill={color}
-            opacity={opacity}
-          />
+          <circle cx={x} cy={y} r={size} fill={color} opacity={opacity} />
           <path
-            d={`M${x-size},${y} L${x+size},${y} M${x},${y-size} L${x},${y+size} M${x-size*0.7},${y-size*0.7} L${x+size*0.7},${y+size*0.7} M${x+size*0.7},${y-size*0.7} L${x-size*0.7},${y+size*0.7}`}
+            d={`M${x - size},${y} L${x + size},${y} M${x},${y - size} L${x},${y + size} M${x - size * 0.7},${y - size * 0.7} L${x + size * 0.7},${y + size * 0.7} M${x + size * 0.7},${y - size * 0.7} L${x - size * 0.7},${y + size * 0.7}`}
             stroke={color}
             strokeWidth="0.5"
             opacity={opacity * 0.8}

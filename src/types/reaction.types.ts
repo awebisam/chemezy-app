@@ -104,3 +104,16 @@ export interface UserReactionStats {
   total_reactions: number;
   total_discoveries: number;
 }
+
+// Extended types for reaction history
+export interface ReactionHistoryItem extends ReactionPrediction {
+  id: string;
+  timestamp: string;
+  reactants_used: Array<{
+    chemical_id: number;
+    molecular_formula: string;
+    common_name: string;
+    quantity: number;
+  }>;
+  environment_used: Environment;
+}

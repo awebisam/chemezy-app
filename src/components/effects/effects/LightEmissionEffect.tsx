@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  BaseEffect,
-  EffectRegistry,
-  EffectAnimations,
-} from '../BaseEffect';
+import { BaseEffect, EffectRegistry, EffectAnimations } from '../BaseEffect';
 import type { BaseEffectProps } from '../BaseEffect';
 import type { LightEmissionEffect as LightEmissionEffectType } from '@/types/reaction.types';
 

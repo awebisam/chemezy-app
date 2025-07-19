@@ -1,7 +1,8 @@
 export { Button } from './Button';
 export { Input } from './Input';
 export { Modal } from './Modal';
-export { LoadingSpinner } from './LoadingSpinner';
+export { LoadingSpinner, LoadingOverlay, LoadingState, Skeleton } from './LoadingSpinner';
+export { ErrorBoundary, useErrorHandler } from './ErrorBoundary';
 export { ToastProvider } from './Toast';
 export { useToast } from './Toast';
 export { useToastHelpers } from './Toast';

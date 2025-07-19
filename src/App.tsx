@@ -1,14 +1,73 @@
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
 import { AuthProvider, AuthGuard } from '@/components/auth';
-import { AuthPage } from '@/pages/AuthPage';
+import { AuthPage, NotFoundPage } from '@/pages';
+import { MainLayout } from '@/components/layout/MainLayout';
+import { ErrorBoundary, ToastProvider } from '@/components/ui';
+import { RouteGuard } from '@/components/layout';
+import { useAuthStore } from '@/store/auth.store';
+import { routes } from '@/config/routes';
 
 function App() {
   return (
-    <AuthProvider>
-      <AuthGuard requireAuth={false}>
-        <AuthPage />
-      </AuthGuard>
-    </AuthProvider>
+    <ErrorBoundary>
+      <ToastProvider>
+        <AuthProvider>
+          <Router>
+            <Routes>
+              {/* Public route - Landing/Auth page */}
+              <Route 
+                path="/auth" 
+                element={
+                  <RouteGuard requireAuth={false}>
+                    <AuthPage />
+                  </RouteGuard>
+                } 
+              />
+
+              {/* Protected routes with layout */}
+              <Route
+                path="/"
+                element={
+                  <RouteGuard requireAuth={true}>
+                    <MainLayout />
+                  </RouteGuard>
+                }
+              >
+                <Route index element={<Navigate to="/lab" replace />} />
+                {routes.map((route) => (
+                  <Route
+                    key={route.path}
+                    path={route.path.substring(1)} // Remove leading slash for nested routes
+                    element={<route.component />}
+                  />
+                ))}
+              </Route>
+
+              {/* 404 Error page */}
+              <Route path="/404" element={<NotFoundPage />} />
+              
+              {/* Catch-all route - redirect to auth if not authenticated, 404 if authenticated */}
+              <Route path="*" element={<AuthRedirect />} />
+            </Routes>
+          </Router>
+        </AuthProvider>
+      </ToastProvider>
+    </ErrorBoundary>
   );
+}
+
+// Component to handle redirect logic based on auth state
+function AuthRedirect() {
+  const { isAuthenticated } = useAuthStore();
+  
+  // If authenticated, show 404 page for unknown routes
+  // If not authenticated, redirect to auth page
+  return <Navigate to={isAuthenticated ? '/404' : '/auth'} replace />;
 }
 
 export default App;

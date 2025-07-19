@@ -80,7 +80,7 @@ export const SelectedChemical: React.FC<SelectedChemicalProps> = ({
   return (
     <div
       className={cn(
-        'bg-white rounded-lg border border-gray-200 p-4 shadow-sm',
+        'bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm',
         'transition-all duration-200 hover:shadow-md hover:border-gray-300',
         className
       )}
@@ -105,12 +105,12 @@ export const SelectedChemical: React.FC<SelectedChemicalProps> = ({
 
         <button
           onClick={handleRemove}
-          className="text-gray-400 hover:text-red-500 transition-colors duration-200 p-1"
+          className="text-gray-400 hover:text-red-500 active:text-red-600 transition-colors duration-200 p-2 touch-manipulation -m-1"
           aria-label={`Remove ${chemical.common_name} from lab bench`}
           title="Remove from lab bench"
         >
           <svg
-            className="w-4 h-4"
+            className="w-4 h-4 sm:w-5 sm:h-5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -153,11 +153,11 @@ export const SelectedChemical: React.FC<SelectedChemicalProps> = ({
               onClick={() => handleQuantityChange(quantity - 0.1)}
               disabled={quantity <= 0.1}
               className={cn(
-                'w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold',
+                'w-8 h-8 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-xs font-bold touch-manipulation',
                 'transition-colors duration-200',
                 quantity <= 0.1
                   ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300 active:bg-gray-400'
               )}
               aria-label="Decrease quantity"
             >
@@ -172,7 +172,7 @@ export const SelectedChemical: React.FC<SelectedChemicalProps> = ({
                 onChange={handleQuantityInputChange}
                 onBlur={handleQuantitySubmit}
                 onKeyDown={handleQuantityKeyDown}
-                className="w-16 px-2 py-1 text-sm text-center border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-16 sm:w-20 px-2 py-1 text-sm text-center border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent touch-manipulation"
                 min="0.1"
                 max="999"
                 step="0.1"
@@ -184,7 +184,7 @@ export const SelectedChemical: React.FC<SelectedChemicalProps> = ({
                   setIsEditing(true);
                   setTempQuantity(quantity.toString());
                 }}
-                className="w-16 px-2 py-1 text-sm text-center bg-gray-50 border border-gray-200 rounded hover:bg-gray-100 transition-colors duration-200"
+                className="w-16 sm:w-20 px-2 py-2 sm:py-1 text-sm text-center bg-gray-50 border border-gray-200 rounded hover:bg-gray-100 active:bg-gray-200 transition-colors duration-200 touch-manipulation"
                 aria-label="Edit quantity"
               >
                 {quantity}
@@ -196,11 +196,11 @@ export const SelectedChemical: React.FC<SelectedChemicalProps> = ({
               onClick={() => handleQuantityChange(quantity + 0.1)}
               disabled={quantity >= 999}
               className={cn(
-                'w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold',
+                'w-8 h-8 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-xs font-bold touch-manipulation',
                 'transition-colors duration-200',
                 quantity >= 999
                   ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300 active:bg-gray-400'
               )}
               aria-label="Increase quantity"
             >
@@ -220,10 +220,10 @@ export const SelectedChemical: React.FC<SelectedChemicalProps> = ({
             key={quickQuantity}
             onClick={() => handleQuantityChange(quickQuantity)}
             className={cn(
-              'flex-1 px-2 py-1 text-xs rounded transition-colors duration-200',
+              'flex-1 px-2 py-2 sm:py-1 text-xs rounded transition-colors duration-200 touch-manipulation',
               quantity === quickQuantity
                 ? 'bg-primary-100 text-primary-700 border border-primary-300'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200 active:bg-gray-300'
             )}
           >
             {quickQuantity}g

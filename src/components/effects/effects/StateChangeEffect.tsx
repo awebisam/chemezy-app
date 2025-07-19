@@ -17,7 +17,7 @@ export class StateChangeEffect extends BaseEffect<StateChangeEffectType> {
     // State-specific properties - assuming initial state is liquid by default
     const fromState = 'liquid'; // Default assumption
     const toState = finalState;
-    
+
     // State visualization properties
     const stateColors = {
       solid: '#8B7355',
@@ -28,13 +28,23 @@ export class StateChangeEffect extends BaseEffect<StateChangeEffectType> {
     };
 
     // State patterns and effects
-    const fromColor = stateColors[fromState as keyof typeof stateColors] || '#9CA3AF';
-    const toColor = stateColors[toState as keyof typeof stateColors] || '#9CA3AF';
-    
+    const fromColor =
+      stateColors[fromState as keyof typeof stateColors] || '#9CA3AF';
+    const toColor =
+      stateColors[toState as keyof typeof stateColors] || '#9CA3AF';
+
     // Interpolate between states
-    const currentColor = super.interpolateColor(fromColor, toColor, transitionProgress);
-    
-    const stateProps = this.getStateProperties(fromState, toState, transitionProgress);
+    const currentColor = super.interpolateColor(
+      fromColor,
+      toColor,
+      transitionProgress
+    );
+
+    const stateProps = this.getStateProperties(
+      fromState,
+      toState,
+      transitionProgress
+    );
 
     if (reduceMotion) {
       return (
@@ -51,7 +61,7 @@ export class StateChangeEffect extends BaseEffect<StateChangeEffectType> {
               ]
             )}
           </defs>
-          
+
           {/* Static state indicator */}
           <circle
             cx={vesselCenter.x}
@@ -61,7 +71,7 @@ export class StateChangeEffect extends BaseEffect<StateChangeEffectType> {
             stroke={currentColor}
             strokeWidth="2"
           />
-          
+
           {/* State label */}
           <text
             x={vesselCenter.x}
@@ -119,7 +129,11 @@ export class StateChangeEffect extends BaseEffect<StateChangeEffectType> {
           r={25 + stateProps.expansion * 20}
           fill={`url(#state-transition-${fromState}-${toState})`}
           opacity={stateProps.opacity}
-          filter={stateProps.hasParticles ? `url(#particle-system-${fromState}-${toState})` : undefined}
+          filter={
+            stateProps.hasParticles
+              ? `url(#particle-system-${fromState}-${toState})`
+              : undefined
+          }
         />
 
         {/* State pattern overlay */}
@@ -134,10 +148,21 @@ export class StateChangeEffect extends BaseEffect<StateChangeEffectType> {
         )}
 
         {/* State-specific effects */}
-        {this.renderStateEffects(vesselCenter, fromState, toState, transitionProgress)}
+        {this.renderStateEffects(
+          vesselCenter,
+          fromState,
+          toState,
+          transitionProgress
+        )}
 
         {/* Transition particles */}
-        {this.renderTransitionParticles(vesselCenter, fromState, toState, progress, transitionProgress)}
+        {this.renderTransitionParticles(
+          vesselCenter,
+          fromState,
+          toState,
+          progress,
+          transitionProgress
+        )}
 
         {/* State labels */}
         <text
@@ -183,7 +208,8 @@ export class StateChangeEffect extends BaseEffect<StateChangeEffectType> {
       aqueous: 0.3,
     };
 
-    const fromExpansion = expansionMap[fromState as keyof typeof expansionMap] || 0;
+    const fromExpansion =
+      expansionMap[fromState as keyof typeof expansionMap] || 0;
     const toExpansion = expansionMap[toState as keyof typeof expansionMap] || 0;
     const expansion = fromExpansion + (toExpansion - fromExpansion) * progress;
 
@@ -194,9 +220,13 @@ export class StateChangeEffect extends BaseEffect<StateChangeEffectType> {
     return { expansion, opacity, hasParticles, hasPattern };
   }
 
-  private createStatePattern(fromState: string, toState: string, progress: number): React.ReactElement {
+  private createStatePattern(
+    fromState: string,
+    toState: string,
+    progress: number
+  ): React.ReactElement {
     const patternId = `state-pattern-${fromState}-${toState}`;
-    
+
     if (fromState === 'solid' || toState === 'solid') {
       return (
         <pattern
@@ -212,7 +242,9 @@ export class StateChangeEffect extends BaseEffect<StateChangeEffectType> {
             width="6"
             height="6"
             fill={stateColors.solid}
-            opacity={fromState === 'solid' ? (1 - progress) * 0.5 : progress * 0.5}
+            opacity={
+              fromState === 'solid' ? (1 - progress) * 0.5 : progress * 0.5
+            }
           />
           <rect
             x="6"
@@ -220,7 +252,9 @@ export class StateChangeEffect extends BaseEffect<StateChangeEffectType> {
             width="6"
             height="6"
             fill={stateColors.solid}
-            opacity={fromState === 'solid' ? (1 - progress) * 0.5 : progress * 0.5}
+            opacity={
+              fromState === 'solid' ? (1 - progress) * 0.5 : progress * 0.5
+            }
           />
         </pattern>
       );
@@ -246,7 +280,7 @@ export class StateChangeEffect extends BaseEffect<StateChangeEffectType> {
             const x = vesselCenter.x + Math.cos(angle) * 30;
             const y = vesselCenter.y + Math.sin(angle) * 30;
             const dropY = y + progress * 20;
-            
+
             return (
               <ellipse
                 key={`melt-${i}`}
@@ -271,9 +305,10 @@ export class StateChangeEffect extends BaseEffect<StateChangeEffectType> {
             const angle = (i / 8) * Math.PI * 2;
             const distance = 25 + progress * 30;
             const x = vesselCenter.x + Math.cos(angle) * distance;
-            const y = vesselCenter.y + Math.sin(angle) * distance - progress * 40;
+            const y =
+              vesselCenter.y + Math.sin(angle) * distance - progress * 40;
             const size = 2 + progress * 3;
-            
+
             return (
               <circle
                 key={`evap-${i}`}
@@ -299,7 +334,7 @@ export class StateChangeEffect extends BaseEffect<StateChangeEffectType> {
             const x = vesselCenter.x + Math.cos(angle) * distance;
             const y = vesselCenter.y + Math.sin(angle) * distance;
             const size = 1 + progress * 2;
-            
+
             return (
               <circle
                 key={`cond-${i}`}
@@ -323,7 +358,7 @@ export class StateChangeEffect extends BaseEffect<StateChangeEffectType> {
             const angle = (i / 6) * Math.PI * 2;
             const x = vesselCenter.x + Math.cos(angle) * 35;
             const y = vesselCenter.y + Math.sin(angle) * 35;
-            
+
             return (
               <g key={`ion-${i}`}>
                 <circle
@@ -376,10 +411,13 @@ export class StateChangeEffect extends BaseEffect<StateChangeEffectType> {
       const distance = 20 + transitionProgress * 40;
       const x = vesselCenter.x + Math.cos(angle) * distance;
       const y = vesselCenter.y + Math.sin(angle) * distance;
-      
-      const size = toState === 'gas' ? 1 + transitionProgress * 2 : 2 - transitionProgress * 1;
+
+      const size =
+        toState === 'gas'
+          ? 1 + transitionProgress * 2
+          : 2 - transitionProgress * 1;
       const opacity = 0.6 + 0.4 * Math.sin(progress * Math.PI * 3 + i);
-      
+
       particles.push(
         <circle
           key={`particle-${i}`}

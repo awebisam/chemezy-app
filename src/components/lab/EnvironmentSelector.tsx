@@ -116,18 +116,19 @@ export const EnvironmentSelector: React.FC<EnvironmentSelectorProps> = ({
                 type="button"
                 onClick={() => handleEnvironmentChange(option.value)}
                 className={cn(
-                  'w-full p-4 rounded-lg border-2 transition-all duration-300 text-left',
-                  'hover:shadow-md hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2',
+                  'w-full p-3 sm:p-4 rounded-lg border-2 transition-all duration-300 text-left touch-manipulation',
+                  'hover:shadow-md active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2',
+                  'min-h-[80px] sm:min-h-[100px]',
                   isSelected
-                    ? `${option.color} border-current shadow-md scale-105 ring-2 ring-primary-500 ring-offset-2`
-                    : 'bg-white border-gray-200 hover:border-gray-300'
+                    ? `${option.color} border-current shadow-md ring-2 ring-primary-500 ring-offset-2`
+                    : 'bg-white border-gray-200 hover:border-gray-300 active:border-gray-400'
                 )}
                 aria-pressed={isSelected}
                 aria-describedby={`env-desc-${option.value.replace(/[^a-zA-Z0-9]/g, '-')}`}
               >
-                <div className="flex items-start space-x-3">
+                <div className="flex items-start space-x-2 sm:space-x-3">
                   <span
-                    className="text-2xl flex-shrink-0"
+                    className="text-xl sm:text-2xl flex-shrink-0"
                     role="img"
                     aria-hidden="true"
                   >
@@ -136,7 +137,7 @@ export const EnvironmentSelector: React.FC<EnvironmentSelectorProps> = ({
                   <div className="flex-1 min-w-0">
                     <h4
                       className={cn(
-                        'font-medium text-sm',
+                        'font-medium text-sm sm:text-base',
                         isSelected ? 'text-current' : 'text-gray-900'
                       )}
                     >
@@ -144,7 +145,7 @@ export const EnvironmentSelector: React.FC<EnvironmentSelectorProps> = ({
                     </h4>
                     <p
                       className={cn(
-                        'text-xs mt-1 line-clamp-2',
+                        'text-xs sm:text-sm mt-1 line-clamp-2',
                         isSelected ? 'text-current opacity-80' : 'text-gray-600'
                       )}
                     >
@@ -154,7 +155,7 @@ export const EnvironmentSelector: React.FC<EnvironmentSelectorProps> = ({
                   {isSelected && (
                     <div className="flex-shrink-0">
                       <svg
-                        className="w-5 h-5 text-current"
+                        className="w-4 h-4 sm:w-5 sm:h-5 text-current"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                         xmlns="http://www.w3.org/2000/svg"
@@ -171,10 +172,10 @@ export const EnvironmentSelector: React.FC<EnvironmentSelectorProps> = ({
                 </div>
               </button>
 
-              {/* Tooltip for detailed description */}
+              {/* Tooltip for detailed description - Hidden on mobile to avoid conflicts with touch */}
               <div
                 id={`env-desc-${option.value.replace(/[^a-zA-Z0-9]/g, '-')}`}
-                className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-20 max-w-xs text-center"
+                className="hidden sm:block absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-20 max-w-xs text-center"
                 role="tooltip"
               >
                 {option.description}

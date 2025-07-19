@@ -1,21 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { LoginForm, RegisterForm } from '@/components/auth';
 import { Modal } from '@/components/ui/Modal';
+import { useAuthStore } from '@/store/auth.store';
 
 export const AuthPage: React.FC = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated } = useAuthStore();
+
+  // If user is already authenticated, redirect them
+  useEffect(() => {
+    if (isAuthenticated) {
+      const from = (location.state as any)?.from?.pathname || '/lab';
+      navigate(from, { replace: true });
+    }
+  }, [isAuthenticated, navigate, location]);
 
   const handleLoginSuccess = () => {
     setIsLoginModalOpen(false);
-    // In a real app, this would redirect to the dashboard
-    alert('Login successful! Welcome to Chemezy!');
+    // Navigation will be handled by the useEffect above
   };
 
   const handleRegisterSuccess = () => {
     setIsRegisterModalOpen(false);
-    // In a real app, this would redirect to the dashboard
-    alert('Registration successful! Welcome to Chemezy!');
+    // Navigation will be handled by the useEffect above
   };
 
   const switchToRegister = () => {
